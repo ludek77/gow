@@ -18,7 +18,7 @@ def index(request):
         'hostname': hostname,
         'database': database.info(),
         'count': PageView.objects.count(),
-        'django': django.get_version()(),
+        'django': django.get_version(),
         'python': sys.version
     })
 
