@@ -1,5 +1,6 @@
 import os
 import django
+import sys
 from django.shortcuts import render
 from django.conf import settings
 from django.http import HttpResponse
@@ -17,7 +18,8 @@ def index(request):
         'hostname': hostname,
         'database': database.info(),
         'count': PageView.objects.count(),
-        'django': django.get_version()()
+        'django': django.get_version()(),
+        'python': sys.version
     })
 
 def health(request):
