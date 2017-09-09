@@ -7,20 +7,14 @@ def logout_view(request):
     return HttpResponse("Logged out")
 
 def login_view(request):
-    username = request.GET.get('username')
-    password = request.GET.get('password')
+    username = request.POST['username']
+    password = request.POST['password']
     user = authenticate(request, username=username, password=password)
     if user is not None:
         login(request, user)
-        return HttpResponse("Login "+username)
+        return HttpResponse('OK')
     else:
-        return HttpResponse("Invalid login")
+        return HttpResponse('Invalid username or password', status=401)
 
 def index(request):
-    if request.user.is_authenticated:
-        return render(request, 'globe.html', {
-            'user': request.user.username
-        })
-      #return HttpResponse("Hello "+request.user.username)
-    else:
-        return HttpResponse("Who are you")
+    return render(request, 'index.html')

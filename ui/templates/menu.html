@@ -1,0 +1,10 @@
+<script>
+	$(document).ready(function() {
+		$('#logout-btn').click(function(event) {
+      		$.get("logout", function( data ) {
+				location.reload();
+			});
+  		});
+	});
+</script>
+<button id="logout-btn">Logout {{ request.user.username }} </button>
