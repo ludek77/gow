@@ -9,6 +9,7 @@ User = get_user_model()
 
 class Game(models.Model):
     name = models.CharField(max_length=100)
+    user = models.ManyToManyField(User, blank=True)
     
     def __str__(self):
         return self.name

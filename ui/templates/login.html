@@ -4,7 +4,6 @@
 			$.post('login/', $('#login-form').serialize())
 				.done(function(data){location.reload();})
 				.fail(function(data,status,error){$('#login-form')[0].reset();$('#login-error').html(error);});
-			//});
   		});
 	});
 </script>
