@@ -18,6 +18,9 @@ def login_view(request):
 
 def index(request):
     if request.user.is_authenticated:
-        return HttpResponse("Hello "+request.user.username)
+        return render(request, 'globe.html', {
+            'user': request.user.username
+        })
+      #return HttpResponse("Hello "+request.user.username)
     else:
         return HttpResponse("Who are you")
