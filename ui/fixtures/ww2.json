@@ -1,0 +1,15 @@
+[
+    {"model": "ui.game", "pk": 1, "fields": {"name": "WW2"}},
+     
+    {"model": "ui.fieldtype", "pk": 1, "fields": {"name": "Sea", "game": 1}}, 
+    {"model": "ui.fieldtype", "pk": 2, "fields": {"name": "Ground", "game": 1}}, 
+    {"model": "ui.fieldtype", "pk": 3, "fields": {"name": "Beach", "game": 1}}, 
+    
+    {"model": "ui.unittype", "pk": 1, "fields": {"name": "Ship", "game": 1}}, 
+    {"model": "ui.unittype", "pk": 2, "fields": {"name": "Tank", "game": 1}}, 
+    
+    {"model": "ui.unitfieldref", "pk": 1, "fields": {"unit": 1, "fieldType": 1}}, 
+    {"model": "ui.unitfieldref", "pk": 2, "fields": {"unit": 1, "fieldType": 3}}, 
+    {"model": "ui.unitfieldref", "pk": 3, "fields": {"unit": 2, "fieldType": 2}}, 
+    {"model": "ui.unitfieldref", "pk": 4, "fields": {"unit": 2, "fieldType": 3}}
+]
