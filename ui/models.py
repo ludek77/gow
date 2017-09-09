@@ -2,6 +2,10 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.contrib.auth import get_user_model
+
+#reference to django user model
+User = get_user_model()
 
 class Game(models.Model):
     name = models.CharField(max_length=100)
@@ -12,6 +16,7 @@ class Game(models.Model):
 class Country(models.Model):
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game)
+    owner = models.ForeignKey(User, null=True, default=None, blank=True)
     
     def __str__(self):
         return self.name
