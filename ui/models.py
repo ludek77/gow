@@ -42,7 +42,7 @@ class Field(models.Model):
     home = models.ForeignKey(Country, null=True, default=None, blank=True)
     lon = models.DecimalField(max_digits=6, decimal_places=3)
     lat = models.DecimalField(max_digits=6, decimal_places=3)
-    next = models.ManyToManyField('self', null=True, blank=True)
+    next = models.ManyToManyField('self', blank=True)
     
     def __str__(self):
         return self.name
