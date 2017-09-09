@@ -26,21 +26,18 @@ class FieldType(models.Model):
 class UnitType(models.Model):
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game)
+    fieldTypes = models.ManyToManyField(FieldType)
 
     def __str__(self):
         return self.name
 
-class UnitFieldRef(models.Model):
-    unit = models.ForeignKey(UnitType)
-    fieldType = models.ForeignKey(FieldType)
-    
-    def __str__(self):
-        return "[" + self.unit.__str__() + ":" + self.fieldType.__str__() + "]"
-  
 class Field(models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey(FieldType)
-    home = models.ForeignKey(Country, null=True, default=None)
+    home = models.ForeignKey(Country, null=True, default=None, blank=True)
+    lon = models.DecimalField(max_digits=6, decimal_places=3)
+    lat = models.DecimalField(max_digits=6, decimal_places=3)
+    next = models.ManyToManyField('self', null=True, blank=True)
     
     def __str__(self):
         return self.name
@@ -48,7 +45,7 @@ class Field(models.Model):
 class Unit(models.Model):
     unitType = models.ForeignKey(UnitType)
     country = models.ForeignKey(Country)
-    field = models.ForeignKey(Field, null=True, default=None)
+    field = models.ForeignKey(Field, null=True, default=None, blank=True)
     
     def __str__(self):
         return "[" + self.unitType + ":" + self.field + "]"

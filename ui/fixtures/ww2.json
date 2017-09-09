@@ -8,8 +8,17 @@
     {"model": "ui.unittype", "pk": 1, "fields": {"name": "Ship", "game": 1}}, 
     {"model": "ui.unittype", "pk": 2, "fields": {"name": "Tank", "game": 1}}, 
     
-    {"model": "ui.unitfieldref", "pk": 1, "fields": {"unit": 1, "fieldType": 1}}, 
-    {"model": "ui.unitfieldref", "pk": 2, "fields": {"unit": 1, "fieldType": 3}}, 
-    {"model": "ui.unitfieldref", "pk": 3, "fields": {"unit": 2, "fieldType": 2}}, 
-    {"model": "ui.unitfieldref", "pk": 4, "fields": {"unit": 2, "fieldType": 3}}
+    {"model": "ui.country", "pk": 3, "fields": {"name": "Italy", "game": 1}}, 
+    {"model": "ui.country", "pk": 4, "fields": {"name": "Russia", "game": 1}}, 
+    {"model": "ui.country", "pk": 5, "fields": {"name": "Spain", "game": 1}},
+    
+    {"model": "ui.movetype", "pk": 1, "fields": {"name": "attack"}}, 
+    {"model": "ui.movetype", "pk": 2, "fields": {"name": "defend"}},
+    
+    {"model": "ui.turn", "pk": 1, "fields": {"name": "Initial", "addingUnits": true}},
+    
+    {"model": "ui.field", "pk": 4, "fields": {"name": "1", "type": 2, "home": 3,    "lon": "10.000", "lat": "10.000", "next": []}}, 
+    {"model": "ui.field", "pk": 5, "fields": {"name": "2", "type": 2, "home": null, "lon": "20.000", "lat": "20.000", "next": [4]}}, 
+    {"model": "ui.field", "pk": 6, "fields": {"name": "3", "type": 3, "home": null, "lon": "10.000", "lat": "20.000", "next": [4, 5]}}, 
+    {"model": "ui.field", "pk": 7, "fields": {"name": "4", "type": 1, "home": null, "lon": "20.000", "lat": "10.000", "next": [4, 5, 6]}}
 ]
