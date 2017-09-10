@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, logout, login
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
-from .models import Game
+from .models import Game, Turn, Field
 
 def game_list_rest(request):
     list = Game.objects.filter(user__id=request.user.id)
@@ -15,6 +15,17 @@ def game_select_rest(request):
     if len(g) == 1: 
         request.session['selected_game'] = str(g[0].id)
     return HttpResponse('OK')
+
+def game_setup_rest(request):
+    g = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
+    t = Turn.objects.get(game=g,open=True)
+    output = '['
+    
+    fields = Field.objects.filter(game=g)
+    output += ', '.join(['{"f":"'+row.name+'","l":['+str(row.lon)+","+str(row.lat)+']}' for row in fields])
+    
+    output += ']'
+    return HttpResponse(output)
 
 def logout_rest(request):
     logout(request)

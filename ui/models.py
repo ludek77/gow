@@ -17,6 +17,7 @@ class Game(models.Model):
 class Country(models.Model):
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game)
+    color = models.CharField(max_length=10)
     owner = models.ForeignKey(User, null=True, default=None, blank=True)
     
     def __str__(self):
@@ -40,6 +41,7 @@ class UnitType(models.Model):
 class Field(models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey(FieldType)
+    game = models.ForeignKey(Game)
     home = models.ForeignKey(Country, null=True, default=None, blank=True)
     lon = models.DecimalField(max_digits=6, decimal_places=3)
     lat = models.DecimalField(max_digits=6, decimal_places=3)
@@ -48,20 +50,31 @@ class Field(models.Model):
     def __str__(self):
         return self.name
 
+class Turn(models.Model):
+    name = models.CharField(max_length=100)
+    game = models.ForeignKey(Game)
+    addingUnits = models.BooleanField(default=False)
+    open = models.BooleanField(default=True)
+    
+    def __str__(self):
+        return self.name
+
+class City(models.Model):
+    turn = models.ForeignKey(Turn)
+    country = models.ForeignKey(Country, null=True, default=None, blank=True)
+    field = models.ForeignKey(Field)
+    
+    def __str__(self):
+        return "[" + self.turn.name + "." + self.country.name + "." + self.field.name + "]"
+
 class Unit(models.Model):
+    turn = models.ForeignKey(Turn)
     unitType = models.ForeignKey(UnitType)
     country = models.ForeignKey(Country)
     field = models.ForeignKey(Field, null=True, default=None, blank=True)
     
     def __str__(self):
-        return "[" + self.unitType + ":" + self.field + "]"
-
-class Turn(models.Model):
-    name = models.CharField(max_length=100)
-    addingUnits = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return self.name
+        return "[" + self.turn.name + "." + self.country.name + "." + self.unitType + "." + self.field.name + "]"
 
 class MoveType(models.Model):
     name = models.CharField(max_length=100)
@@ -70,12 +83,12 @@ class MoveType(models.Model):
         return self.name
 
 class Move(models.Model):
-    moveType = models.ForeignKey(MoveType)
     turn = models.ForeignKey(Turn)
     unit = models.ForeignKey(Unit)
+    moveType = models.ForeignKey(MoveType)
     
     def __str__(self):
-        return "[" + self.turn.name + "." + self.unit.country.name + ":" + self.unit.field.name + "-" + self.moveType.name + "]"
+        return "[" + self.turn.name + "." + self.unit.country.name + "." + self.unit.field.name + "." + self.moveType.name + "]"
 
 class Target(models.Model):
     move = models.ForeignKey(Move)
@@ -83,4 +96,4 @@ class Target(models.Model):
     field = models.ForeignKey(Field)
     
     def __str__(self):
-        return field.name;
+        return "[" + seq + "." + field.name + "]";
