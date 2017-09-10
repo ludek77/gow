@@ -1,10 +1,9 @@
-Game={{ request.session.selected_game }}
-
+{{game.name}}.{{country.name}}
 <div id="mapid" style="width: 1000px; height: 800px;"></div>
 <script>
 	var map = L.map('mapid').setView([51.505, 10.09], 4);
 
-	L.tileLayer('http://tileserver.maptiler.com/nasa/{z}/{x}/{y}.jpg', {maxZoom: 5}).addTo(map);
+	L.tileLayer('{{game.tileServer}}', {maxZoom: 5}).addTo(map);
 	
 	// clicking on map
 	var popup = L.popup();

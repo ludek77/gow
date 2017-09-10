@@ -9,7 +9,9 @@ User = get_user_model()
 
 class Game(models.Model):
     name = models.CharField(max_length=100)
+    winPoints = models.IntegerField()
     user = models.ManyToManyField(User, blank=True)
+    tileServer= models.CharField(max_length = 100)
     
     def __str__(self):
         return self.name
@@ -17,7 +19,10 @@ class Game(models.Model):
 class Country(models.Model):
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game)
+    email = models.CharField(max_length=100)
     color = models.CharField(max_length=10)
+    lon = models.DecimalField(max_digits=6, decimal_places=3)
+    lat = models.DecimalField(max_digits=6, decimal_places=3)
     owner = models.ForeignKey(User, null=True, default=None, blank=True)
     
     def __str__(self):
@@ -25,14 +30,13 @@ class Country(models.Model):
     
 class FieldType(models.Model):
     name = models.CharField(max_length=100)
-    game = models.ForeignKey(Game)
 
     def __str__(self):
         return self.name
 
 class UnitType(models.Model):
     name = models.CharField(max_length=100)
-    game = models.ForeignKey(Game)
+    icon = models.CharField(max_length=100)
     fieldTypes = models.ManyToManyField(FieldType)
 
     def __str__(self):
@@ -42,9 +46,11 @@ class Field(models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey(FieldType)
     game = models.ForeignKey(Game)
-    home = models.ForeignKey(Country, null=True, default=None, blank=True)
     lon = models.DecimalField(max_digits=6, decimal_places=3)
     lat = models.DecimalField(max_digits=6, decimal_places=3)
+    home = models.ForeignKey(Country, null=True, default=None, blank=True)
+    isCity = models.BooleanField(default=False)
+    points = models.IntegerField()
     next = models.ManyToManyField('self', blank=True)
     
     def __str__(self):
@@ -61,16 +67,16 @@ class Turn(models.Model):
 
 class City(models.Model):
     turn = models.ForeignKey(Turn)
-    country = models.ForeignKey(Country, null=True, default=None, blank=True)
     field = models.ForeignKey(Field)
+    country = models.ForeignKey(Country, null=True, default=None, blank=True)
     
     def __str__(self):
         return "[" + self.turn.name + "." + self.country.name + "." + self.field.name + "]"
 
 class Unit(models.Model):
     turn = models.ForeignKey(Turn)
-    unitType = models.ForeignKey(UnitType)
     country = models.ForeignKey(Country)
+    unitType = models.ForeignKey(UnitType)
     field = models.ForeignKey(Field, null=True, default=None, blank=True)
     
     def __str__(self):

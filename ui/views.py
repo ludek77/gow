@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, logout, login
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
-from .models import Game, Turn, Field
+from django.template import loader
+from .models import Game, Turn, Field, Country
 
 def game_list_rest(request):
     list = Game.objects.filter(user__id=request.user.id)
@@ -61,4 +62,16 @@ def login_rest(request):
         return HttpResponse('Invalid username or password', status=401)
 
 def index(request):
-    return render(request, 'index.html')
+    #return render(request, 'index.html')
+    games = Game.objects.filter(user__id=request.user.id,pk=request.session['selected_game'])
+    if len(games)>0:
+        countries = Country.objects.filter(owner__id=request.user.id,game=games[0])
+        country=''
+        if len(countries)>0:
+            country = countries[0]
+        context = {
+            'game': games[0],
+            'country': country
+        }
+    template = loader.get_template('index.html')
+    return HttpResponse(template.render(context, request))
