@@ -2,7 +2,60 @@ Game={{ request.session.selected_game }}
 
 <div id="mapid" style="width: 1000px; height: 800px;"></div>
 <script>
-	var mymap = L.map('mapid').setView([51.505, 10.09], 4);
+	var map = L.map('mapid').setView([51.505, 10.09], 4);
 
-	L.tileLayer('http://tileserver.maptiler.com/nasa/{z}/{x}/{y}.jpg', {maxZoom: 5}).addTo(mymap);
+	L.tileLayer('http://tileserver.maptiler.com/nasa/{z}/{x}/{y}.jpg', {maxZoom: 5}).addTo(map);
+	
+	// clicking on map
+	var popup = L.popup();
+	function onMapClick(e) {
+		popup.setLatLng(e.latlng)
+			.setContent("You clicked the map at " + e.latlng.toString())
+			.openOn(map);
+	}
+	map.on('click', onMapClick);
+	
+	function addLine(lat, lng) {
+		L.polyline([lat,lng], {color: 'gray', opacity:0.5})
+			.addTo(map);
+	}
+	
+	function addField(latlng) {
+		L.circle(latlng, 50000, {color: 'gray'}).addTo(map);
+	}
+	
+	function addCity(latlng, clr) {
+		L.circle(latlng, 150000, {
+			color: clr,
+			fillColor: clr,
+			fillOpacity: 0.5
+		}).on('click', clickCity).addTo(map);
+	}
+	
+	function clickCity(e) {
+		alert('City clicked: '+e.latlng);
+	}
+	
+	function addMarker(latlng, clr) {
+		var markerIcon = L.icon({
+		    iconUrl: '/static/icon/soldier.png',
+		    iconAnchor: [12, 63]
+		});
+		L.marker(latlng, {icon: markerIcon}).addTo(map);
+		L.rectangle([[latlng[0]+4,latlng[1]-1],[latlng[0],latlng[1]+1]], 
+			{color: clr,fillOpacity:1}).on('click', clickMarker).addTo(map);
+	}
+	
+	function clickMarker(e) {
+		alert('Marker clicked: '+e.latlng);
+	}
+
+	addLine([40.313, -4.658],[46.316, 3.515]);
+	addLine([46.316, 3.515],[44.339, 11.074]);
+	addField([44.339, 11.074]);
+	addField([46.316, 3.515]);
+	addCity([40.313, -4.658], 'white');
+	addMarker([44.339, 11.074], 'blue');
+	addMarker([40.313, -4.658], 'yellow');
+	
 </script>
