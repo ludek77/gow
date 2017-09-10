@@ -15,7 +15,7 @@ Game={{ request.session.selected_game }}
 	}
 	map.on('click', onMapClick);
 	
-	function addLine(lat, lng) {
+	function addPath(lat, lng) {
 		L.polyline([lat,lng], {color: 'gray', opacity:0.5})
 			.addTo(map);
 	}
@@ -50,7 +50,7 @@ Game={{ request.session.selected_game }}
 		alert('Marker clicked: '+e.latlng);
 	}
 	
-	//addLine([46.316, 3.515],[44.339, 11.074]);
+	//addPath([46.316, 3.515],[44.339, 11.074]);
 	//addField([46.316, 3.515]);
 	//addCity([40.313, -4.658], 'white');
 	//addMarker([44.339, 11.074], 'blue');
@@ -58,8 +58,13 @@ Game={{ request.session.selected_game }}
 	$(document).ready(function() {
 		$.get('game_setup',function(data){
 			var json = $.parseJSON(data);
-			for(var i in json) {
-			     var latlng = json[i].l;
+			for(var i in json.paths) {
+				var ll1 = json.paths[i][0];
+				var ll2 = json.paths[i][1];
+				addPath(ll1, ll2);
+			}
+			for(var i in json.fields) {
+			     var latlng = json.fields[i][1];
 			     addField(latlng);
 			}
 		});

@@ -6,7 +6,7 @@ from .models import Game, Turn, Field
 
 def game_list_rest(request):
     list = Game.objects.filter(user__id=request.user.id)
-    output = '[' + ', '.join(['{"name":"'+row.name+'","id":"'+str(row.id)+'"}' for row in list]) + ']'
+    output = '[' + ','.join(['{"name":"'+row.name+'","id":"'+str(row.id)+'"}' for row in list]) + ']'
     return HttpResponse(output)
 
 def game_select_rest(request):
@@ -19,12 +19,26 @@ def game_select_rest(request):
 def game_setup_rest(request):
     g = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     t = Turn.objects.get(game=g,open=True)
-    output = '['
+    output = '{'
     
     fields = Field.objects.filter(game=g)
-    output += ', '.join(['{"f":"'+row.name+'","l":['+str(row.lon)+","+str(row.lat)+']}' for row in fields])
+    output += '"fields":['
+    separator = ''
+    for row in fields:
+        output += separator+'["'+row.name+'",['+str(row.lon)+','+str(row.lat)+']]'
+        separator = ','
+    output += '],'
     
+    output += '"paths":['
+    separator = ''
+    for f in fields:
+        for n in f.next.all():
+            if(n.pk < f.pk):
+                output += separator+'[['+str(f.lon)+','+str(f.lat)+'],['+str(n.lon)+','+str(n.lat)+']]'
+                separator = ','
     output += ']'
+    
+    output += '}'
     return HttpResponse(output)
 
 def logout_rest(request):
