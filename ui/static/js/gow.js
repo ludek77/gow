@@ -82,12 +82,31 @@ function addUnit(latlng, pk, clr, uType) {
 		{color: clr,fillOpacity:1}).addTo(map);
 }
 
+function option(id, text) {
+	return '<option value='+id+'>'+text+'</option>';
+}
+
+function setOptions(obj, list) {
+	obj.html('');
+	for(var i in list) {
+		obj.append(option(list[i][0],list[i][1]));
+	}
+}
+
 function onClickUnit(e,pk) {
 	$.get('unit_get?u='+pk, function(data) {
 		var json = $.parseJSON(data);
 		$('#unit-dialog .country').text(json.country);
 		$('#unit-dialog .unitType').text(json.type);
 		$('#unit-dialog .field').text(json.field);
+		if(json.cmds) {
+			$('#unit-dialog .owner-only').show();
+			setOptions($('#unit-dialog #unitCommand'), json.cmds);
+			$('#unit-dialog #unitCommand').val(json.cmd);
+		} else {
+			$('#unit-dialog .owner-only').hide();
+			$('#unit-dialog #unitCommand').html('');
+		}
 		openDialog('#unit-dialog');
 	});
 }
@@ -98,7 +117,7 @@ function setupGameList(selectedGame) {
 		for(var i in json) {
 		     var id = json[i].id;
 		     var name = json[i].name;
-		     $('#select-game').append('<option value='+id+'>'+name+'</option>');
+		     $('#select-game').append(option(id,name));
 		}
 		$('#select-game').val(selectedGame);
 	});
