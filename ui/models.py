@@ -9,7 +9,6 @@ User = get_user_model()
 
 class Game(models.Model):
     name = models.CharField(max_length=100)
-    winPoints = models.IntegerField()
     user = models.ManyToManyField(User, blank=True)
     tileServer= models.CharField(max_length = 100)
     
@@ -19,7 +18,6 @@ class Game(models.Model):
 class Country(models.Model):
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game)
-    email = models.CharField(max_length=100)
     color = models.CharField(max_length=10)
     lon = models.DecimalField(max_digits=6, decimal_places=3)
     lat = models.DecimalField(max_digits=6, decimal_places=3)
@@ -50,7 +48,6 @@ class Field(models.Model):
     lat = models.DecimalField(max_digits=6, decimal_places=3)
     home = models.ForeignKey(Country, null=True, default=None, blank=True)
     isCity = models.BooleanField(default=False)
-    points = models.IntegerField()
     next = models.ManyToManyField('self', blank=True)
     
     def __str__(self):
@@ -59,7 +56,6 @@ class Field(models.Model):
 class Turn(models.Model):
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game)
-    addingUnits = models.BooleanField(default=False)
     open = models.BooleanField(default=True)
     
     def __str__(self):
@@ -82,22 +78,22 @@ class Unit(models.Model):
     def __str__(self):
         return "[" + self.turn.name + "." + self.country.name + "." + self.unitType + "." + self.field.name + "]"
 
-class MoveType(models.Model):
+class CommandType(models.Model):
     name = models.CharField(max_length=100)
     
     def __str__(self):
         return self.name
 
-class Move(models.Model):
+class Command(models.Model):
     turn = models.ForeignKey(Turn)
     unit = models.ForeignKey(Unit)
-    moveType = models.ForeignKey(MoveType)
+    commandType = models.ForeignKey(CommandType)
     
     def __str__(self):
-        return "[" + self.turn.name + "." + self.unit.country.name + "." + self.unit.field.name + "." + self.moveType.name + "]"
+        return "[" + self.turn.name + "." + self.unit.country.name + "." + self.unit.field.name + "." + self.commandType.name + "]"
 
 class Target(models.Model):
-    move = models.ForeignKey(Move)
+    command = models.ForeignKey(Command)
     seq = models.IntegerField()
     field = models.ForeignKey(Field)
     

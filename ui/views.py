@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, logout, login
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.template import loader
-from .models import Game, Turn, Field, Country
+from .models import Game, Turn, Field, Country, UnitType, City
 
 def game_list_rest(request):
     list = Game.objects.filter(user__id=request.user.id)
@@ -19,14 +19,30 @@ def game_select_rest(request):
 
 def game_setup_rest(request):
     g = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
-    t = Turn.objects.get(game=g,open=True)
+    t = Turn.objects.get(game=g)
     output = '{'
     
+    unitTypes = UnitType.objects.all()
+    output += '"unitTypes":['
+    separator = ''
+    for row in unitTypes:
+        output += separator+'["'+row.name+'","'+row.icon+'"]'
+        separator = ','
+    output += '],'
+    
     fields = Field.objects.filter(game=g)
+    cities = City.objects.filter(turn=t)
     output += '"fields":['
     separator = ''
     for row in fields:
-        output += separator+'["'+row.name+'",['+str(row.lon)+','+str(row.lat)+']]'
+        color = '';
+        if(row.isCity):
+            color='-'
+        city = cities.filter(field=row)
+        if len(city)==1:
+            color = city[0].color
+        print(str(row)+' '+color)
+        output += separator+'["'+row.name+'",['+str(row.lon)+','+str(row.lat)+'],"'+color+'"]'
         separator = ','
     output += '],'
     
