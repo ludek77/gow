@@ -1,5 +1,6 @@
 {{game.name}}.{{country.name}}
-<div id="mapid" style="width: 1000px; height: 800px;"></div>
+<div id="mapid"></div>
+<div id="commands"></div>
 <script>
 	map = L.map('mapid').setView([{{country.lat}},{{country.lng}}], 4);
 	L.tileLayer('{{game.tileServer}}', {maxZoom: 5}).addTo(map);
