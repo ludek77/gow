@@ -21,7 +21,11 @@
 		</div>
 		
 		<div id="workspace">
-		{% include "map.html" %}
+			{% if request.user.is_authenticated %}
+				{% include "map.html" %}
+			{% else %}
+				{% include "welcome.html" %}
+			{% endif %}
 		</div>
 	</body>
 </html>
