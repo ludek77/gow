@@ -1,7 +1,7 @@
 {{game.name}}.{{country.name}}
 <div id="mapid" style="width: 1000px; height: 800px;"></div>
 <script>
-	var map = L.map('mapid').setView([51.505, 10.09], 4);
+	var map = L.map('mapid').setView([{{country.lat}},{{country.lon}}], 4);
 	var unitTypes = 'empty';
 	var emptyColor = 'gray';
 
