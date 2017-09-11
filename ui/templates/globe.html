@@ -78,14 +78,12 @@
 			    	addField(latlng);
 			    }
 			}
-			//addCity([44.339, 11.074],'yellow');
 			for(var i in json.units) {
 				var latlng = json.units[i][0];
 				var clr = json.units[i][1];
 				var type = json.units[i][2];
 				addUnit(latlng, clr, type);
 			}			
-			addUnit([44.339, 11.074],'blue','tank');
 		});
 	});
 </script>

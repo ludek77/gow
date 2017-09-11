@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, logout, login
 from django.http import HttpResponse, JsonResponse
 from django.core import serializers
 from django.template import loader
-from .models import Game, Turn, Field, Country, UnitType, City
+from .models import Game, Turn, Field, Country, UnitType, City, Unit
 
 def game_list_rest(request):
     list = Game.objects.filter(user__id=request.user.id)
@@ -41,7 +41,6 @@ def game_setup_rest(request):
         city = cities.filter(field=row)
         if len(city)==1:
             color = city[0].color
-        print(str(row)+' '+color)
         output += separator+'["'+row.name+'",['+str(row.lon)+','+str(row.lat)+'],"'+color+'"]'
         separator = ','
     output += '],'
@@ -53,6 +52,14 @@ def game_setup_rest(request):
             if(n.pk < f.pk):
                 output += separator+'[['+str(f.lon)+','+str(f.lat)+'],['+str(n.lon)+','+str(n.lat)+']]'
                 separator = ','
+    output += '],'
+    
+    units = Unit.objects.filter(turn=t)
+    output += '"units":['
+    separator = ''
+    for row in units:
+        output += separator+'[['+str(row.field.lon)+','+str(row.field.lat)+'],"'+row.country.color+'","'+row.unitType.name+'"]'
+        separator = ','
     output += ']'
     
     output += '}'

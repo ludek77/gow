@@ -76,7 +76,7 @@ class Unit(models.Model):
     field = models.ForeignKey(Field, null=True, default=None, blank=True)
     
     def __str__(self):
-        return "[" + self.turn.name + "." + self.country.name + "." + self.unitType + "." + self.field.name + "]"
+        return "[" + self.turn.name + "." + self.country.name + "." + self.unitType.name + "." + self.field.name + "]"
 
 class CommandType(models.Model):
     name = models.CharField(max_length=100)
