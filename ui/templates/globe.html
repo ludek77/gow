@@ -9,52 +9,50 @@
 	
 	// clicking on map
 	var popup = L.popup();
-	function onMapClick(e) {
+	function onClickMap(e) {
 		popup.setLatLng(e.latlng)
-			.setContent("You clicked the map at " + e.latlng.toString())
+			.setContent("Map clicked [" + e.latlng.toString() + "]")
 			.openOn(map);
 	}
-	map.on('click', onMapClick);
+	map.on('click', onClickMap);
 	
 	function addPath(lat, lng) {
-		L.polyline([lat,lng], {color: emptyColor, opacity:0.5})
-			.addTo(map);
+		L.polyline([lat,lng], {color: emptyColor, opacity:0.5}).addTo(map);
 	}
 	
-	function addField(latlng) {
-		L.circle(latlng, 50000, {color: emptyColor}).addTo(map);
+	function addField(latlng, pk) {
+		L.circle(latlng, 50000, {color: emptyColor}).on('click', function(e){onClickField(e,pk)}).addTo(map);
 	}
 	
-	function addCity(latlng, clr) {
+	function onClickField(e,pk) {
+		alert('Field '+pk+' clicked');
+	}
+	
+	function addCity(latlng, pk, clr) {
 		L.circle(latlng, 150000, {
 			color: clr,
 			fillColor: clr,
 			fillOpacity: 0.5
-		}).on('click', clickCity).addTo(map);
+		}).on('click', function(e){onClickCity(e,pk)}).addTo(map);
 	}
 	
-	function clickCity(e) {
-		alert('City clicked: '+e.latlng);
+	function onClickCity(e,pk) {
+		alert('City '+pk+' clicked');
 	}
 	
-	function addUnit(latlng, clr, uType) {
+	function addUnit(latlng, pk, clr, uType) {
 		var markerIcon = L.icon({
 		    iconUrl: unitTypes[uType],
 		    iconAnchor: [12, 63]
 		});
-		L.marker(latlng, {icon: markerIcon}).addTo(map);
+		L.marker(latlng, {icon: markerIcon}).on('click', function(e){onClickUnit(e,pk)}).addTo(map);
 		L.rectangle([[latlng[0]+4,latlng[1]-1],[latlng[0],latlng[1]+1]], 
-			{color: clr,fillOpacity:1}).on('click', clickMarker).addTo(map);
+			{color: clr,fillOpacity:1}).addTo(map);
 	}
 	
-	function clickMarker(e) {
-		alert('Marker clicked: '+e.latlng);
+	function onClickUnit(e,pk) {
+		alert('Unit '+pk+' clicked');
 	}
-	
-	//addPath([46.316, 3.515],[44.339, 11.074]);
-	//addField([46.316, 3.515]);
-	//addCity([40.313, -4.658], 'white');
-	//addMarker([44.339, 11.074], 'blue');
 
 	$(document).ready(function() {
 		$.get('game_setup',function(data){
@@ -69,20 +67,22 @@
 				addPath(ll1, ll2);
 			}
 			for(var i in json.fields) {
+				var pk = json.fields[i][0];
 			    var latlng = json.fields[i][1];
 			    var clr = json.fields[i][2];
 				if(clr != '') {
 					if(clr == '-') clr = 'gray';
-					addCity(latlng, clr);
+					addCity(latlng, pk, clr);
 				} else {
-			    	addField(latlng);
+			    	addField(latlng, pk);
 			    }
 			}
 			for(var i in json.units) {
-				var latlng = json.units[i][0];
-				var clr = json.units[i][1];
-				var type = json.units[i][2];
-				addUnit(latlng, clr, type);
+				var pk = json.units[i][0];
+				var latlng = json.units[i][1];
+				var clr = json.units[i][2];
+				var type = json.units[i][3];
+				addUnit(latlng, pk, clr, type);
 			}			
 		});
 	});

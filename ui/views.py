@@ -26,7 +26,7 @@ def game_setup_rest(request):
     output += '"unitTypes":['
     separator = ''
     for row in unitTypes:
-        output += separator+'["'+row.name+'","'+row.icon+'"]'
+        output += separator+'['+str(row.pk)+',"'+row.icon+'"]'
         separator = ','
     output += '],'
     
@@ -41,7 +41,7 @@ def game_setup_rest(request):
         city = cities.filter(field=row)
         if len(city)==1:
             color = city[0].color
-        output += separator+'["'+row.name+'",['+str(row.lon)+','+str(row.lat)+'],"'+color+'"]'
+        output += separator+'['+str(row.pk)+',['+str(row.lon)+','+str(row.lat)+'],"'+color+'"]'
         separator = ','
     output += '],'
     
@@ -58,7 +58,7 @@ def game_setup_rest(request):
     output += '"units":['
     separator = ''
     for row in units:
-        output += separator+'[['+str(row.field.lon)+','+str(row.field.lat)+'],"'+row.country.color+'","'+row.unitType.name+'"]'
+        output += separator+'['+str(row.pk)+',['+str(row.field.lon)+','+str(row.field.lat)+'],"'+row.country.color+'",'+str(row.unitType.pk)+']'
         separator = ','
     output += ']'
     
