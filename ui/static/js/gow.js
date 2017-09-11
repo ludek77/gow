@@ -61,7 +61,8 @@ function onClickUnit(e,pk) {
 	alert('Unit '+pk+' clicked');
 }
 
-function setupGameList(json, selectedGame) {
+function setupGameList(data, selectedGame) {
+	var json = $.parseJSON(data);
 	for(var i in json) {
 	     var id = json[i].id;
 	     var name = json[i].name;
@@ -70,7 +71,8 @@ function setupGameList(json, selectedGame) {
 	$("#select-game").val(selectedGame);
 }
 
-function setupGame(json) {
+function setupGame(data) {
+	var json = $.parseJSON(data);
 	unitTypes = {};
 	for(var i in json.unitTypes) {
 		unitTypes[json.unitTypes[i][0]] = json.unitTypes[i][1];
