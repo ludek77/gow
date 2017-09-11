@@ -12,11 +12,12 @@
 	</head>
 	<body>
 		{% if request.user.is_authenticated %}
-			{% include "menu.html" %} 
+			{% include "games.html" %}
+			{% include "logout.html" %}
 		{% else %}
 			{% include "login.html" %}
 		{% endif %}
-		<hr/>
+		
 		{% include "globe.html" %}
 	</body>
 </html>
