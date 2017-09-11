@@ -20,7 +20,6 @@ def country_setup_rest(request):
     output += ']'
     
     output += '}'
-    print(output)
     return HttpResponse(output)
 
 def index(request):

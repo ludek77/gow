@@ -41,7 +41,10 @@ function addCity(latlng, pk, clr) {
 }
 
 function onClickCity(e,pk) {
-	$.get('city_get', function(data) {
+	$.get('city_get?c='+pk, function(data) {
+		var json = $.parseJSON(data);
+		$('#city-dialog .country').text(json.country);
+		$('#city-dialog .field').text(json.field);
 		openDialog('#city-dialog');
 	});
 }
@@ -80,7 +83,11 @@ function addUnit(latlng, pk, clr, uType) {
 }
 
 function onClickUnit(e,pk) {
-	$.get('unit_get', function(data) {
+	$.get('unit_get?u='+pk, function(data) {
+		var json = $.parseJSON(data);
+		$('#unit-dialog .country').text(json.country);
+		$('#unit-dialog .unitType').text(json.type);
+		$('#unit-dialog .field').text(json.field);
 		openDialog('#unit-dialog');
 	});
 }

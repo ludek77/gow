@@ -36,7 +36,7 @@ def game_setup_rest(request):
             color='-'
         city = cities.filter(field=row)
         if len(city)==1:
-            color = city[0].color
+            color = city[0].country.color
         output += separator+'['+str(row.pk)+',['+str(row.lat)+','+str(row.lng)+'],"'+color+'"]'
         separator = ','
     output += '],'

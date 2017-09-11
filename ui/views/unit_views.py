@@ -1,7 +1,13 @@
 from django.http import HttpResponse
-from ui.models import Game, Turn
+from ui.models import Unit
 
 def unit_get_rest(request):
-    selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
-    output = 'unit'
+    uid = request.GET.get("u")
+    selectedUnit = Unit.objects.get(pk=uid)
+    output = '{'
+    #output += '"pk":'+str(selectedUnit.pk)+','
+    output += '"field":"'+selectedUnit.field.name+'",'
+    output += '"country":"'+selectedUnit.country.name+'",'
+    output += '"type":"'+selectedUnit.unitType.name+'"'
+    output += '}'
     return HttpResponse(output)
