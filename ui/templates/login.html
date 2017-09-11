@@ -1,9 +1,7 @@
 <script>
 	$(document).ready(function() {
 		$('#login-user').click(function(event) {
-			$.post('login/', $('#login-form').serialize())
-				.done(function(data){location.reload();})
-				.fail(function(data,status,error){$('#login-form')[0].reset();$('#login-error').html(error);});
+			login();
   		});
 	});
 </script>

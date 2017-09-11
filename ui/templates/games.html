@@ -1,13 +1,7 @@
 <script>
 	$(document).ready(function() {
 		$.get('game_list',function(data){
-			var json = $.parseJSON(data);
-			for(var i in json) {
-			     var id = json[i].id;
-			     var name = json[i].name;
-			     $("#select-game").append('<option value='+id+'>'+name+'</option>');
-			}
-			$("#select-game").val("{{request.session.selected_game}}");
+			setupGameList($.parseJSON(data), "{{request.session.selected_game}}");
 		});
 		
 		$("#select-game").change(function() {
