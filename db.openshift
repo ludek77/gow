@@ -1,0 +1,25 @@
+The following service(s) have been created in your project: postgresql.
+       Username: userQ0S
+       Password: YwMhhwPxM1R6ucxc
+  Database Name: gow
+ Connection URL: postgresql://postgresql:5432/
+
+For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/postgresql-container/blob/master/9.5
+
+
+
+Download and install the oc command line tool. After that, you can start by logging in, switching to this particular project, and displaying an overview of it, by doing:
+
+oc login https://api.starter-us-west-1.openshift.com
+oc project gow
+oc status
+
+_________________________________
+
+python manage.py makemigrations ui
+python manage.py sqlmigrate ui %1
+python manage.py migrate
+
+python manage.py createsuperuser
+
+python manage.py loaddata ww2
