@@ -1,6 +1,7 @@
 #mapid {
 	height: 100%;
 	overflow: hidden;
+	z-index: 0;
 }
 
 #menu {
@@ -13,4 +14,8 @@
 	width: 200px;
 	height: 100%;
 	background-color: gray;
+}
+
+#dialog {
+	z-index: 9999;
 }

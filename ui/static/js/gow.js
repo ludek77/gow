@@ -23,6 +23,10 @@ function onClickMap(e) {
 }
 map.on('click', onClickMap);*/
 
+function openDialog(title, text) {
+	$('#dialog').html(text).prop('title', title).dialog();
+}
+
 function addPath(lat, lng) {
 	L.polyline([lat,lng], {color: emptyColor, opacity:0.5}).addTo(map);
 }
@@ -32,7 +36,7 @@ function addField(latlng, pk) {
 }
 
 function onClickField(e,pk) {
-	alert('Field '+pk+' clicked');
+	openDialog('Field ', pk+' clicked');
 }
 
 function addCity(latlng, pk, clr) {
@@ -44,7 +48,7 @@ function addCity(latlng, pk, clr) {
 }
 
 function onClickCity(e,pk) {
-	alert('City '+pk+' clicked');
+	openDialog('City ', pk+' clicked');
 }
 
 function addUnit(latlng, pk, clr, uType) {
@@ -58,7 +62,7 @@ function addUnit(latlng, pk, clr, uType) {
 }
 
 function onClickUnit(e,pk) {
-	alert('Unit '+pk+' clicked');
+	openDialog('Unit ', pk+' clicked');
 }
 
 function setupGameList(selectedGame) {
