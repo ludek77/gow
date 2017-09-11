@@ -14,17 +14,9 @@ function logout() {
 	});
 }
 
-//clicking on map
-/*var popup = L.popup();
-function onClickMap(e) {
-	popup.setLatLng(e.latlng)
-		.setContent("Map clicked [" + e.latlng.toString() + "]")
-		.openOn(map);
-}
-map.on('click', onClickMap);*/
-
-function openDialog(title, text) {
-	$('#dialog').html(text).prop('title', title).dialog();
+function openDialog(id) {
+	$('.ui-dialog-content').dialog('close');
+	$(id).dialog();
 }
 
 function addPath(lat, lng) {
@@ -36,7 +28,7 @@ function addField(latlng, pk) {
 }
 
 function onClickField(e,pk) {
-	openDialog('Field ', pk+' clicked');
+	alert('Field clicked ['+pk+']');
 }
 
 function addCity(latlng, pk, clr) {
@@ -48,7 +40,10 @@ function addCity(latlng, pk, clr) {
 }
 
 function onClickCity(e,pk) {
-	openDialog('City ', pk+' clicked');
+	$.get('city_get', function(data) {
+		//$('#city-dialog').html(data);
+		openDialog('#city-dialog');
+	});
 }
 
 function addUnit(latlng, pk, clr, uType) {
@@ -62,7 +57,10 @@ function addUnit(latlng, pk, clr, uType) {
 }
 
 function onClickUnit(e,pk) {
-	openDialog('Unit ', pk+' clicked');
+	$.get('unit_get', function(data) {
+		//$('#unit-dialog').html(data);
+		openDialog('#unit-dialog');
+	});
 }
 
 function setupGameList(selectedGame) {
