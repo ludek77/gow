@@ -15,13 +15,13 @@ function logout() {
 }
 
 //clicking on map
-var popup = L.popup();
+/*var popup = L.popup();
 function onClickMap(e) {
 	popup.setLatLng(e.latlng)
 		.setContent("Map clicked [" + e.latlng.toString() + "]")
 		.openOn(map);
 }
-map.on('click', onClickMap);
+map.on('click', onClickMap);*/
 
 function addPath(lat, lng) {
 	L.polyline([lat,lng], {color: emptyColor, opacity:0.5}).addTo(map);
@@ -61,43 +61,59 @@ function onClickUnit(e,pk) {
 	alert('Unit '+pk+' clicked');
 }
 
-function setupGameList(data, selectedGame) {
-	var json = $.parseJSON(data);
-	for(var i in json) {
-	     var id = json[i].id;
-	     var name = json[i].name;
-	     $("#select-game").append('<option value='+id+'>'+name+'</option>');
-	}
-	$("#select-game").val(selectedGame);
+function setupGameList(selectedGame) {
+	$.get('game_list',function(data){
+		var json = $.parseJSON(data);
+		for(var i in json) {
+		     var id = json[i].id;
+		     var name = json[i].name;
+		     $('#select-game').append('<option value='+id+'>'+name+'</option>');
+		}
+		$('#select-game').val(selectedGame);
+	});
 }
 
-function setupGame(data) {
-	var json = $.parseJSON(data);
-	unitTypes = {};
-	for(var i in json.unitTypes) {
-		unitTypes[json.unitTypes[i][0]] = json.unitTypes[i][1];
-	}
-	for(var i in json.paths) {
-		var ll1 = json.paths[i][0];
-		var ll2 = json.paths[i][1];
-		addPath(ll1, ll2);
-	}
-	for(var i in json.fields) {
-		var pk = json.fields[i][0];
-	    var latlng = json.fields[i][1];
-	    var clr = json.fields[i][2];
-		if(clr != '') {
-			if(clr == '-') clr = 'gray';
-			addCity(latlng, pk, clr);
-		} else {
-	    	addField(latlng, pk);
-	    }
-	}
-	for(var i in json.units) {
-		var pk = json.units[i][0];
-		var latlng = json.units[i][1];
-		var clr = json.units[i][2];
-		var type = json.units[i][3];
-		addUnit(latlng, pk, clr, type);
-	}
+function setupCommandList() {
+	$.get('country_setup',function(data){
+		var json= $.parseJSON(data);
+		var units = json.units;
+		for(var i in units) {
+			$('#commands').append(units[i][0]+'.'+unitTypes[units[i][1]]);
+		}
+	});
+}
+
+function setupGame() {
+	$.get('game_setup',function(data){
+		var json = $.parseJSON(data);
+		unitTypes = {};
+		for(var i in json.unitTypes) {
+			unitTypes[json.unitTypes[i][0]] = json.unitTypes[i][1];
+		}
+		for(var i in json.paths) {
+			var ll1 = json.paths[i][0];
+			var ll2 = json.paths[i][1];
+			addPath(ll1, ll2);
+		}
+		for(var i in json.fields) {
+			var pk = json.fields[i][0];
+		    var latlng = json.fields[i][1];
+		    var clr = json.fields[i][2];
+			if(clr != '') {
+				if(clr == '-') clr = 'gray';
+				addCity(latlng, pk, clr);
+			} else {
+		    	addField(latlng, pk);
+		    }
+		}
+		for(var i in json.units) {
+			var pk = json.units[i][0];
+			var latlng = json.units[i][1];
+			var clr = json.units[i][2];
+			var type = json.units[i][3];
+			addUnit(latlng, pk, clr, type);
+		}
+		
+		setupCommandList();
+	});
 }

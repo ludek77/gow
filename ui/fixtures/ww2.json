@@ -23,4 +23,5 @@
     {"model": "ui.field", "pk": 7, "fields": {"name": "Germany", "type": 3, "game": 1, "home": null, "lat": "50.28", "lng":"7.47", "next": [5, 6]}},
 
 	{"model": "ui.unit", "pk": 1, "fields": {"turn": 1, "country": 2, "unitType": 2, "field": 5}}
+	{"model": "ui.unit", "pk": 2, "fields": {"turn": 1, "country": 3, "unitType": 2, "field": 4}}
 ]

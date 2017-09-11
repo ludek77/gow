@@ -22,6 +22,7 @@
 		
 		<div id="workspace">
 			{% if request.user.is_authenticated %}
+				{% include "commands.html" %}
 				{% include "map.html" %}
 			{% else %}
 				{% include "welcome.html" %}

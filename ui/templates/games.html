@@ -1,8 +1,6 @@
 <script>
 	$(document).ready(function() {
-		$.get('game_list',function(data){
-			setupGameList(data, "{{request.session.selected_game}}");
-		});
+		setupGameList("{{request.session.selected_game}}");
 		
 		$("#select-game").change(function() {
 			$.get("game_select?g="+$("#select-game").val(), function( data ) {

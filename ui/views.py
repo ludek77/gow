@@ -18,8 +18,8 @@ def game_select_rest(request):
     return HttpResponse('OK')
 
 def game_setup_rest(request):
-    g = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
-    t = Turn.objects.get(game=g)
+    selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
+    selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
     output = '{'
     
     unitTypes = UnitType.objects.all()
@@ -30,8 +30,8 @@ def game_setup_rest(request):
         separator = ','
     output += '],'
     
-    fields = Field.objects.filter(game=g)
-    cities = City.objects.filter(turn=t)
+    fields = Field.objects.filter(game=selectedGame)
+    cities = City.objects.filter(turn=selectedTurn)
     output += '"fields":['
     separator = ''
     for row in fields:
@@ -54,7 +54,7 @@ def game_setup_rest(request):
                 separator = ','
     output += '],'
     
-    units = Unit.objects.filter(turn=t)
+    units = Unit.objects.filter(turn=selectedTurn)
     output += '"units":['
     separator = ''
     for row in units:
@@ -63,6 +63,27 @@ def game_setup_rest(request):
     output += ']'
     
     output += '}'
+    return HttpResponse(output)
+
+def country_setup_rest(request):
+    selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
+    selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+    selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
+    output = '{'
+    
+    output += '"name":"'+selectedCountry.name+'",'
+    output += '"pk":'+str(selectedCountry.pk)+','
+    
+    output += '"units":['
+    units = Unit.objects.filter(country=selectedCountry, turn=selectedTurn)
+    separator = ''
+    for row in units:
+        output += separator+'['+str(row.pk)+','+str(row.unitType.pk)+']'
+        separator = ','
+    output += ']'
+    
+    output += '}'
+    print(output)
     return HttpResponse(output)
 
 def logout_rest(request):
@@ -77,9 +98,13 @@ def login_rest(request):
         #login
         login(request, user)
         #if one game available, select it
-        list = Game.objects.filter(user__id=request.user.id)
-        if len(list) >= 1:
-            request.session['selected_game'] = str(list[0].id)
+        games = Game.objects.filter(user__id=request.user.id)
+        if len(games) >= 1:
+            request.session['selected_game'] = str(games[0].id)
+            
+            turns = Turn.objects.filter(game=games[0], open=True)
+            if len(turns) == 1:
+                request.session['selected_turn'] = str(turns[0].id)
         return HttpResponse('OK')
     else:
         return HttpResponse('Invalid username or password', status=401)
