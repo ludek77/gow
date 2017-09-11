@@ -34,3 +34,16 @@ def unit_get_rest(request):
 
     output += '}'
     return HttpResponse(output)
+
+def unit_command_rest(request):
+    uid = request.GET.get("u")
+    ctid = request.GET.get("ct")
+    selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
+    selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
+    selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+    selectedUnit = Unit.objects.get(pk=uid, country=selectedCountry, turn=selectedTurn)
+    selectedCommand = Command.objects.get(unit=selectedUnit, turn=selectedTurn)
+    commandType = CommandType.objects.get(pk=ctid)
+    selectedCommand.commandType = commandType
+    selectedCommand.save()
+    return HttpResponse('')

@@ -1,3 +1,12 @@
+<script>
+	$(document).ready(function() {
+		$("#unitCommand").change(function() {
+			$.get("unit_command?u="+selectedUnit+"&ct="+$("#unitCommand").val(), function( data ) {
+			});
+		});
+	});
+</script>
+
 <div id="unit-dialog" title="Unit">
 	<div>Field<span class="field"></span></div>
 	<div>Country<span class="country"></span></div>

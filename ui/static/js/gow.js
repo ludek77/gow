@@ -93,7 +93,10 @@ function setOptions(obj, list) {
 	}
 }
 
+var selectedUnit=null;
+
 function onClickUnit(e,pk) {
+	selectedUnit=pk;
 	$.get('unit_get?u='+pk, function(data) {
 		var json = $.parseJSON(data);
 		$('#unit-dialog .country').text(json.country);
