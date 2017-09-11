@@ -41,7 +41,7 @@ def game_setup_rest(request):
         city = cities.filter(field=row)
         if len(city)==1:
             color = city[0].color
-        output += separator+'['+str(row.pk)+',['+str(row.lon)+','+str(row.lat)+'],"'+color+'"]'
+        output += separator+'['+str(row.pk)+',['+str(row.lat)+','+str(row.lng)+'],"'+color+'"]'
         separator = ','
     output += '],'
     
@@ -50,7 +50,7 @@ def game_setup_rest(request):
     for f in fields:
         for n in f.next.all():
             if(n.pk < f.pk):
-                output += separator+'[['+str(f.lon)+','+str(f.lat)+'],['+str(n.lon)+','+str(n.lat)+']]'
+                output += separator+'[['+str(f.lat)+','+str(f.lng)+'],['+str(n.lat)+','+str(n.lng)+']]'
                 separator = ','
     output += '],'
     
@@ -58,7 +58,7 @@ def game_setup_rest(request):
     output += '"units":['
     separator = ''
     for row in units:
-        output += separator+'['+str(row.pk)+',['+str(row.field.lon)+','+str(row.field.lat)+'],"'+row.country.color+'",'+str(row.unitType.pk)+']'
+        output += separator+'['+str(row.pk)+',['+str(row.field.lat)+','+str(row.field.lng)+'],"'+row.country.color+'",'+str(row.unitType.pk)+']'
         separator = ','
     output += ']'
     
@@ -86,15 +86,13 @@ def login_rest(request):
 
 def index(request):
     #return render(request, 'index.html')
-    games = Game.objects.filter(user__id=request.user.id,pk=request.session['selected_game'])
-    if len(games)>0:
-        countries = Country.objects.filter(owner__id=request.user.id,game=games[0])
-        country=''
-        if len(countries)>0:
-            country = countries[0]
-        context = {
-            'game': games[0],
-            'country': country
-        }
+    context = {}
+    if request.session.get('selected_game',None) != None:
+        games = Game.objects.filter(user__id=request.user.id,pk=request.session['selected_game'])
+        if len(games) == 1:
+            context['game'] = games[0]
+            countries = Country.objects.filter(owner__id=request.user.id,game=games[0])
+            if len(countries)>0:
+                context['country'] = countries[0]
     template = loader.get_template('index.html')
     return HttpResponse(template.render(context, request))

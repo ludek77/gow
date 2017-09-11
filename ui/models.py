@@ -19,8 +19,8 @@ class Country(models.Model):
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game)
     color = models.CharField(max_length=10)
-    lon = models.DecimalField(max_digits=6, decimal_places=3)
-    lat = models.DecimalField(max_digits=6, decimal_places=3)
+    lat = models.DecimalField(max_digits=5, decimal_places=2)
+    lng = models.DecimalField(max_digits=5, decimal_places=2)
     owner = models.ForeignKey(User, null=True, default=None, blank=True)
     
     def __str__(self):
@@ -44,8 +44,8 @@ class Field(models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey(FieldType)
     game = models.ForeignKey(Game)
-    lon = models.DecimalField(max_digits=6, decimal_places=3)
-    lat = models.DecimalField(max_digits=6, decimal_places=3)
+    lat = models.DecimalField(max_digits=5, decimal_places=2)
+    lng = models.DecimalField(max_digits=5, decimal_places=2)
     home = models.ForeignKey(Country, null=True, default=None, blank=True)
     isCity = models.BooleanField(default=False)
     next = models.ManyToManyField('self', blank=True)
