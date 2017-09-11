@@ -1,9 +1,8 @@
-{{game.name}}.{{country.name}}
-<div id="mapid"></div>
 <div id="commands"></div>
+<div id="mapid"></div>
 <script>
 	map = L.map('mapid').setView([{{country.lat}},{{country.lng}}], 4);
-	L.tileLayer('{{game.tileServer}}', {maxZoom: 5}).addTo(map);
+	L.tileLayer('damage{{game.tileServer}}', {maxZoom: 5}).addTo(map);
 	
 	$(document).ready(function() {
 		$.get('game_setup',function(data){

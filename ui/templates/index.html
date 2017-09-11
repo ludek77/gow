@@ -11,13 +11,17 @@
 		<link rel="stylesheet" href="{% static "css/gow.css" %}"/>
 	</head>
 	<body>
-		{% if request.user.is_authenticated %}
-			{% include "games.html" %}
-			{% include "logout.html" %}
-		{% else %}
-			{% include "login.html" %}
-		{% endif %}
+		<div id="menu">
+			{% if request.user.is_authenticated %}
+				{% include "games.html" %}
+				{% include "logout.html" %}
+			{% else %}
+				{% include "login.html" %}
+			{% endif %}
+		</div>
 		
-		{% include "globe.html" %}
+		<div id="workspace">
+		{% include "map.html" %}
+		</div>
 	</body>
 </html>
