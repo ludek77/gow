@@ -35,6 +35,8 @@ class FieldType(models.Model):
 class UnitType(models.Model):
     name = models.CharField(max_length=100)
     icon = models.CharField(max_length=100)
+    width = models.IntegerField()
+    height = models.IntegerField()
     fieldTypes = models.ManyToManyField(FieldType)
 
     def __str__(self):

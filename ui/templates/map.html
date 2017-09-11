@@ -2,6 +2,9 @@
 <script>
 	map = L.map('mapid').setView([{{country.lat}},{{country.lng}}], 4);
 	L.tileLayer('damage{{game.tileServer}}', {maxZoom: 5}).addTo(map);
+	map.on('zoomend', function() {
+		resizeIcons();
+	});
 	
 	$(document).ready(function() {
 		setupGame();

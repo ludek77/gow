@@ -1,6 +1,7 @@
 var map = null;
 var unitTypes = 'empty';
 var emptyColor = 'gray';
+var iconWidth = 24;
 
 function login() {
 	$.post('login/', $('#login-form').serialize())
@@ -41,15 +42,37 @@ function addCity(latlng, pk, clr) {
 
 function onClickCity(e,pk) {
 	$.get('city_get', function(data) {
-		//$('#city-dialog').html(data);
 		openDialog('#city-dialog');
+	});
+}
+
+function resizeIcons() {
+	var currentZoom = map.getZoom();
+	var multip = 2;
+	for(var i = 5; i > currentZoom; i--) {
+		multip /= 2;
+	}
+	$('.leaflet-marker-icon').each(function(index,item){
+		var width = 0;
+		var height = 0;
+		var classList = item.className.split(/\s+/);
+		for(var i = 0; i < classList.length; i++) {
+			if(classList[i].startsWith('id-')) {
+				var id = classList[i].substring(3);
+				width = unitTypes[id][2];
+				height = unitTypes[id][3];
+				break;
+			}
+		}
+		$(item).css('width', width*multip).css('margin-left',-(width*multip/2)).css('margin-top',-height*multip);
 	});
 }
 
 function addUnit(latlng, pk, clr, uType) {
 	var markerIcon = L.icon({
-	    iconUrl: unitTypes[uType],
-	    iconAnchor: [12, 63]
+	    iconUrl: unitTypes[uType][1],
+	    iconAnchor: [unitTypes[uType][2]/2, unitTypes[uType][3]],
+	    className: 'id-'+uType
 	});
 	L.marker(latlng, {icon: markerIcon}).on('click', function(e){onClickUnit(e,pk)}).addTo(map);
 	L.rectangle([[latlng[0]+4,latlng[1]-1],[latlng[0],latlng[1]+1]], 
@@ -58,7 +81,6 @@ function addUnit(latlng, pk, clr, uType) {
 
 function onClickUnit(e,pk) {
 	$.get('unit_get', function(data) {
-		//$('#unit-dialog').html(data);
 		openDialog('#unit-dialog');
 	});
 }
@@ -90,7 +112,7 @@ function setupGame() {
 		var json = $.parseJSON(data);
 		unitTypes = {};
 		for(var i in json.unitTypes) {
-			unitTypes[json.unitTypes[i][0]] = json.unitTypes[i][1];
+			unitTypes[json.unitTypes[i][0]] = json.unitTypes[i];
 		}
 		for(var i in json.paths) {
 			var ll1 = json.paths[i][0];
