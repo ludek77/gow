@@ -2,6 +2,7 @@
 	$(document).ready(function() {
 		$("#unitCommand").change(function() {
 			$.get("unit_command?u="+selectedUnit+"&ct="+$("#unitCommand").val(), function( data ) {
+				$('#commandTarget').html("WHOM?").show();
 			});
 		});
 	});
@@ -13,6 +14,9 @@
 	<div>Type<span class="unitType"></span></div>
 	
 	<div class="owner-only">
-		<div>Command<select id="unitCommand"></select></div>
+		<div>Command
+			<select id="unitCommand"></select>
+			<span id="commandTarget"></span>
+		</div>
 	</div>
 </div>
