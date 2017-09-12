@@ -44,10 +44,11 @@ function onClickField(e,pk) {
 }
 
 function addCity(latlng, pk, clr) {
-	L.circle(latlng, 150000, {
+	L.rectangle([[latlng[0]-1.5,latlng[1]-1.5],[latlng[0]+1.5,latlng[1]+1.5]], {
 		color: clr,
 		fillColor: clr,
-		fillOpacity: 0.5
+		fillOpacity: 0.5,
+		className: 'c-id-'+pk
 	}).on('click', function(e){
 		onClickCity(e,pk);
 	}).addTo(map);
