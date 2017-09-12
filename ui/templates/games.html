@@ -3,10 +3,25 @@
 	function addFieldToMap(e) {
 		var lat = e.latlng.lat.toFixed(2);
 		var lng = e.latlng.lng.toFixed(2);
-		$.get('field_add?lat='+lat+'&lng='+lng, function(data) {
-			var json = $.parseJSON(data);
-			addField([json.lat,json.lng],json.pk);
+		openDialog('/ui/field_dialog', function() {
+			$('#field-save').click(function(){
+				var type = $('#field-type').val();
+				var name = $('#field-name').val();
+				var isCity = $('#field-iscity').is(':checked');
+				saveFieldToMap(lat,lng,type,name,isCity);
+			});
 		});
+	}
+	function saveFieldToMap(lat,lng,type,name,isCity) {
+		$.get('field_add?lat='+lat+'&lng='+lng+'&type='+type+'&name='+name+'&isCity='+isCity, function(data) {
+			var json = $.parseJSON(data);
+			if(json.isCity) {
+				addCity([json.lat,json.lng],json.pk,'gray');
+			} else {
+				addField([json.lat,json.lng],json.pk);
+			}
+		});
+		closeDialog();
 	}
 	function deleteFieldFromMap(e,pk) {
 		$.get('field_delete?pk='+pk, function(data) {

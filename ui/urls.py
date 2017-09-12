@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^$', ui_views.index, name='index'),
     url(r'^unit_dialog/', ui_views.unit_dialog, name='unit_dialog'),
     url(r'^city_dialog/', ui_views.city_dialog, name='city_dialog'),
+    url(r'^field_dialog/', ui_views.field_dialog, name='field_dialog'),
     
     url(r'^logout/', user_views.logout_rest, name='logout'),
     url(r'^login/', user_views.login_rest, name='login'),

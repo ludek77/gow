@@ -23,6 +23,10 @@ function openDialog(url, handler) {
 	});
 }
 
+function closeDialog() {
+	$('#dialog').dialog('close');
+}
+
 function addPath(lat, lng, pk1, pk2) {
 	L.polyline([lat,lng], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
 }
@@ -50,7 +54,7 @@ function addCity(latlng, pk, clr) {
 		fillOpacity: 0.5,
 		className: 'c-id-'+pk
 	}).on('click', function(e){
-		onClickCity(e,pk);
+		onClickField(e,pk);
 	}).addTo(map);
 }
 
@@ -62,11 +66,6 @@ function displayCity(e,pk) {
 			$('#city-dialog .field').text(json.field);
 		});
 	});
-}
-
-var cityClickHandler = displayCity;
-function onClickCity(e,pk) {
-	if(cityClickHandler != null) cityClickHandler(e,pk);
 }
 
 function resizeIcons() {

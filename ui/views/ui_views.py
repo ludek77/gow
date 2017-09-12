@@ -1,5 +1,5 @@
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.template import loader
 from ui.models import Game, Turn, Country, Unit
 
@@ -23,3 +23,8 @@ def unit_dialog(request):
 @login_required
 def city_dialog(request):
     return HttpResponse(loader.get_template('city_dialog.html').render())
+
+@login_required
+@permission_required('change_game')
+def field_dialog(request):
+    return HttpResponse(loader.get_template('field_dialog.html').render())

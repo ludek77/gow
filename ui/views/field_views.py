@@ -7,19 +7,23 @@ from ui.models import Game, Field, FieldType
 def field_add_rest(request):
     lat = request.GET.get("lat")
     lng = request.GET.get("lng")
+    type = request.GET.get("type")
+    name = request.GET.get("name")
+    isCity = (request.GET.get("isCity")=='true')
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     field = Field()
-    field.name = ''
-    field.type = FieldType.objects.first()
+    field.name = name
+    field.type = FieldType.objects.get(pk=type)
     field.game = selectedGame
     field.lat = lat
     field.lng = lng
-    field.isCity = False
+    field.isCity = isCity
     field.save()
     output = '{'
     output += '"pk":'+str(field.pk)+','
     output += '"lat":'+str(field.lat)+','
-    output += '"lng":'+str(field.lng)    
+    output += '"lng":'+str(field.lng)+','
+    output += '"isCity":'+str(isCity).lower()
     output += '}'
     return HttpResponse(output)
 
