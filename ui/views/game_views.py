@@ -50,7 +50,7 @@ def game_setup_rest(request):
     for f in fields:
         for n in f.next.all():
             if(n.pk < f.pk):
-                output += separator+'[['+str(f.lat)+','+str(f.lng)+'],['+str(n.lat)+','+str(n.lng)+']]'
+                output += separator+'[['+str(f.lat)+','+str(f.lng)+'],['+str(n.lat)+','+str(n.lng)+'],'+str(f.pk)+','+str(n.pk)+']'
                 separator = ','
     output += '],'
     

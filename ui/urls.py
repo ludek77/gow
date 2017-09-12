@@ -18,6 +18,8 @@ urlpatterns = [
     
     url(r'^field_add/', field_views.field_add_rest, name='field_add'),
     url(r'^field_delete/', field_views.field_delete_rest, name='field_delete'),
+    url(r'^path_add/', field_views.path_add_rest, name='path_add'),
+    url(r'^path_delete/', field_views.path_delete_rest, name='path_delete'),
     
     url(r'^city_get/', city_views.city_get_rest, name='city_get'),
     

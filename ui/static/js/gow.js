@@ -23,8 +23,8 @@ function openDialog(url, handler) {
 	});
 }
 
-function addPath(lat, lng) {
-	L.polyline([lat,lng], {color: emptyColor, opacity:0.5}).addTo(map);
+function addPath(lat, lng, pk1, pk2) {
+	L.polyline([lat,lng], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
 }
 
 function addField(latlng, pk) {
@@ -168,7 +168,9 @@ function setupGame() {
 		for(var i in json.paths) {
 			var ll1 = json.paths[i][0];
 			var ll2 = json.paths[i][1];
-			addPath(ll1, ll2);
+			var pk1 = json.paths[i][2];
+			var pk2 = json.paths[i][3];
+			addPath(ll1, ll2, pk1, pk2);
 		}
 		for(var i in json.fields) {
 			var pk = json.fields[i][0];

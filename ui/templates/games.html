@@ -14,16 +14,36 @@
 		});
 	}
 	var lastField = null;
-	function togglePathField(e,pk) {
-		if(currentField == null) currentField = pk;
+	function addPathToMap(e,pk) {
+		if(lastField == null) lastField = pk;
 		else {
-			alert('toggle path '+currentField+'-'+pk);
-			currentField = null;
+			$.get('path_add?f1='+lastField+'&f2='+pk, function(data) {
+				var json = $.parseJSON(data);
+				addPath(json.ll1,json.ll2,json.pk1,json.pk2);
+			});
+			lastField = null;
 		}
 	}
-	function configureAddFields() {mapClickHandler = addFieldToMap;fieldClickHandler = null;}
-	
+	function deletePathFromMap(e,pk) {
+		if(lastField == null) lastField = pk;
+		else {
+			if(pk > lastField) {
+				tmp = pk;
+				pk = lastField;
+				lastField = tmp;
+			}
+			$.get('path_delete?f1='+lastField+'&f2='+pk, function(data) {
+				alert(data);
+				var json = $.parseJSON(data);
+				$('path.p-id-'+json.pk1+'-'+json.pk2).hide();
+			});
+			lastField = null;
+		}
+	}
+	function configureAddFields()    {mapClickHandler = addFieldToMap;fieldClickHandler = null;}
 	function configureDeleteFields() {mapClickHandler = null;fieldClickHandler = deleteFieldFromMap;}
+	function configureAddPaths()     {mapClickHandler = null;fieldClickHandler = addPathToMap;currentField = null;}
+	function configureDeletePaths()  {mapClickHandler = null;fieldClickHandler = deletePathFromMap;currentField = null;}
 {% endif %}
 
 	$(document).ready(function() {
@@ -46,6 +66,8 @@
 			var value = $("#configure-type").val();
 			if(value == 'add_fields') configureAddFields()
 			else if(value == 'delete_fields') configureDeleteFields();
+			else if(value == 'add_paths') configureAddPaths();
+			else if(value == 'delete_paths') configureDeletePaths();
 		});
 {% endif %}
 	});
@@ -57,5 +79,7 @@
 	<select id="configure-type" style="display:none">
 		<option value="add_fields">Add fields</option>
 		<option value="delete_fields">Delete fields</option>
+		<option value="add_paths">Add paths</option>
+		<option value="delete_paths">Delete paths</option>
 	</select>
 {% endif %}
