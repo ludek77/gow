@@ -1,4 +1,10 @@
 <script>
+{% if perms.ui.change_game %}		
+	function fieldClicked(e,pk) {
+		alert('My clicked ['+pk+']');
+	}
+{% endif %}
+
 	$(document).ready(function() {
 		setupGameList("{{request.session.selected_game}}");
 		
@@ -7,6 +13,15 @@
 				location.reload();
 			});
 		});
+
+{% if perms.ui.change_game %}		
+		$("#configure-game").click(function() {
+			fieldClickHandler = fieldClicked;
+			map.on('click', function(e) {
+				addField(e.latlng, 8);
+			});
+		});
+{% endif %}
 	});
 </script>
 

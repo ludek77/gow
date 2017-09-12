@@ -13,8 +13,7 @@
 		<link rel="stylesheet" href="{% static "css/gow.css" %}"/>
 	</head>
 	<body>
-		{% include "city-dialog.html" %}
-		{% include "unit-dialog.html" %}
+		<div id="dialog" style="display:none"></div>
 		
 		<div id="menu">
 			{% if request.user.is_authenticated %}

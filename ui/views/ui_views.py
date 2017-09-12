@@ -15,3 +15,11 @@ def index(request):
                     context['country'] = countries[0]
     template = loader.get_template('index.html')
     return HttpResponse(template.render(context, request))
+
+@login_required
+def unit_dialog(request):
+    return HttpResponse(loader.get_template('unit_dialog.html').render())
+
+@login_required
+def city_dialog(request):
+    return HttpResponse(loader.get_template('city_dialog.html').render())

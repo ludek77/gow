@@ -15,9 +15,12 @@ function logout() {
 	});
 }
 
-function openDialog(id) {
-	$('.ui-dialog-content').dialog('close');
-	$(id).dialog();
+function openDialog(url, handler) {
+	$.get(url, function(data) {
+		$('#dialog').html(data);
+		if(handler != null) handler();
+		$('#dialog').dialog();
+	});
 }
 
 function addPath(lat, lng) {
@@ -28,8 +31,9 @@ function addField(latlng, pk) {
 	L.circle(latlng, 50000, {color: emptyColor}).on('click', function(e){onClickField(e,pk)}).addTo(map);
 }
 
+var fieldClickHandler = null;
 function onClickField(e,pk) {
-	alert('Field clicked ['+pk+']');
+	if(fieldClickHandler != null) fieldClickHandler(e,pk);
 }
 
 function addCity(latlng, pk, clr) {
@@ -40,13 +44,19 @@ function addCity(latlng, pk, clr) {
 	}).on('click', function(e){onClickCity(e,pk)}).addTo(map);
 }
 
-function onClickCity(e,pk) {
+function displayCity(e,pk) {
 	$.get('city_get?c='+pk, function(data) {
 		var json = $.parseJSON(data);
-		$('#city-dialog .country').text(json.country);
-		$('#city-dialog .field').text(json.field);
-		openDialog('#city-dialog');
+		openDialog('/ui/city_dialog', function() {
+			$('#city-dialog .country').text(json.country);
+			$('#city-dialog .field').text(json.field);
+		});
 	});
+}
+
+var cityClickHandler = displayCity;
+function onClickCity(e,pk) {
+	if(cityClickHandler != null) cityClickHandler(e,pk);
 }
 
 function resizeIcons() {
@@ -99,18 +109,19 @@ function onClickUnit(e,pk) {
 	selectedUnit=pk;
 	$.get('unit_get?u='+pk, function(data) {
 		var json = $.parseJSON(data);
-		$('#unit-dialog .country').text(json.country);
-		$('#unit-dialog .unitType').text(json.type);
-		$('#unit-dialog .field').text(json.field);
-		if(json.cmds) {
-			$('#unit-dialog .owner-only').show();
-			setOptions($('#unit-dialog #unitCommand'), json.cmds);
-			$('#unit-dialog #unitCommand').val(json.cmd);
-		} else {
-			$('#unit-dialog .owner-only').hide();
-			$('#unit-dialog #unitCommand').html('');
-		}
-		openDialog('#unit-dialog');
+		openDialog('/ui/unit_dialog', function() {
+			$('#unit-dialog .country').text(json.country);
+			$('#unit-dialog .unitType').text(json.type);
+			$('#unit-dialog .field').text(json.field);
+			if(json.cmds) {
+				$('#unit-dialog .owner-only').show();
+				setOptions($('#unit-dialog #unitCommand'), json.cmds);
+				$('#unit-dialog #unitCommand').val(json.cmd);
+			} else {
+				$('#unit-dialog .owner-only').hide();
+				$('#unit-dialog #unitCommand').html('');
+			}
+		});
 	});
 }
 
