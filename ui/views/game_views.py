@@ -64,3 +64,4 @@ def game_setup_rest(request):
     
     output += '}'
     return HttpResponse(output)
+

@@ -83,7 +83,7 @@ class Unit(models.Model):
 class CommandType(models.Model):
     name = models.CharField(max_length=100)
     unitType = models.ManyToManyField(UnitType, blank=True)
-    template = models.CharField(max_length=100, null=True, default=None, blank=True)
+    template = models.CharField(max_length=100)
     
     def __str__(self):
         return self.name

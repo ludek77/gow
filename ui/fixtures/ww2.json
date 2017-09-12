@@ -10,10 +10,10 @@
     
     {"model": "ui.country", "pk": 1, "fields": {"name": "Italy", "game": 1, "color": "green", "lng": "10.00", "lat": "51.00", "owner": null}}, 
     {"model": "ui.country", "pk": 2, "fields": {"name": "Russia", "game": 1, "color": "red", "lng": "10.00", "lat": "51.00", "owner": null}}, 
-    {"model": "ui.country", "pk": 3, "fields": {"name": "Spain", "game": 1, "color": "yellow", "lng": "10.00", "lat": "51.00", "owner": 1}},
+    {"model": "ui.country", "pk": 3, "fields": {"name": "Spain", "game": 1, "color": "yellow", "lng": "10.00", "lat": "51.00", "owner": null}},
 
 	{"model": "ui.commandtype", "pk": 1, "fields": {"name": "attack", "template": "F.next", "unitType": [1, 2]}}, 
-	{"model": "ui.commandtype", "pk": 2, "fields": {"name": "defend", "template": null, "unitType": [1, 2]}}, 
+	{"model": "ui.commandtype", "pk": 2, "fields": {"name": "defend", "template": "", "unitType": [1, 2]}}, 
 	{"model": "ui.commandtype", "pk": 3, "fields": {"name": "move", "template": "F.next,?F.next", "unitType": [1, 2]}}, 
 	{"model": "ui.commandtype", "pk": 4, "fields": {"name": "support_defence", "template": "F.next.unit", "unitType": [1, 2]}}, 
 	{"model": "ui.commandtype", "pk": 5, "fields": {"name": "support_attack", "template": "F.next,F.next.unit", "unitType": [1, 2]}}, 
@@ -29,6 +29,6 @@
 
 	{"model": "ui.city", "pk": 1, "fields": {"turn": 1, "field": 4, "country": 3}},
 
-	{"model": "ui.unit", "pk": 1, "fields": {"turn": 1, "country": 2, "unitType": 2, "field": 5}}
+	{"model": "ui.unit", "pk": 1, "fields": {"turn": 1, "country": 2, "unitType": 2, "field": 5}},
 	{"model": "ui.unit", "pk": 2, "fields": {"turn": 1, "country": 3, "unitType": 2, "field": 4}}
 ]
