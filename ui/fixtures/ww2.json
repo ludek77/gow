@@ -12,7 +12,6 @@
     {"model": "ui.country", "pk": 2, "fields": {"name": "Russia", "game": 1, "color": "red", "lng": "10.00", "lat": "51.00", "owner": null}}, 
     {"model": "ui.country", "pk": 3, "fields": {"name": "Spain", "game": 1, "color": "yellow", "lng": "10.00", "lat": "51.00", "owner": 1}},
 
-
 	{"model": "ui.commandtype", "pk": 1, "fields": {"name": "attack", "template": "F.next", "unitType": [1, 2]}}, 
 	{"model": "ui.commandtype", "pk": 2, "fields": {"name": "defend", "template": null, "unitType": [1, 2]}}, 
 	{"model": "ui.commandtype", "pk": 3, "fields": {"name": "move", "template": "F.next,?F.next", "unitType": [1, 2]}}, 
