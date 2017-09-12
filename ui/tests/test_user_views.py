@@ -5,7 +5,7 @@ from django.urls import reverse
 class UserTests(TestCase):
     
     def setUp(self):
-        call_command('loaddata', 'user', verbosity=0)
+        call_command('loaddata', 'test/user', verbosity=0)
     
     def test_index(self):
         response = self.client.get(reverse('index'))
