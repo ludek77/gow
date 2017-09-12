@@ -28,7 +28,14 @@ function addPath(lat, lng) {
 }
 
 function addField(latlng, pk) {
-	L.circle(latlng, 50000, {color: emptyColor}).on('click', function(e){onClickField(e,pk)}).addTo(map);
+	L.circle(latlng, 50000, {color: emptyColor, className: 'f-id-'+pk}).on('click', function(e){
+		onClickField(e,pk);
+	}).addTo(map);
+}
+
+var mapClickHandler = null;
+function onMapClick(e) {
+	if(mapClickHandler != null) mapClickHandler(e);
 }
 
 var fieldClickHandler = null;
@@ -41,7 +48,9 @@ function addCity(latlng, pk, clr) {
 		color: clr,
 		fillColor: clr,
 		fillOpacity: 0.5
-	}).on('click', function(e){onClickCity(e,pk)}).addTo(map);
+	}).on('click', function(e){
+		onClickCity(e,pk);
+	}).addTo(map);
 }
 
 function displayCity(e,pk) {
@@ -70,7 +79,7 @@ function resizeIcons() {
 		var height = 0;
 		var classList = item.className.split(/\s+/);
 		for(var i = 0; i < classList.length; i++) {
-			if(classList[i].startsWith('id-')) {
+			if(classList[i].startsWith('u-id-')) {
 				var id = classList[i].substring(3);
 				width = unitTypes[id][2];
 				height = unitTypes[id][3];
@@ -85,9 +94,11 @@ function addUnit(latlng, pk, clr, uType) {
 	var markerIcon = L.icon({
 	    iconUrl: unitTypes[uType][1],
 	    iconAnchor: [unitTypes[uType][2]/2, unitTypes[uType][3]],
-	    className: 'id-'+uType
+	    className: 'u-id-'+uType
 	});
-	L.marker(latlng, {icon: markerIcon}).on('click', function(e){onClickUnit(e,pk)}).addTo(map);
+	L.marker(latlng, {icon: markerIcon}).on('click', function(e){
+		onClickUnit(e,pk)
+	}).addTo(map);
 	L.rectangle([[latlng[0]+4,latlng[1]-1],[latlng[0],latlng[1]+1]], 
 		{color: clr,fillOpacity:1}).addTo(map);
 }

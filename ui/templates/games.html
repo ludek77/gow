@@ -1,8 +1,29 @@
 <script>
 {% if perms.ui.change_game %}		
-	function fieldClicked(e,pk) {
-		alert('My clicked ['+pk+']');
+	function addFieldToMap(e) {
+		var lat = e.latlng.lat.toFixed(2);
+		var lng = e.latlng.lng.toFixed(2);
+		$.get('field_add?lat='+lat+'&lng='+lng, function(data) {
+			var json = $.parseJSON(data);
+			addField([json.lat,json.lng],json.pk);
+		});
 	}
+	function deleteFieldFromMap(e,pk) {
+		$.get('field_delete?pk='+pk, function(data) {
+			$('.f-id-'+pk).hide();
+		});
+	}
+	var lastField = null;
+	function togglePathField(e,pk) {
+		if(currentField == null) currentField = pk;
+		else {
+			alert('toggle path '+currentField+'-'+pk);
+			currentField = null;
+		}
+	}
+	function configureAddFields() {mapClickHandler = addFieldToMap;fieldClickHandler = null;}
+	
+	function configureDeleteFields() {mapClickHandler = null;fieldClickHandler = deleteFieldFromMap;}
 {% endif %}
 
 	$(document).ready(function() {
@@ -16,10 +37,15 @@
 
 {% if perms.ui.change_game %}		
 		$("#configure-game").click(function() {
-			fieldClickHandler = fieldClicked;
-			map.on('click', function(e) {
-				addField(e.latlng, 8);
-			});
+			$('#configure-game').hide();
+			$('#configure-type').show();
+			configureAddFields();
+		});
+		
+		$("#configure-type").change(function(e) {
+			var value = $("#configure-type").val();
+			if(value == 'add_fields') configureAddFields()
+			else if(value == 'delete_fields') configureDeleteFields();
 		});
 {% endif %}
 	});
@@ -28,4 +54,8 @@
 <select id="select-game"></select>
 {% if perms.ui.change_game %}
 	<input id="configure-game" type="button" value="Configure"/>
+	<select id="configure-type" style="display:none">
+		<option value="add_fields">Add fields</option>
+		<option value="delete_fields">Delete fields</option>
+	</select>
 {% endif %}

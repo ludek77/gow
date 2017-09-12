@@ -1,6 +1,6 @@
 from django.conf.urls import url
 
-from ui.views import ui_views, user_views, game_views, city_views, country_views, unit_views
+from ui.views import ui_views, user_views, game_views, city_views, country_views, unit_views, field_views
 
 urlpatterns = [
     url(r'^$', ui_views.index, name='index'),
@@ -15,6 +15,9 @@ urlpatterns = [
     url(r'^game_setup/', game_views.game_setup_rest, name='game_setup'),
     
     url(r'^country_setup/', country_views.country_setup_rest, name='country_setup'),
+    
+    url(r'^field_add/', field_views.field_add_rest, name='field_add'),
+    url(r'^field_delete/', field_views.field_delete_rest, name='field_delete'),
     
     url(r'^city_get/', city_views.city_get_rest, name='city_get'),
     
