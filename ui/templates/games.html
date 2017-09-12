@@ -11,3 +11,6 @@
 </script>
 
 <select id="select-game"></select>
+{% if perms.ui.change_game %}
+	<input id="configure-game" type="button" value="Configure"/>
+{% endif %}

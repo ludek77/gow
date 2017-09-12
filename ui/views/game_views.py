@@ -1,11 +1,14 @@
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from ui.models import Game, Turn, Field, UnitType, City, Unit
 
+@login_required
 def game_list_rest(request):
     list = Game.objects.filter(user__id=request.user.id)
     output = '[' + ','.join(['{"name":"'+row.name+'","id":"'+str(row.id)+'"}' for row in list]) + ']'
     return HttpResponse(output)
 
+@login_required
 def game_select_rest(request):
     game = request.GET.get("g")
     g = Game.objects.filter(pk=game, user__id=request.user.id)
@@ -13,6 +16,7 @@ def game_select_rest(request):
         request.session['selected_game'] = str(g[0].id)
     return HttpResponse('OK')
 
+@login_required
 def game_setup_rest(request):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)

@@ -1,6 +1,8 @@
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 from ui.models import Unit, CommandType, Game, Turn, Command, Country
 
+@login_required
 def unit_get_rest(request):
     uid = request.GET.get("u")
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
@@ -35,6 +37,7 @@ def unit_get_rest(request):
     output += '}'
     return HttpResponse(output)
 
+@login_required
 def unit_command_rest(request):
     uid = request.GET.get("u")
     ctid = request.GET.get("ct")

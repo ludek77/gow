@@ -1,7 +1,9 @@
 from django.contrib.auth import authenticate, logout, login
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from ui.models import Game, Turn
 
+@login_required
 def logout_rest(request):
     logout(request)
     return HttpResponse("Logged out")
