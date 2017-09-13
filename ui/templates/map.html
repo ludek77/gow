@@ -1,6 +1,6 @@
 <script>
 	map = L.map('map').setView([{{country.lat}},{{country.lng}}], 4);
-	L.tileLayer('{{game.tileServer}}', {maxZoom: 5}).addTo(map);
+	L.tileLayer('{{game.tileServer}}', {minZoom:3, maxZoom: 5}).addTo(map);
 	map.on('zoomend', function() {
 		resizeIcons();
 	});
