@@ -157,10 +157,11 @@ function selectTarget(param) {
 function clickTarget(e,pk) {
 	commandArgs[selectedTarget] = pk;
 	var ct = $('#unit-command').val();
-	$.get('unit_command/?f='+selectedUnit+'&ct='+ct+'&args='+commandArgs, function(data) {
+	$.get('unit_command/?f='+selectedField+'&ct='+ct+'&args='+commandArgs, function(data) {
 		var json = $.parseJSON(data);
-		renderUnitDialog(json);
+		renderFieldDialog(json);
 	});
+	fieldClickHandler = defaultClickField;
 }
 
 function setupUnitDialog(template,args) {

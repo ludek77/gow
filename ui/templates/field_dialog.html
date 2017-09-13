@@ -1,9 +1,9 @@
 <script>
 	$(document).ready(function() {
 		$("#unit-command").change(function() {
-			$.get("unit_command?u="+selectedUnit+"&ct="+$("#unit-command").val(), function( data ) {
+			$.get("unit_command?f="+selectedField+"&ct="+$("#unit-command").val(), function( data ) {
 				var json = $.parseJSON(data);
-				renderUnitDialog(json);
+				renderFieldDialog(json);
 			});
 		});
 	});
