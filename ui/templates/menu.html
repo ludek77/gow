@@ -8,6 +8,7 @@
 {% if request.user.is_authenticated %}
 	{% include "games.html" %}
 	<button id="logout-btn">Logout {{ request.user.username }} </button>
+	{% include "commands_dialog.html" %}
 {% else %}
 	<form id="login-form">
 		{% csrf_token %}
