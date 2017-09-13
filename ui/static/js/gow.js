@@ -28,8 +28,8 @@ function closeDialog() {
 	$('#dialog').dialog('close');
 }
 
-function renderPath(lat, lng, pk1, pk2) {
-	L.polyline([lat,lng], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
+function renderPath(ll1, ll2, pk1, pk2) {
+	L.polyline([ll1,ll2], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
 }
 
 function renderField(latlng, pk) {
