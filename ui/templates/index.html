@@ -7,6 +7,9 @@
 		<script src="{% static "js/jquery-3.2.1.min.js" %}"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 		<script src="{% static "js/gow.js" %}"></script>
+		{% if perms.ui.change_game %}	
+			<script src="{% static "js/gow-admin.js" %}"></script>	
+		{% endif %}
 		<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
@@ -16,12 +19,7 @@
 		<div id="dialog" style="display:none"></div>
 		
 		<div id="menu">
-			{% if request.user.is_authenticated %}
-				{% include "games.html" %}
-				{% include "logout.html" %}
-			{% else %}
-				{% include "login.html" %}
-			{% endif %}
+			{% include "menu.html" %}
 		</div>
 		
 		<div id="workspace">

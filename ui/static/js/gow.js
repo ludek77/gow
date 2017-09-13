@@ -148,16 +148,6 @@ function setupGameList(selectedGame) {
 	});
 }
 
-function setupCommandList() {
-	$.get('country_setup',function(data){
-		var json= $.parseJSON(data);
-		var units = json.units;
-		for(var i in units) {
-			$('#commands').append(units[i][0]+'.'+unitTypes[units[i][1]]);
-		}
-	});
-}
-
 function setupGame() {
 	$.get('game_setup',function(data){
 		var json = $.parseJSON(data);
@@ -191,6 +181,12 @@ function setupGame() {
 			addUnit(latlng, pk, clr, type);
 		}
 		
-		setupCommandList();
+		$.get('country_setup',function(data){
+			var json= $.parseJSON(data);
+			var units = json.units;
+			for(var i in units) {
+				$('#commands-content').append(units[i][0]+'.'+unitTypes[units[i][1]]);
+			}
+		});
 	});
 }

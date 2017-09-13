@@ -1,6 +1,5 @@
 #mapid {
 	height: 100%;
-	overflow: hidden;
 	z-index: 0;
 }
 
@@ -9,11 +8,9 @@
 	height: 50px;
 }
 
-#commands {
-	float: right;
-	width: 200px;
-	height: 100%;
-	background-color: gray;
+#commands-content {
+	widgth: 200px;
+	height: 500px;
 }
 
 #dialog {

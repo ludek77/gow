@@ -41,18 +41,20 @@ def field_delete_rest(request):
 def path_add_rest(request):
     pk1 = request.GET.get("f1")
     pk2 = request.GET.get("f2")
-    selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
-    field1 = Field.objects.get(pk=pk1)
-    field2 = Field.objects.get(pk=pk2)
-    field1.next.add(field2)
-    field1.save()
     output = '{'
-    output += '"pk1":'+pk1+','
-    output += '"pk2":'+pk2+','
-    output += '"ll1":['+str(field1.lat)+','+str(field1.lng)+'],'
-    output += '"ll2":['+str(field2.lat)+','+str(field2.lng)+']'
+    if pk1 != pk2:
+        selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
+        field1 = Field.objects.get(pk=pk1)
+        field2 = Field.objects.get(pk=pk2)
+        field1.next.add(field2)
+        field1.save()
+        output += '"pk1":'+pk1+','
+        output += '"pk2":'+pk2+','
+        output += '"ll1":['+str(field1.lat)+','+str(field1.lng)+'],'
+        output += '"ll2":['+str(field2.lat)+','+str(field2.lng)+']'
     output += '}'
     return HttpResponse(output)
+    
 
 @login_required
 @permission_required('change_game')

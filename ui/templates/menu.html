@@ -1,0 +1,20 @@
+<script>
+	$(document).ready(function() {
+		$('#login-user').click(function(event) {login()});
+		$('#logout-btn').click(function(event) {logout()});
+	});
+</script>
+
+{% if request.user.is_authenticated %}
+	{% include "games.html" %}
+	<button id="logout-btn">Logout {{ request.user.username }} </button>
+{% else %}
+	<form id="login-form">
+		{% csrf_token %}
+		<input type="text" name="username"/>
+		<input type="password" name="password"/>
+		<input id="login-user" type="button" value="Login"/>
+		<span id="login-error"></span>
+	</form>
+{% endif %}
+ 
