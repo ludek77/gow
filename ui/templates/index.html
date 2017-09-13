@@ -17,18 +17,20 @@
 	</head>
 	<body>
 		<div id="dialog" style="display:none"></div>
-		
-		<div id="menu">
-			{% include "menu.html" %}
-		</div>
-		
+
 		<div id="workspace">
-			{% if request.user.is_authenticated %}
+			<div id="menu">
+				{% include "menu.html" %}
 				{% include "commands.html" %}
-				{% include "map.html" %}
-			{% else %}
-				{% include "welcome.html" %}
-			{% endif %}
+			</div>
+			
+			<div id="map">
+				{% if request.user.is_authenticated %}
+					{% include "map.html" %}
+				{% else %}
+					{% include "welcome.html" %}
+				{% endif %}
+			</div>
 		</div>
 	</body>
 </html>

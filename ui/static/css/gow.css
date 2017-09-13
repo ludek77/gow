@@ -1,11 +1,22 @@
-#mapid {
+body {
 	height: 100%;
-	z-index: 0;
+	margin: 0;
+}
+
+#workspace {
+	display: flex;
+	flex-flow: column;
+	height: 100%;
+	width: 100%;
 }
 
 #menu {
-	width: 100%;
-	height: 50px;
+	flex: 0 1 auto;
+}
+
+#map {
+	flex: 1 1 auto;
+	z-index: 0;
 }
 
 #commands-content {
