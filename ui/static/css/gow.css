@@ -35,4 +35,5 @@ body {
 .unit-param span.target {
 	color: blue;
 	text-decoration: underline;
+	cursor: pointer;
 }

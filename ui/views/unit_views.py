@@ -24,7 +24,7 @@ def unit_get_rest(request):
     
         cmd = Command.objects.filter(turn=selectedTurn, unit=selectedUnit)
         if len(cmd) == 1:
-            output += ',"cmd":['+str(cmd[0].commandType.pk)+','+cmd[0].commandType.template+']'
+            output += ',"cmd":['+str(cmd[0].commandType.pk)+',['+cmd[0].commandType.template+']]'
         
         cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
         output += ',"cmds":['
