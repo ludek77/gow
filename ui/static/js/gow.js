@@ -127,7 +127,8 @@ function onClickUnit(e,pk) {
 			if(json.cmds) {
 				$('#unit-dialog .owner-only').show();
 				setOptions($('#unit-command'), json.cmds);
-				$('#unit-command').val(json.cmd);
+				$('#unit-command').val(json.cmd[0]);
+				setupUnitDialog(json.cmd[1]);
 			} else {
 				$('#unit-dialog .owner-only').hide();
 				$('#unit-command').html('');
@@ -140,11 +141,12 @@ function appendTarget(text,param) {
 	$('#unit-command-targets').append('<div class="unit-param"><span class="label">'+text+'</span><span class="target">Unknown</span></div>');
 }
 
-function setupUnitDialog(data) {
+function setupUnitDialog(template) {
 	$('#unit-command-targets').html('');
-	var json = $.parseJSON(data);
-	for(var i = 0; i < json.template.length; i++) {
-		appendTarget(json.template[i][0],json.template[i][1]);
+	for(var i = 0; i < template.length; i++) {
+		if(template[i] != '') {
+			appendTarget(template[i][0],template[i][1]);
+		}
 	}
 }
 

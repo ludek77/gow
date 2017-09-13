@@ -13,7 +13,7 @@
     {"model": "ui.country", "pk": 3, "fields": {"name": "Spain", "game": 1, "color": "yellow", "lng": "10.00", "lat": "51.00", "owner": null}},
 
     {"model": "ui.commandtype", "pk": 1, "fields": {"name": "attack", "template": "[\"Target\",[\"next\"]]", "unitType": [1, 2]}}, 
-    {"model": "ui.commandtype", "pk": 2, "fields": {"name": "defend", "template": "", "unitType": [1, 2]}}, 
+    {"model": "ui.commandtype", "pk": 2, "fields": {"name": "defend", "template": "[]", "unitType": [1, 2]}}, 
     {"model": "ui.commandtype", "pk": 3, "fields": {"name": "move", "template": "[\"Move to\",[\"next\"]],[\"Second target\",[\"opt\",\"next\"]]", "unitType": [1, 2]}}, 
     {"model": "ui.commandtype", "pk": 4, "fields": {"name": "support_defence", "template": "[\"Supported unit\",[\"next\",\"unit\"]]", "unitType": [1, 2]}}, 
     {"model": "ui.commandtype", "pk": 5, "fields": {"name": "support_attack", "template": "[\"Target\",[\"next\"]],[\"Supported unit\",[\"next\",\"unit\"]]", "unitType": [1,2]}}, 

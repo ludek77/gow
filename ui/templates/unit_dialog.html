@@ -2,7 +2,8 @@
 	$(document).ready(function() {
 		$("#unit-command").change(function() {
 			$.get("unit_command?u="+selectedUnit+"&ct="+$("#unit-command").val(), function( data ) {
-				setupUnitDialog(data);
+				var json = $.parseJSON(data);
+				setupUnitDialog(json.template);
 			});
 		});
 	});
