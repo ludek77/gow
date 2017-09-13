@@ -26,5 +26,5 @@ def city_dialog(request):
 
 @login_required
 @permission_required('change_game')
-def field_dialog(request):
-    return HttpResponse(loader.get_template('field_dialog.html').render())
+def new_field_dialog(request):
+    return HttpResponse(loader.get_template('new_field_dialog.html').render())

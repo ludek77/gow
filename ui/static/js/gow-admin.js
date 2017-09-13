@@ -1,7 +1,7 @@
 function addFieldToMap(e) {
 	var lat = e.latlng.lat.toFixed(2);
 	var lng = e.latlng.lng.toFixed(2);
-	openDialog('/ui/field_dialog', function() {
+	openDialog('/ui/new_field_dialog', function() {
 		$('#field-save').click(function(){
 			var type = $('#field-type').val();
 			var name = $('#field-name').val();
