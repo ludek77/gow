@@ -27,3 +27,12 @@ body {
 #dialog {
 	z-index: 9999;
 }
+
+.unit-param span.label {
+	font-weight: bold;
+}
+
+.unit-param span.target {
+	color: blue;
+	text-decoration: underline;
+}

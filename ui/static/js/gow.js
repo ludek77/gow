@@ -136,16 +136,15 @@ function onClickUnit(e,pk) {
 	});
 }
 
-function appendTarget(target) {
-	$('#unit-command-targets').append('<span>'+target+'</span>');
+function appendTarget(text,param) {
+	$('#unit-command-targets').append('<div class="unit-param"><span class="label">'+text+'</span><span class="target">Unknown</span></div>');
 }
 
 function setupUnitDialog(data) {
 	$('#unit-command-targets').html('');
 	var json = $.parseJSON(data);
-	var targets = json.template.split(/\s+/);
-	for(var i = 0; i < targets.length; i++) {
-		appendTarget(targets[i]);
+	for(var i = 0; i < json.template.length; i++) {
+		appendTarget(json.template[i][0],json.template[i][1]);
 	}
 }
 
