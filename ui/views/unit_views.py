@@ -11,7 +11,6 @@ def unitResponse(request, fieldId):
     output = '{'
 
     # public data
-    #output += '"pk":'+str(selectedUnit.pk)+','
     output += '"field":"'+selectedField.name+'"'
     if len(selectedUnit) == 1:
         output += ',"country":"'+selectedUnit[0].country.name+'"'
@@ -25,7 +24,15 @@ def unitResponse(request, fieldId):
     
         cmd = Command.objects.filter(turn=selectedTurn, unit=selectedUnit)
         if len(cmd) == 1:
-            output += ',"cmd":['+str(cmd[0].commandType.pk)+',['+cmd[0].commandType.template+'],['+cmd[0].args+']]'
+            output += ',"cmd":['+str(cmd[0].commandType.pk)+',['+cmd[0].commandType.template+'],['
+            if cmd[0].args != '':
+                flds = cmd[0].args.split(',')
+                separator = ''
+                for fld in flds:
+                    f = Field.objects.get(pk=fld)
+                    output += separator+'['+str(f.pk)+',"'+f.name+'"]'
+                    separator = ','
+                output += ']]'
         
         cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
         output += ',"cmds":['

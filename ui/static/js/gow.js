@@ -67,16 +67,6 @@ function renderCity(latlng, fpk, clr) {
 	}).addTo(map);
 }
 
-/*function displayCity(e,pk) {
-	$.get('city_get?c='+pk, function(data) {
-		var json = $.parseJSON(data);
-		openDialog('/ui/field_dialog', function() {
-			$('#city-dialog .country').text(json.country);
-			$('#city-dialog .field').text(json.field);
-		});
-	});
-}*/
-
 function resizeIcons() {
 	var currentZoom = map.getZoom();
 	var multip = 2;
@@ -143,8 +133,12 @@ function renderFieldDialog(json) {
 }
 
 function appendTarget(index,text,param,arg) {
-	if(arg == null) arg = 'Select';
-	$('#unit-command-targets').append('<div class="unit-param"><span class="label">'+text+'</span><span id="target-'+index+'" class="clickable" onclick="selectTarget('+index+')">'+arg+'</span></div>');
+	if(arg == null) arg = [null,'Select'];
+	$('#unit-command-targets')
+		.append('<div class="unit-param">')
+		.append('<span class="label">'+text+'</span>')
+		.append('<span id="target-'+index+'" class="clickable" onclick="selectTarget('+index+')">'+arg[1]+'</span>')
+		.append('</div>');
 }
 
 var selectedTarget = null;
@@ -235,8 +229,3 @@ function appendUnitCommand(unit) {
 	var type = unitTypes[unit[1]];
 	$('#commands-content').append('<div><span class="clickable" onclick="onClickField('+unit[0]+','+unit[2]+')">'+unit[3]+'</span><span>'+type[4]+'</span></div>');
 }
-/*
-function clickUnitCommand(uid, fid) {
-	onClickField(null,uid);
-}
-*/
