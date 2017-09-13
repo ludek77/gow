@@ -5,7 +5,7 @@
     {"model": "ui.fieldtype", "pk": 2, "fields": {"name": "Ground"}}, 
     {"model": "ui.fieldtype", "pk": 3, "fields": {"name": "Beach"}}, 
     
-    {"model": "ui.unittype", "pk": 1, "fields": {"name": "Ship", "icon": "/static/icon/soldier.png", "width": 24, "height": 64, "fieldTypes": [1, 3]}}, 
+    {"model": "ui.unittype", "pk": 1, "fields": {"name": "Ship", "icon": "/static/icon/ship.png", "width": 48, "height": 48, "fieldTypes": [1, 3]}}, 
     {"model": "ui.unittype", "pk": 2, "fields": {"name": "Soldier", "icon": "/static/icon/soldier.png", "width": 24, "height": 64, "fieldTypes": [2, 3]}},
     
     {"model": "ui.country", "pk": 1, "fields": {"name": "Italy", "game": 1, "color": "green", "lng": "10.00", "lat": "51.00", "owner": null}}, 

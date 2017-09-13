@@ -80,7 +80,7 @@ function resizeIcons() {
 		var classList = item.className.split(/\s+/);
 		for(var i = 0; i < classList.length; i++) {
 			if(classList[i].startsWith('u-id-')) {
-				var id = classList[i].substring(3);
+				var id = classList[i].substring(5);
 				width = unitTypes[id][2];
 				height = unitTypes[id][3];
 				break;
