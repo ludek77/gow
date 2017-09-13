@@ -92,7 +92,7 @@ class Command(models.Model):
     turn = models.ForeignKey(Turn)
     unit = models.ForeignKey(Unit)
     commandType = models.ForeignKey(CommandType)
-    args = models.CharField(max_length=100, null=True, default=None, blank=True)
+    args = models.CharField(max_length=100, default='')
     
     def __str__(self):
         return "[" + self.turn.name + "." + self.unit.country.name + "." + self.unit.field.name + "." + self.commandType.name + "]"

@@ -115,37 +115,62 @@ function setOptions(obj, list) {
 }
 
 var selectedUnit=null;
+var commandArgs=[];
+
+function renderUnitDialog(json) {
+	commandArgs = json.cmd[2];
+	openDialog('/ui/unit_dialog', function() {
+		$('#unit-dialog .country').text(json.country);
+		$('#unit-dialog .unitType').text(json.type);
+		$('#unit-dialog .field').text(json.field);
+		if(json.cmds) {
+			$('#unit-dialog .owner-only').show();
+			setOptions($('#unit-command'), json.cmds);
+			$('#unit-command').val(json.cmd[0]);
+			setupUnitDialog(json.cmd[1],json.cmd[2]);
+		} else {
+			$('#unit-dialog .owner-only').hide();
+			$('#unit-command').html('');
+		}
+	});
+}
 
 function onClickUnit(e,pk) {
 	selectedUnit=pk;
 	$.get('unit_get?u='+pk, function(data) {
 		var json = $.parseJSON(data);
-		openDialog('/ui/unit_dialog', function() {
-			$('#unit-dialog .country').text(json.country);
-			$('#unit-dialog .unitType').text(json.type);
-			$('#unit-dialog .field').text(json.field);
-			if(json.cmds) {
-				$('#unit-dialog .owner-only').show();
-				setOptions($('#unit-command'), json.cmds);
-				$('#unit-command').val(json.cmd[0]);
-				setupUnitDialog(json.cmd[1]);
-			} else {
-				$('#unit-dialog .owner-only').hide();
-				$('#unit-command').html('');
-			}
-		});
+		renderUnitDialog(json);
 	});
 }
 
-function appendTarget(text,param) {
-	$('#unit-command-targets').append('<div class="unit-param"><span class="label">'+text+'</span><span class="target">Unknown</span></div>');
+function appendTarget(index,text,param,arg) {
+	if(arg == null) arg = 'Select';
+	$('#unit-command-targets').append('<div class="unit-param"><span class="label">'+text+'</span><span id="target-'+index+'" class="target" onclick="selectTarget('+index+')">'+arg+'</span></div>');
 }
 
-function setupUnitDialog(template) {
+var selectedTarget = null;
+function selectTarget(param) {
+	$('#target-'+param).text('Pick target field');
+	selectedTarget = param;
+	fieldClickHandler = clickTarget;
+}
+
+function clickTarget(e,pk) {
+	commandArgs[selectedTarget] = pk;
+	var ct = $('#unit-command').val();
+	$.get('unit_command/?u='+selectedUnit+'&ct='+ct+'&args='+commandArgs, function(data) {
+		var json = $.parseJSON(data);
+		renderUnitDialog(json);
+	});
+}
+
+function setupUnitDialog(template,args) {
 	$('#unit-command-targets').html('');
 	for(var i = 0; i < template.length; i++) {
 		if(template[i] != '') {
-			appendTarget(template[i][0],template[i][1]);
+			var arg = null;
+			if(args.length >= i) arg = args[i];
+			appendTarget(i,template[i][0],template[i][1],arg);
 		}
 	}
 }

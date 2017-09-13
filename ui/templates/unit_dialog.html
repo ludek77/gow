@@ -3,7 +3,7 @@
 		$("#unit-command").change(function() {
 			$.get("unit_command?u="+selectedUnit+"&ct="+$("#unit-command").val(), function( data ) {
 				var json = $.parseJSON(data);
-				setupUnitDialog(json.template);
+				renderUnitDialog(json);
 			});
 		});
 	});
