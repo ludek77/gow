@@ -28,12 +28,16 @@ function closeDialog() {
 	$('#dialog').dialog('close');
 }
 
-function renderPath(ll1, ll2, pk1, pk2) {
-	L.polyline([ll1,ll2], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
+function renderPath(lat1,lng1,lat2,lng2, pk1, pk2) {
+	L.polyline([[lat1,lng1],[lat2,lng2]], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
+	L.polyline([[lat1,lng1+360],[lat2,lng2+360]], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
 }
 
-function renderField(latlng, pk) {
-	L.circle(latlng, 50000, {color: emptyColor, className: 'f-id-'+pk}).on('click', function(e){
+function renderField(lat, lng, pk) {
+	L.circle([lat,lng], 50000, {color: emptyColor, className: 'f-id-'+pk}).on('click', function(e){
+		onClickField(e,pk);
+	}).addTo(map);
+	L.circle([lat,lng+360], 50000, {color: emptyColor, className: 'f-id-'+pk}).on('click', function(e){
 		onClickField(e,pk);
 	}).addTo(map);
 }
@@ -56,8 +60,8 @@ function defaultClickField(e,pk) {
 	});
 }
 
-function renderCity(latlng, fpk, clr) {
-	L.rectangle([[latlng[0]-1.5,latlng[1]-2],[latlng[0]+1.5,latlng[1]+2]], {
+function renderCity(lat, lng, fpk, clr) {
+	L.rectangle([[lat-1.5,lng-2],[lat+1.5,lng+2]], {
 		color: clr,
 		fillColor: clr,
 		fillOpacity: 0.5,
@@ -65,6 +69,25 @@ function renderCity(latlng, fpk, clr) {
 	}).on('click', function(e){
 		onClickField(e,fpk);
 	}).addTo(map);
+	L.rectangle([[lat-1.5,lng-2+360],[lat+1.5,lng+2+360]], {
+		color: clr,
+		fillColor: clr,
+		fillOpacity: 0.5,
+		className: 'c-id-'+fpk
+	}).on('click', function(e){
+		onClickField(e,fpk);
+	}).addTo(map);
+}
+
+function centerMap() {
+	var b = map.getBounds();
+    var minll = b.getWest();
+    var c = map.getCenter();
+    if(minll < -180) c.lng += 360;
+   	if(minll > 180) c.lng -= 360;
+   	if(c.lng != map.getCenter().lng) {
+   		map.setView(c, map.getZoom());
+   	}
 }
 
 function resizeIcons() {
@@ -89,16 +112,21 @@ function resizeIcons() {
 	});
 }
 
-function renderUnit(latlng, upk, fpk, clr, uType) {
+function renderUnit(lat, lng, upk, fpk, clr, uType) {
 	var markerIcon = L.icon({
 	    iconUrl: unitTypes[uType][1],
 	    iconAnchor: [unitTypes[uType][2]/2, unitTypes[uType][3]/2],
 	    className: 'u-id-'+uType
 	});
-	L.marker(latlng, {icon: markerIcon}).on('click', function(e){
+	L.marker([lat,lng], {icon: markerIcon}).on('click', function(e){
 		onClickField(e,fpk)
 	}).addTo(map);
-	L.rectangle([[latlng[0]+2,latlng[1]-1],[latlng[0]-2,latlng[1]+1]], 
+	L.rectangle([[lat+2,lng-1],[lat-2,lng+1]], 
+		{color: clr,fillOpacity:1}).addTo(map);
+	L.marker([lat,lng+360], {icon: markerIcon}).on('click', function(e){
+		onClickField(e,fpk)
+	}).addTo(map);
+	L.rectangle([[lat+2,lng-1+360],[lat-2,lng+1+360]], 
 		{color: clr,fillOpacity:1}).addTo(map);
 }
 
@@ -195,7 +223,7 @@ function setupGame() {
 			var ll2 = json.paths[i][1];
 			var pk1 = json.paths[i][2];
 			var pk2 = json.paths[i][3];
-			renderPath(ll1, ll2, pk1, pk2);
+			renderPath(ll1[0],ll1[1],ll2[0],ll2[1], pk1, pk2);
 		}
 		for(var i in json.fields) {
 			var pk = json.fields[i][0];
@@ -203,9 +231,9 @@ function setupGame() {
 		    var clr = json.fields[i][2];
 			if(clr != '') {
 				if(clr == '-') clr = emptyColor;
-				renderCity(latlng, pk, clr);
+				renderCity(latlng[0],latlng[1], pk, clr);
 			} else {
-		    	renderField(latlng, pk);
+		    	renderField(latlng[0],latlng[1], pk);
 		    }
 		}
 		for(var i in json.units) {
@@ -214,7 +242,7 @@ function setupGame() {
 			var latlng = json.units[i][2];
 			var clr = json.units[i][3];
 			var type = json.units[i][4];
-			renderUnit(latlng, pk, fpk, clr, type);
+			renderUnit(latlng[0],latlng[1], pk, fpk, clr, type);
 		}
 		
 		$.get('country_setup',function(data){

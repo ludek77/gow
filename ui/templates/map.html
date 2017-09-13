@@ -1,10 +1,9 @@
 <script>
-	map = L.map('map').setView([{{country.lat}},{{country.lng}}], 4);
+	map = L.map('map').setView([{{country.lat}},{{country.lng}}], 3);
 	L.tileLayer('{{game.tileServer}}', {minZoom:3, maxZoom: 5}).addTo(map);
-	map.on('zoomend', function() {
-		resizeIcons();
-	});
-	map.on('click', function(e) {onMapClick(e);});
+	map.on('zoomend', function() {resizeIcons()});
+	map.on('click', function(e) {onMapClick(e)});
+	map.on('moveend', function(e) {centerMap()});
 	
 	$(document).ready(function() {setupGame()});
 </script>
