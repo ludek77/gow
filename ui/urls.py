@@ -4,8 +4,7 @@ from ui.views import ui_views, user_views, game_views, city_views, country_views
 
 urlpatterns = [
     url(r'^$', ui_views.index, name='index'),
-    url(r'^unit_dialog/', ui_views.unit_dialog, name='unit_dialog'),
-    url(r'^city_dialog/', ui_views.city_dialog, name='city_dialog'),
+    url(r'^field_dialog/', ui_views.field_dialog, name='field_dialog'),
     url(r'^new_field_dialog/', ui_views.new_field_dialog, name='new_field_dialog'),
     
     url(r'^logout/', user_views.logout_rest, name='logout'),

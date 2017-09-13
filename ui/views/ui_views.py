@@ -17,12 +17,8 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 @login_required
-def unit_dialog(request):
-    return HttpResponse(loader.get_template('unit_dialog.html').render())
-
-@login_required
-def city_dialog(request):
-    return HttpResponse(loader.get_template('city_dialog.html').render())
+def field_dialog(request):
+    return HttpResponse(loader.get_template('field_dialog.html').render())
 
 @login_required
 @permission_required('change_game')

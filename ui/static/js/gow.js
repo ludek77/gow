@@ -1,7 +1,6 @@
 var map = null;
 var unitTypes = 'empty';
 var emptyColor = 'gray';
-var iconWidth = 24;
 
 function login() {
 	$.post('login/', $('#login-form').serialize())
@@ -27,11 +26,11 @@ function closeDialog() {
 	$('#dialog').dialog('close');
 }
 
-function addPath(lat, lng, pk1, pk2) {
+function renderPath(lat, lng, pk1, pk2) {
 	L.polyline([lat,lng], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
 }
 
-function addField(latlng, pk) {
+function renderField(latlng, pk) {
 	L.circle(latlng, 50000, {color: emptyColor, className: 'f-id-'+pk}).on('click', function(e){
 		onClickField(e,pk);
 	}).addTo(map);
@@ -47,7 +46,7 @@ function onClickField(e,pk) {
 	if(fieldClickHandler != null) fieldClickHandler(e,pk);
 }
 
-function addCity(latlng, pk, clr) {
+function renderCity(latlng, pk, clr) {
 	L.rectangle([[latlng[0]-1.5,latlng[1]-2],[latlng[0]+1.5,latlng[1]+2]], {
 		color: clr,
 		fillColor: clr,
@@ -61,7 +60,7 @@ function addCity(latlng, pk, clr) {
 function displayCity(e,pk) {
 	$.get('city_get?c='+pk, function(data) {
 		var json = $.parseJSON(data);
-		openDialog('/ui/city_dialog', function() {
+		openDialog('/ui/field_dialog', function() {
 			$('#city-dialog .country').text(json.country);
 			$('#city-dialog .field').text(json.field);
 		});
@@ -90,7 +89,7 @@ function resizeIcons() {
 	});
 }
 
-function addUnit(latlng, pk, clr, uType) {
+function renderUnit(latlng, pk, clr, uType) {
 	var markerIcon = L.icon({
 	    iconUrl: unitTypes[uType][1],
 	    iconAnchor: [unitTypes[uType][2]/2, unitTypes[uType][3]/2],
@@ -118,7 +117,7 @@ var selectedUnit=null;
 var commandArgs=[];
 
 function renderUnitDialog(json) {
-	openDialog('/ui/unit_dialog', function() {
+	openDialog('/ui/field_dialog', function() {
 		$('#unit-dialog .country').text(json.country);
 		$('#unit-dialog .unitType').text(json.type);
 		$('#unit-dialog .field').text(json.field);
@@ -200,7 +199,7 @@ function setupGame() {
 			var ll2 = json.paths[i][1];
 			var pk1 = json.paths[i][2];
 			var pk2 = json.paths[i][3];
-			addPath(ll1, ll2, pk1, pk2);
+			renderPath(ll1, ll2, pk1, pk2);
 		}
 		for(var i in json.fields) {
 			var pk = json.fields[i][0];
@@ -208,9 +207,9 @@ function setupGame() {
 		    var clr = json.fields[i][2];
 			if(clr != '') {
 				if(clr == '-') clr = 'gray';
-				addCity(latlng, pk, clr);
+				renderCity(latlng, pk, clr);
 			} else {
-		    	addField(latlng, pk);
+		    	renderField(latlng, pk);
 		    }
 		}
 		for(var i in json.units) {
@@ -218,7 +217,7 @@ function setupGame() {
 			var latlng = json.units[i][1];
 			var clr = json.units[i][2];
 			var type = json.units[i][3];
-			addUnit(latlng, pk, clr, type);
+			renderUnit(latlng, pk, clr, type);
 		}
 		
 		$.get('country_setup',function(data){
