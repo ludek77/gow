@@ -17,11 +17,14 @@
 	</head>
 	<body>
 		<div id="dialog" style="display:none"></div>
+		<script>
+			$("#dialog").on("dialogclose", function(event) {fieldClickHandler=defaultClickField;});
+		</script>
 
 		<div id="workspace">
 			<div id="menu">
 				{% include "menu.html" %}
-				{% include "commands.html" %}
+				{% include "commands_dialog.html" %}
 			</div>
 			
 			<div id="map">

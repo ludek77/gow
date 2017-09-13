@@ -32,7 +32,7 @@ def unitResponse(request, fieldId):
                     f = Field.objects.get(pk=fld)
                     output += separator+'['+str(f.pk)+',"'+f.name+'"]'
                     separator = ','
-                output += ']]'
+            output += ']]'
         
         cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
         output += ',"cmds":['
