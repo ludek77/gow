@@ -1,23 +1,25 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from ui.models import Unit, CommandType, Game, Turn, Command, Country
+from ui.models import Unit, CommandType, Game, Turn, Command, Country, Field
 
-def unitResponse(request, unitId):
+def unitResponse(request, fieldId):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
-    selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
-    selectedUnit = Unit.objects.get(pk=unitId)
+    selectedField = Field.objects.get(pk=fieldId)
+    selectedUnit = Unit.objects.filter(field__pk=fieldId, turn=selectedTurn)
     
     output = '{'
 
     # public data
     #output += '"pk":'+str(selectedUnit.pk)+','
-    output += '"field":"'+selectedUnit.field.name+'"'
-    output += ',"country":"'+selectedUnit.country.name+'"'
-    output += ',"type":"'+selectedUnit.unitType.name+'"'
+    output += '"field":"'+selectedField.name+'"'
+    if len(selectedUnit) == 1:
+        output += ',"country":"'+selectedUnit[0].country.name+'"'
+        output += ',"type":"'+selectedUnit[0].unitType.name+'"'
     
     # owner restricted data
-    selectedUnit = Unit.objects.filter(pk=unitId, country=selectedCountry, turn=selectedTurn)
+    selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+    selectedUnit = Unit.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
     if len(selectedUnit) == 1:
         selectedUnit = selectedUnit.first(); 
     
@@ -38,18 +40,18 @@ def unitResponse(request, unitId):
 
 @login_required
 def unit_get_rest(request):
-    unitId = request.GET.get("u")
-    return unitResponse(request, unitId)
+    fieldId = request.GET.get("f")
+    return unitResponse(request, fieldId)
 
 @login_required
 def unit_command_rest(request):
-    unitId = request.GET.get("u")
+    fieldId = request.GET.get("f")
     ctid = request.GET.get("ct")
     args = request.GET.get("args")
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
     selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
-    selectedUnit = Unit.objects.get(pk=unitId, country=selectedCountry, turn=selectedTurn)
+    selectedUnit = Unit.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
     selectedCommand = Command.objects.get(unit=selectedUnit, turn=selectedTurn)
     commandType = CommandType.objects.get(pk=ctid)
     selectedCommand.commandType = commandType
@@ -58,4 +60,4 @@ def unit_command_rest(request):
     selectedCommand.args = args;
     selectedCommand.save()
     
-    return unitResponse(request, unitId)
+    return unitResponse(request, fieldId)

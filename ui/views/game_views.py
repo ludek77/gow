@@ -58,7 +58,7 @@ def game_setup_rest(request):
     output += '"units":['
     separator = ''
     for row in units:
-        output += separator+'['+str(row.pk)+',['+str(row.field.lat)+','+str(row.field.lng)+'],"'+row.country.color+'",'+str(row.unitType.pk)+']'
+        output += separator+'['+str(row.pk)+','+str(row.field.pk)+',['+str(row.field.lat)+','+str(row.field.lng)+'],"'+row.country.color+'",'+str(row.unitType.pk)+']'
         separator = ','
     output += ']'
     

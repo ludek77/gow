@@ -1,6 +1,8 @@
 var map = null;
 var unitTypes = 'empty';
 var emptyColor = 'gray';
+var selectedField=null;
+var commandArgs=[];
 
 function login() {
 	$.post('login/', $('#login-form').serialize())
@@ -41,23 +43,31 @@ function onMapClick(e) {
 	if(mapClickHandler != null) mapClickHandler(e);
 }
 
-var fieldClickHandler = null;
+var fieldClickHandler = defaultClickField;
 function onClickField(e,pk) {
 	if(fieldClickHandler != null) fieldClickHandler(e,pk);
 }
 
-function renderCity(latlng, pk, clr) {
+function defaultClickField(e,pk) {
+	selectedField=pk;
+	$.get('unit_get?f='+pk, function(data) {
+		var json = $.parseJSON(data);
+		renderFieldDialog(json);
+	});
+}
+
+function renderCity(latlng, fpk, clr) {
 	L.rectangle([[latlng[0]-1.5,latlng[1]-2],[latlng[0]+1.5,latlng[1]+2]], {
 		color: clr,
 		fillColor: clr,
 		fillOpacity: 0.5,
-		className: 'c-id-'+pk
+		className: 'c-id-'+fpk
 	}).on('click', function(e){
-		onClickField(e,pk);
+		onClickField(e,fpk);
 	}).addTo(map);
 }
 
-function displayCity(e,pk) {
+/*function displayCity(e,pk) {
 	$.get('city_get?c='+pk, function(data) {
 		var json = $.parseJSON(data);
 		openDialog('/ui/field_dialog', function() {
@@ -65,7 +75,7 @@ function displayCity(e,pk) {
 			$('#city-dialog .field').text(json.field);
 		});
 	});
-}
+}*/
 
 function resizeIcons() {
 	var currentZoom = map.getZoom();
@@ -89,14 +99,14 @@ function resizeIcons() {
 	});
 }
 
-function renderUnit(latlng, pk, clr, uType) {
+function renderUnit(latlng, upk, fpk, clr, uType) {
 	var markerIcon = L.icon({
 	    iconUrl: unitTypes[uType][1],
 	    iconAnchor: [unitTypes[uType][2]/2, unitTypes[uType][3]/2],
 	    className: 'u-id-'+uType
 	});
 	L.marker(latlng, {icon: markerIcon}).on('click', function(e){
-		onClickUnit(e,pk)
+		onClickField(e,fpk)
 	}).addTo(map);
 	L.rectangle([[latlng[0]+2,latlng[1]-1],[latlng[0]-2,latlng[1]+1]], 
 		{color: clr,fillOpacity:1}).addTo(map);
@@ -113,10 +123,7 @@ function setOptions(obj, list) {
 	}
 }
 
-var selectedUnit=null;
-var commandArgs=[];
-
-function renderUnitDialog(json) {
+function renderFieldDialog(json) {
 	openDialog('/ui/field_dialog', function() {
 		$('#unit-dialog .country').text(json.country);
 		$('#unit-dialog .unitType').text(json.type);
@@ -135,14 +142,6 @@ function renderUnitDialog(json) {
 	});
 }
 
-function onClickUnit(e,pk) {
-	selectedUnit=pk;
-	$.get('unit_get?u='+pk, function(data) {
-		var json = $.parseJSON(data);
-		renderUnitDialog(json);
-	});
-}
-
 function appendTarget(index,text,param,arg) {
 	if(arg == null) arg = 'Select';
 	$('#unit-command-targets').append('<div class="unit-param"><span class="label">'+text+'</span><span id="target-'+index+'" class="clickable" onclick="selectTarget('+index+')">'+arg+'</span></div>');
@@ -158,7 +157,7 @@ function selectTarget(param) {
 function clickTarget(e,pk) {
 	commandArgs[selectedTarget] = pk;
 	var ct = $('#unit-command').val();
-	$.get('unit_command/?u='+selectedUnit+'&ct='+ct+'&args='+commandArgs, function(data) {
+	$.get('unit_command/?f='+selectedUnit+'&ct='+ct+'&args='+commandArgs, function(data) {
 		var json = $.parseJSON(data);
 		renderUnitDialog(json);
 	});
@@ -206,7 +205,7 @@ function setupGame() {
 		    var latlng = json.fields[i][1];
 		    var clr = json.fields[i][2];
 			if(clr != '') {
-				if(clr == '-') clr = 'gray';
+				if(clr == '-') clr = emptyColor;
 				renderCity(latlng, pk, clr);
 			} else {
 		    	renderField(latlng, pk);
@@ -214,10 +213,11 @@ function setupGame() {
 		}
 		for(var i in json.units) {
 			var pk = json.units[i][0];
-			var latlng = json.units[i][1];
-			var clr = json.units[i][2];
-			var type = json.units[i][3];
-			renderUnit(latlng, pk, clr, type);
+			var fpk = json.units[i][1];
+			var latlng = json.units[i][2];
+			var clr = json.units[i][3];
+			var type = json.units[i][4];
+			renderUnit(latlng, pk, fpk, clr, type);
 		}
 		
 		$.get('country_setup',function(data){
@@ -232,9 +232,10 @@ function setupGame() {
 
 function appendUnitCommand(unit) {
 	var type = unitTypes[unit[1]];
-	$('#commands-content').append('<div><span class="clickable" onclick="clickUnitCommand('+unit[0]+','+unit[2]+')">'+unit[3]+'</span><span>'+type[4]+'</span></div>');
+	$('#commands-content').append('<div><span class="clickable" onclick="onClickField('+unit[0]+','+unit[2]+')">'+unit[3]+'</span><span>'+type[4]+'</span></div>');
 }
-
+/*
 function clickUnitCommand(uid, fid) {
-	onClickUnit(null,uid);
+	onClickField(null,uid);
 }
+*/
