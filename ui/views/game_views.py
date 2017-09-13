@@ -26,7 +26,7 @@ def game_setup_rest(request):
     output += '"unitTypes":['
     separator = ''
     for row in unitTypes:
-        output += separator+'['+str(row.pk)+',"'+row.icon+'",'+str(row.width)+','+str(row.height)+']'
+        output += separator+'['+str(row.pk)+',"'+row.icon+'",'+str(row.width)+','+str(row.height)+',"'+row.name+'"]'
         separator = ','
     output += '],'
     

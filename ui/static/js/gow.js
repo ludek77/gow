@@ -146,7 +146,7 @@ function onClickUnit(e,pk) {
 
 function appendTarget(index,text,param,arg) {
 	if(arg == null) arg = 'Select';
-	$('#unit-command-targets').append('<div class="unit-param"><span class="label">'+text+'</span><span id="target-'+index+'" class="target" onclick="selectTarget('+index+')">'+arg+'</span></div>');
+	$('#unit-command-targets').append('<div class="unit-param"><span class="label">'+text+'</span><span id="target-'+index+'" class="clickable" onclick="selectTarget('+index+')">'+arg+'</span></div>');
 }
 
 var selectedTarget = null;
@@ -225,8 +225,17 @@ function setupGame() {
 			var json= $.parseJSON(data);
 			var units = json.units;
 			for(var i in units) {
-				$('#commands-content').append(units[i][0]+'.'+unitTypes[units[i][1]]);
+				appendUnitCommand(units[i]);
 			}
 		});
 	});
+}
+
+function appendUnitCommand(unit) {
+	var type = unitTypes[unit[1]];
+	$('#commands-content').append('<div><span class="clickable" onclick="clickUnitCommand('+unit[0]+','+unit[2]+')">'+unit[3]+'</span><span>'+type[4]+'</span></div>');
+}
+
+function clickUnitCommand(uid, fid) {
+	onClickUnit(null,uid);
 }
