@@ -48,7 +48,7 @@ function onClickField(e,pk) {
 }
 
 function addCity(latlng, pk, clr) {
-	L.rectangle([[latlng[0]-1.5,latlng[1]-1.5],[latlng[0]+1.5,latlng[1]+1.5]], {
+	L.rectangle([[latlng[0]-1.5,latlng[1]-2],[latlng[0]+1.5,latlng[1]+2]], {
 		color: clr,
 		fillColor: clr,
 		fillOpacity: 0.5,
@@ -86,20 +86,20 @@ function resizeIcons() {
 				break;
 			}
 		}
-		$(item).css('width', width*multip).css('margin-left',-(width*multip/2)).css('margin-top',-height*multip);
+		$(item).css('width', width*multip).css('margin-left',-(width*multip/2)).css('margin-top',-height*multip/2);
 	});
 }
 
 function addUnit(latlng, pk, clr, uType) {
 	var markerIcon = L.icon({
 	    iconUrl: unitTypes[uType][1],
-	    iconAnchor: [unitTypes[uType][2]/2, unitTypes[uType][3]],
+	    iconAnchor: [unitTypes[uType][2]/2, unitTypes[uType][3]/2],
 	    className: 'u-id-'+uType
 	});
 	L.marker(latlng, {icon: markerIcon}).on('click', function(e){
 		onClickUnit(e,pk)
 	}).addTo(map);
-	L.rectangle([[latlng[0]+4,latlng[1]-1],[latlng[0],latlng[1]+1]], 
+	L.rectangle([[latlng[0]+2,latlng[1]-1],[latlng[0]-2,latlng[1]+1]], 
 		{color: clr,fillOpacity:1}).addTo(map);
 }
 
