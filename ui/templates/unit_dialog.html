@@ -1,8 +1,8 @@
 <script>
 	$(document).ready(function() {
-		$("#unitCommand").change(function() {
-			$.get("unit_command?u="+selectedUnit+"&ct="+$("#unitCommand").val(), function( data ) {
-				$('#commandTarget').html("WHOM?").show();
+		$("#unit-command").change(function() {
+			$.get("unit_command?u="+selectedUnit+"&ct="+$("#unit-command").val(), function( data ) {
+				setupUnitDialog(data);
 			});
 		});
 	});
@@ -15,8 +15,8 @@
 	
 	<div class="owner-only">
 		<div>Command
-			<select id="unitCommand"></select>
-			<span id="commandTarget"></span>
+			<select id="unit-command"></select>
+			<div id='unit-command-targets'></div>
 		</div>
 	</div>
 </div>

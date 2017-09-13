@@ -49,5 +49,5 @@ def unit_command_rest(request):
     commandType = CommandType.objects.get(pk=ctid)
     selectedCommand.commandType = commandType
     selectedCommand.save()
-    output = '{"template":'+commandType.template+'}'
+    output = '{"template":"'+commandType.template+'"}'
     return HttpResponse(output)

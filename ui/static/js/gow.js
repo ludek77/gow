@@ -126,14 +126,27 @@ function onClickUnit(e,pk) {
 			$('#unit-dialog .field').text(json.field);
 			if(json.cmds) {
 				$('#unit-dialog .owner-only').show();
-				setOptions($('#unit-dialog #unitCommand'), json.cmds);
-				$('#unit-dialog #unitCommand').val(json.cmd);
+				setOptions($('#unit-command'), json.cmds);
+				$('#unit-command').val(json.cmd);
 			} else {
 				$('#unit-dialog .owner-only').hide();
-				$('#unit-dialog #unitCommand').html('');
+				$('#unit-command').html('');
 			}
 		});
 	});
+}
+
+function appendTarget(target) {
+	$('#unit-command-targets').append('<span>'+target+'</span>');
+}
+
+function setupUnitDialog(data) {
+	$('#unit-command-targets').html('');
+	var json = $.parseJSON(data);
+	var targets = json.template.split(',');
+	for(var i = 0; i < targets.length; i++) {
+		appendTarget(targets[i]);
+	}
 }
 
 function setupGameList(selectedGame) {
