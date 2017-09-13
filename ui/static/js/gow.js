@@ -118,17 +118,18 @@ var selectedUnit=null;
 var commandArgs=[];
 
 function renderUnitDialog(json) {
-	commandArgs = json.cmd[2];
 	openDialog('/ui/unit_dialog', function() {
 		$('#unit-dialog .country').text(json.country);
 		$('#unit-dialog .unitType').text(json.type);
 		$('#unit-dialog .field').text(json.field);
 		if(json.cmds) {
+			commandArgs = json.cmd[2];
 			$('#unit-dialog .owner-only').show();
 			setOptions($('#unit-command'), json.cmds);
 			$('#unit-command').val(json.cmd[0]);
 			setupUnitDialog(json.cmd[1],json.cmd[2]);
 		} else {
+			commandArgs = [];
 			$('#unit-dialog .owner-only').hide();
 			$('#unit-command').html('');
 		}
