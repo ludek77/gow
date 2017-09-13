@@ -143,7 +143,7 @@ function appendTarget(target) {
 function setupUnitDialog(data) {
 	$('#unit-command-targets').html('');
 	var json = $.parseJSON(data);
-	var targets = json.template.split(',');
+	var targets = json.template.split(/\s+/);
 	for(var i = 0; i < targets.length; i++) {
 		appendTarget(targets[i]);
 	}
