@@ -14,21 +14,37 @@ function closeDialog() {
 	$('#dialog').dialog('close');
 }
 
-function renderPath(lat1,lng1,lat2,lng2, pk1, pk2) {
+function renderPathElement(lat1,lng1,lat2,lng2, pk1, pk2) {
 	L.polyline([[lat1,lng1],[lat2,lng2]], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
-	L.polyline([[lat1,lng1+360],[lat2,lng2+360]], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
 }
 
-function renderField(lat, lng, pk) {
+function renderPathElements(lat1, lng1, lat2, lng2, pk1, pk2) {
+	if(lng2 - lng1 > 180) renderPathElement(lat1, lng1, lat2, lng2-360, pk1, pk2);
+	else renderPathElement(lat1, lng1, lat2, lng2, pk1, pk2);
+}
+
+function renderPath(lat1, lng1, lat2, lng2, pk1, pk2) {
+	var tmp = null;
+	if(lng2 < lng1) {
+		tmp = lat1; lat1 = lat2; lat2 = tmp;
+		tmp = lng1; lng1 = lng2; lng2 = tmp;
+	}
+	renderPathElements(lat1, lng1, lat2, lng2, pk1, pk2);
+	if(lng1 > 180) renderPathElements(lat1, lng1-360, lat2, lng2-360, pk1, pk2); 
+}
+
+function renderFieldElement(lat ,lng ,pk) {
 	L.circle([lat,lng], 50000, {color: emptyColor, className: 'f-id-'+pk}).on('click', function(e){
 		onClickField(e,pk);
 	}).addTo(map);
-	L.circle([lat,lng+360], 50000, {color: emptyColor, className: 'f-id-'+pk}).on('click', function(e){
-		onClickField(e,pk);
-	}).addTo(map);
 }
 
-function renderCity(lat, lng, fpk, clr) {
+function renderField(lat, lng, pk) {
+	renderFieldElement(lat, lng, pk);
+	if(lng > 180) renderFieldElement(lat, lng-360, pk);
+}
+
+function renderCityElement(lat, lng, fpk, clr) {
 	L.rectangle([[lat-1.5,lng-2],[lat+1.5,lng+2]], {
 		color: clr,
 		fillColor: clr,
@@ -37,14 +53,19 @@ function renderCity(lat, lng, fpk, clr) {
 	}).on('click', function(e){
 		onClickField(e,fpk);
 	}).addTo(map);
-	L.rectangle([[lat-1.5,lng-2+360],[lat+1.5,lng+2+360]], {
-		color: clr,
-		fillColor: clr,
-		fillOpacity: 0.5,
-		className: 'c-id-'+fpk
-	}).on('click', function(e){
-		onClickField(e,fpk);
+}
+
+function renderCity(lat, lng, fpk, clr) {
+	renderCityElement(lat, lng, fpk, clr);
+	if(lng > 180) renderCityElement(lat, lng-360, fpk, clr);
+}
+
+function renderUnitElement(lat, lng, upk, fpk, clr, markerIcon) {
+	L.marker([lat,lng], {icon: markerIcon}).on('click', function(e){
+		onClickField(e,fpk)
 	}).addTo(map);
+	L.rectangle([[lat+2,lng-1],[lat-2,lng+1]], 
+		{color: clr,fillOpacity:1}).addTo(map);
 }
 
 function renderUnit(lat, lng, upk, fpk, clr, uType) {
@@ -53,24 +74,14 @@ function renderUnit(lat, lng, upk, fpk, clr, uType) {
 	    iconAnchor: [unitTypes[uType][2]/2, unitTypes[uType][3]/2],
 	    className: 'u-id-'+uType
 	});
-	L.marker([lat,lng], {icon: markerIcon}).on('click', function(e){
-		onClickField(e,fpk)
-	}).addTo(map);
-	L.rectangle([[lat+2,lng-1],[lat-2,lng+1]], 
-		{color: clr,fillOpacity:1}).addTo(map);
-	L.marker([lat,lng+360], {icon: markerIcon}).on('click', function(e){
-		onClickField(e,fpk)
-	}).addTo(map);
-	L.rectangle([[lat+2,lng-1+360],[lat-2,lng+1+360]], 
-		{color: clr,fillOpacity:1}).addTo(map);
+	renderUnitElement(lat, lng, upk, fpk, clr, markerIcon);
+	if(lng > 180) renderUnitElement(lat, lng-360, upk, fpk, clr, markerIcon);
 }
 
 function centerMap() {
-	var b = map.getBounds();
-    var minll = b.getWest();
     var c = map.getCenter();
-    if(minll < -180) c.lng += 360;
-   	if(minll > 180) c.lng -= 360;
+    if(c.lng < 0) c.lng += 360;
+   	if(c.lng > 360) c.lng -= 360;
    	if(c.lng != map.getCenter().lng) {
    		map.setView(c, map.getZoom());
    	}

@@ -5,8 +5,8 @@ from ui.models import Game, Field, FieldType
 @login_required
 @permission_required('change_game')
 def field_add_rest(request):
-    lat = request.GET.get("lat")
-    lng = request.GET.get("lng")
+    lat = float(request.GET.get("lat"))
+    lng = float(request.GET.get("lng"))
     type = request.GET.get("type")
     name = request.GET.get("name")
     isCity = (request.GET.get("isCity")=='true')
@@ -16,6 +16,10 @@ def field_add_rest(request):
     field.type = FieldType.objects.get(pk=type)
     field.game = selectedGame
     field.lat = lat
+    while lng < 0:
+        lng += 360
+    while lng > 360:
+        lng -= 360
     field.lng = lng
     field.isCity = isCity
     field.save()

@@ -51,7 +51,6 @@ function deletePathFromMap(e,pk) {
 			lastField = tmp;
 		}
 		$.get('path_delete?f1='+lastField+'&f2='+pk, function(data) {
-			alert(data);
 			var json = $.parseJSON(data);
 			$('path.p-id-'+json.pk1+'-'+json.pk2).hide();
 		});
