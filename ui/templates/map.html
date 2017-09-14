@@ -1,5 +1,9 @@
 <script>
+{% if country %}
 	map = L.map('map').setView([{{country.lat}},{{country.lng}}], 4);
+{% else %}
+	map = L.map('map').setView([0,0], 4);
+{% endif %}
 	L.tileLayer('{{game.tileServer}}', {minZoom:3, maxZoom: 5}).addTo(map);
 	map.on('zoomend', function() {resizeIcons()});
 	map.on('click', function(e) {onMapClick(e)});

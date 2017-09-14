@@ -136,7 +136,7 @@ function setupGame() {
 			renderUnit(latlng[0],latlng[1], pk, fpk, clr, type);
 		}
 		
-		$.get('country_setup',function(data){
+		$.get('country_setup/',function(data){
 			var json= $.parseJSON(data);
 			var units = json.units;
 			for(var i in units) {
