@@ -53,7 +53,7 @@ class Field(models.Model):
     next = models.ManyToManyField('self', blank=True)
     
     def __str__(self):
-        return self.name
+        return str(self.pk) + '-' + self.name
 
 class Turn(models.Model):
     name = models.CharField(max_length=100)
