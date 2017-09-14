@@ -1,4 +1,4 @@
-{% if country %}
+{% if country and turn %}
 <script>
 	$(document).ready(function() {
 		$('#commands').dialog({dialogClass:commands-dialog, position:{my:"right top",at:"right-20 top+70", of:"body"}});
@@ -6,6 +6,6 @@
 </script>
 {% endif %}
 
-<div id="commands" title="Commands for {{country.name}}" style="display:none">
+<div id="commands" title="Commands for {{country.name}} in {{turn.name}}" style="display:none">
 	<div id="commands-content"></div>
 </div>
