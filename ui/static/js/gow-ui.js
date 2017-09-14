@@ -1,10 +1,9 @@
 var map = null;
 var emptyColor = 'gray';
 
-function openDialog(url, title, handler) {
+function openDialog(url, handler) {
 	$.get(url, function(data) {
 		$('#dialog').html(data);
-		$('#dialog').attr('title', title);
 		if(handler != null) handler();
 		$('#dialog').dialog();
 	});
@@ -82,12 +81,16 @@ function renderUnit(lat, lng, upk, fpk, clr, uType) {
 	if(lng < 180) renderUnitElement(lat, lng+360, upk, fpk, clr, markerIcon);
 }
 
+function focusLatLng(lat, lng) {
+	map.setView([lat,lng], map.getZoom());
+}
+
 function centerMap() {
     var c = map.getCenter();
     if(c.lng < 0) c.lng += 360;
    	if(c.lng > 360) c.lng -= 360;
    	if(c.lng != map.getCenter().lng) {
-   		map.setView(c, map.getZoom());
+   		focusLatLng(c.lat, c.lng);
    	}
 }
 

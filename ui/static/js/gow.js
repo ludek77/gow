@@ -33,7 +33,7 @@ function defaultClickField(e,pk) {
 }
 
 function renderFieldDialog(json) {
-	openDialog('/ui/field_dialog', 'Field', function() {
+	openDialog('/ui/field_dialog', function() {
 		$('#unit-dialog .country').text(json.country);
 		$('#unit-dialog .unitType').text(json.type);
 		$('#unit-dialog .field').text(json.field);
@@ -148,5 +148,6 @@ function setupGame() {
 
 function appendUnitCommand(unit) {
 	var type = unitTypes[unit[1]];
-	$('#commands-content').append('<div><span class="clickable" onclick="onClickField('+unit[0]+','+unit[2]+')">'+unit[3]+'</span><span>'+type[4]+'</span></div>');
+	var ll = unit[4];
+	$('#commands-content').append('<div><span class="clickable" onclick="focusLatLng('+ll[0]+','+ll[1]+');onClickField('+unit[0]+','+unit[2]+')">'+unit[3]+'</span><span>'+type[4]+'</span></div>');
 }

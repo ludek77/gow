@@ -16,7 +16,7 @@ def country_setup_rest(request):
     units = Unit.objects.filter(country=selectedCountry, turn=selectedTurn)
     separator = ''
     for row in units:
-        output += separator+'['+str(row.pk)+','+str(row.unitType.pk)+','+str(row.field.pk)+',"'+row.field.name+'"]'
+        output += separator+'['+str(row.pk)+','+str(row.unitType.pk)+','+str(row.field.pk)+',"'+row.field.name+'",['+str(row.field.lat)+','+str(row.field.lng)+']]'
         separator = ','
     output += ']'
     
