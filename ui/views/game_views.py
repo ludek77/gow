@@ -19,7 +19,10 @@ def game_select_rest(request):
 @login_required
 def game_setup_rest(request):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
-    selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
+    if 'selected_turn' in request.session:
+        selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
+    else:
+        selectedTurn = None
     output = '{'
     
     unitTypes = UnitType.objects.all()
@@ -28,39 +31,44 @@ def game_setup_rest(request):
     for row in unitTypes:
         output += separator+'['+str(row.pk)+',"'+row.icon+'",'+str(row.width)+','+str(row.height)+',"'+row.name+'"]'
         separator = ','
-    output += '],'
+    output += ']'
     
     fields = Field.objects.filter(game=selectedGame)
-    cities = City.objects.filter(turn=selectedTurn)
-    output += '"fields":['
+    if selectedTurn is not None:
+        cities = City.objects.filter(turn=selectedTurn)
+    else:
+        cities = None
+    output += ',"fields":['
     separator = ''
     for row in fields:
         color = '';
         if(row.isCity):
             color='-'
-        city = cities.filter(field=row)
-        if len(city)==1:
-            color = city[0].country.color
+        if cities is not None:
+            city = cities.filter(field=row)
+            if len(city)==1:
+                color = city[0].country.color
         output += separator+'['+str(row.pk)+',['+str(row.lat)+','+str(row.lng)+'],"'+color+'"]'
         separator = ','
-    output += '],'
+    output += ']'
     
-    output += '"paths":['
+    output += ',"paths":['
     separator = ''
     for f in fields:
         for n in f.next.all():
             if(n.pk < f.pk):
                 output += separator+'[['+str(f.lat)+','+str(f.lng)+'],['+str(n.lat)+','+str(n.lng)+'],'+str(f.pk)+','+str(n.pk)+']'
                 separator = ','
-    output += '],'
-    
-    units = Unit.objects.filter(turn=selectedTurn)
-    output += '"units":['
-    separator = ''
-    for row in units:
-        output += separator+'['+str(row.pk)+','+str(row.field.pk)+',['+str(row.field.lat)+','+str(row.field.lng)+'],"'+row.country.color+'",'+str(row.unitType.pk)+']'
-        separator = ','
     output += ']'
+    
+    if selectedTurn is not None:
+        units = Unit.objects.filter(turn=selectedTurn)
+        output += ',"units":['
+        separator = ''
+        for row in units:
+            output += separator+'['+str(row.pk)+','+str(row.field.pk)+',['+str(row.field.lat)+','+str(row.field.lng)+'],"'+row.country.color+'",'+str(row.unitType.pk)+']'
+            separator = ','
+        output += ']'
     
     output += '}'
     return HttpResponse(output)
