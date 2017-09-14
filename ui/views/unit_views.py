@@ -4,43 +4,48 @@ from ui.models import Unit, CommandType, Game, Turn, Command, Country, Field
 
 def unitResponse(request, fieldId):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
-    selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
     selectedField = Field.objects.get(pk=fieldId)
-    selectedUnit = Unit.objects.filter(field__pk=fieldId, turn=selectedTurn)
+    if 'selected_turn' in request.session:
+        selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
+        selectedUnit = Unit.objects.get(field__pk=fieldId, turn=selectedTurn)
+    else:
+        selectedTurn = None
+        selectedUnit = None
     
     output = '{'
 
     # public data
     output += '"field":"'+selectedField.name+'"'
-    if len(selectedUnit) == 1:
-        output += ',"country":"'+selectedUnit[0].country.name+'"'
-        output += ',"type":"'+selectedUnit[0].unitType.name+'"'
+    if selectedUnit is not None:
+        output += ',"country":"'+selectedUnit.country.name+'"'
+        output += ',"type":"'+selectedUnit.unitType.name+'"'
     
     # owner restricted data
-    selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
-    selectedUnit = Unit.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
-    if len(selectedUnit) == 1:
-        selectedUnit = selectedUnit.first(); 
-    
-        cmd = Command.objects.filter(turn=selectedTurn, unit=selectedUnit)
-        if len(cmd) == 1:
-            output += ',"cmd":['+str(cmd[0].commandType.pk)+',['+cmd[0].commandType.template+'],['
-            if cmd[0].args != '':
-                flds = cmd[0].args.split(',')
-                separator = ''
-                for fld in flds:
-                    f = Field.objects.get(pk=fld)
-                    output += separator+'['+str(f.pk)+',"'+f.name+'"]'
-                    separator = ','
-            output += ']]'
+    if selectedTurn is not None:
+        selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+        selectedUnit = Unit.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+        if len(selectedUnit) == 1:
+            selectedUnit = selectedUnit.first(); 
         
-        cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
-        output += ',"cmds":['
-        separator = ''
-        for row in cmds:
-            output += separator+'['+str(row.id)+',"'+row.name+'"]'
-            separator = ','
-        output += ']'
+            cmd = Command.objects.filter(turn=selectedTurn, unit=selectedUnit)
+            if len(cmd) == 1:
+                output += ',"cmd":['+str(cmd[0].commandType.pk)+',['+cmd[0].commandType.template+'],['
+                if cmd[0].args != '':
+                    flds = cmd[0].args.split(',')
+                    separator = ''
+                    for fld in flds:
+                        f = Field.objects.get(pk=fld)
+                        output += separator+'['+str(f.pk)+',"'+f.name+'"]'
+                        separator = ','
+                output += ']]'
+            
+            cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
+            output += ',"cmds":['
+            separator = ''
+            for row in cmds:
+                output += separator+'['+str(row.id)+',"'+row.name+'"]'
+                separator = ','
+            output += ']'
 
     output += '}'
     return HttpResponse(output)
