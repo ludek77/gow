@@ -30,7 +30,8 @@ function renderPath(lat1, lng1, lat2, lng2, pk1, pk2) {
 		tmp = lng1; lng1 = lng2; lng2 = tmp;
 	}
 	renderPathElements(lat1, lng1, lat2, lng2, pk1, pk2);
-	if(lng1 > 180) renderPathElements(lat1, lng1-360, lat2, lng2-360, pk1, pk2); 
+	if(lng2 > 180) renderPathElements(lat1, lng1-360, lat2, lng2-360, pk1, pk2);
+	if(lng1 < 180) renderPathElements(lat1, lng1+360, lat2, lng2+360, pk1, pk2);
 }
 
 function renderFieldElement(lat ,lng ,pk) {
@@ -42,6 +43,7 @@ function renderFieldElement(lat ,lng ,pk) {
 function renderField(lat, lng, pk) {
 	renderFieldElement(lat, lng, pk);
 	if(lng > 180) renderFieldElement(lat, lng-360, pk);
+	if(lng < 180) renderFieldElement(lat, lng+360, pk);
 }
 
 function renderCityElement(lat, lng, fpk, clr) {
@@ -58,6 +60,7 @@ function renderCityElement(lat, lng, fpk, clr) {
 function renderCity(lat, lng, fpk, clr) {
 	renderCityElement(lat, lng, fpk, clr);
 	if(lng > 180) renderCityElement(lat, lng-360, fpk, clr);
+	if(lng < 180) renderCityElement(lat, lng+360, fpk, clr);
 }
 
 function renderUnitElement(lat, lng, upk, fpk, clr, markerIcon) {
@@ -76,6 +79,7 @@ function renderUnit(lat, lng, upk, fpk, clr, uType) {
 	});
 	renderUnitElement(lat, lng, upk, fpk, clr, markerIcon);
 	if(lng > 180) renderUnitElement(lat, lng-360, upk, fpk, clr, markerIcon);
+	if(lng < 180) renderUnitElement(lat, lng+360, upk, fpk, clr, markerIcon);
 }
 
 function centerMap() {
