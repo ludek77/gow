@@ -1,10 +1,11 @@
 var map = null;
 var emptyColor = 'gray';
 
-function openDialog(url, handler) {
+function openDialog(url, title, handler) {
 	$.get(url, function(data) {
 		$('#dialog').html(data);
 		if(handler != null) handler();
+		$('#dialog').dialog('option', 'title', title);
 		$('#dialog').dialog();
 	});
 }

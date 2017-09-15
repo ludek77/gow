@@ -33,7 +33,7 @@ function defaultClickField(e,pk) {
 }
 
 function renderFieldDialog(json) {
-	openDialog('/ui/field_dialog', function() {
+	openDialog('/ui/field_dialog', 'Field', function() {
 		$('#unit-dialog .country').text(json.country);
 		$('#unit-dialog .unitType').text(json.type);
 		$('#unit-dialog .field').text(json.field);
