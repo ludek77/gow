@@ -18,10 +18,9 @@ def index(request):
                     if len(turn) == 1:
                         turn = turn.first()
                         if turn.deadline and turn.deadline <= timezone.now():
-                            e = Engine(games[0], turn)
-                            turn = e.recalculate()
-                            request.session['selected_turn'] = turn.pk
-                            context['turn'] = turn
+                            newTurn = Engine().recalculate(games[0], turn)
+                            request.session['selected_turn'] = newTurn.pk
+                            context['turn'] = newTurn
                         else:
                             context['turn'] = turn
                 if len(countries)>0:

@@ -93,6 +93,8 @@ def game_start_rest(request):
     newGame = Game()
     newGame.name = gname
     newGame.tileServer = selectedGame.tileServer
+    newGame.winPoints = selectedGame.winPoints
+    newGame.defaultCommandType = selectedGame.defaultCommandType
     newGame.save()
     for u in selectedGame.user.all():
         newGame.user.add(u)
@@ -121,6 +123,8 @@ def game_start_rest(request):
         newField.lng = f.lng
         newField.defaultPriority = f.defaultPriority
         newField.defaultUnitType = f.defaultUnitType
+        newField.winPoints = f.winPoints
+        newField.unitPoints = f.unitPoints
         if f.home is not None:
             newField.home = Country.objects.get(game=newGame, name=f.home.name)
         newField.isCity = f.isCity
