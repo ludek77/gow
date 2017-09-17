@@ -148,13 +148,20 @@ function setupGame() {
 			renderUnit(latlng[0],latlng[1], pk, fpk, clr, type);
 		}
 		
-		$.get('country_setup/',function(data){
-			var json= $.parseJSON(data);
-			var units = json.units;
-			for(var i in units) {
-				appendUnitCommand(units[i]);
-			}
-		});
+		renderCountryDialog();
+	});
+}
+
+function renderCountryDialog() {
+	$.get('country_setup/',function(data){
+		$('#commands-content').html('');
+		var json= $.parseJSON(data);
+		for(var i in json.units) {
+			appendUnitCommand(json.units[i]);
+		}
+		for(var i in json.cities) {
+			appendCityCommand(json.cities[i]);
+		}
 	});
 }
 
@@ -162,4 +169,9 @@ function appendUnitCommand(unit) {
 	var type = unitTypes[unit[1]];
 	var ll = unit[4];
 	$('#commands-content').append('<div><span class="clickable" onclick="focusLatLng('+ll[0]+','+ll[1]+');onClickField('+unit[0]+','+unit[2]+')">'+unit[3]+'</span><span>'+type[4]+'</span></div>');
+}
+
+function appendCityCommand(city) {
+	var ll = city[4];
+	$('#commands-content').append('<div><span class="clickable" onclick="focusLatLng('+ll[0]+','+ll[1]+');onClickField('+city[0]+','+city[2]+')">'+city[3]+'</span><span>add '+city[1]+'</span></div>');
 }

@@ -4,12 +4,14 @@
 			$.get("unit_command?f="+selectedField+"&ct="+$("#unit-command").val(), function( data ) {
 				var json = $.parseJSON(data);
 				renderFieldDialog(json);
+				renderCountryDialog();
 			});
 		});
 		$("#add-unit-command").change(function() {
 			$.get("city_command?f="+selectedField+"&ct="+$("#add-unit-command").val(), function( data ) {
 				var json = $.parseJSON(data);
 				renderFieldDialog(json);
+				renderCountryDialog();
 			});
 		});
 	});
