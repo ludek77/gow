@@ -13,15 +13,18 @@ class Engine:
     def recalculate(self, game, turn):
         self.log('Recalculating game', game, turn)
         #close original turn
-        #self.closeTurn(turn) DONT CLOSE FOR EASIER DEVELOPMENT
+        self.closeTurn(turn)
         #create new turn
         newTurn = self.nextTurn(game, turn)
+        #copy units
+        self.copyUnits(game, turn, newTurn)
         #add units
         if turn.newUnits:
             self.syncUnits(game, turn, newTurn)
+        #setup new cities
+        self.syncCities(game, turn, newTurn)
             
-        self.log('Recalculation done', game, turn)
-        #return newTurn RETURN OLD TURN FOR EASIER DEVELOPMENT
+        self.log('Recalculation done', game, newTurn)
         return turn
         
     def nextTurn(self, game, turn):
@@ -34,24 +37,35 @@ class Engine:
         newTurn.save()
         return newTurn
     
+    def createNewUnit(self, game, newTurn, country, unitType, field):
+        newUnit = Unit()
+        newUnit.turn = newTurn
+        newUnit.country = country
+        newUnit.unitType = unitType
+        newUnit.field = field
+        newUnit.save()
+        newCommand = Command()
+        newCommand.turn = newTurn
+        newCommand.unit = newUnit
+        newCommand.commandType = game.defaultCommandType
+        newCommand.save()
+    
+    def copyUnits(self, game, turn, newTurn):
+        self.log('Copying units', game, turn)
+        cmds = Command.objects.filter(turn=turn)
+        for cmd in cmds:
+            self.createNewUnit(game, newTurn, cmd.unit.country, cmd.unit.unitType, cmd.unit.field)
+        
     def addUnits(self, game, turn, newTurn, country, unitPoints):
-        self.log('Adding units for ['+str(country.pk)+'.'+country.name+']:'+str(unitPoints)+'pts', game, turn)
+        #self.log('Adding units for ['+str(country.pk)+'.'+country.name+']:'+str(unitPoints)+'pts', game, turn)
         cmds = CityCommand.objects.filter(city__turn=turn, city__country=country).order_by('priority')
         for cmd in cmds:
             if unitPoints >= cmd.newUnitType.unitPoints:
-                newUnit = Unit()
-                newUnit.turn = newTurn
-                newUnit.country = country
-                newUnit.unitType = cmd.newUnitType
-                newUnit.field = cmd.city.field
-                newUnit.save()
-                newCommand = Command()
-                newCommand.turn = newTurn
-                newCommand.unit = newUnit
-                newCommand.commandType = game.defaultCommandType
-                newCommand.save()
+                self.createNewUnit(game, newTurn, country, cmd.newUnitType, cmd.city.field)
+                cmd.result = 'ok'
+                cmd.save()
                 unitPoints -= cmd.newUnitType.unitPoints
-                self.log('Add ['+cmd.newUnitType.name+'] to '+cmd.city.field.name, game, turn)   
+                #self.log('Add ['+cmd.newUnitType.name+'] to '+cmd.city.field.name, game, turn)   
     
     def removeUnits(self, game, turn, newTurn, country, unitPoints):
         self.log('Removing units for ['+str(country.pk)+'.'+country.name+']:'+str(unitPoints)+'pts', game, turn)
@@ -75,3 +89,13 @@ class Engine:
             elif unitUnitPoints > cityUnitPoints:
                 self.removeUnits(game, turn, newTurn, country, unitUnitPoints-cityUnitPoints)
         return None
+    
+    def syncCities(self, game, turn, newTurn):
+        self.log('Synchronizing cities', game, turn)
+        cities = City.objects.filter(turn=turn)
+        for city in cities:
+            newCity = City()
+            newCity.turn = newTurn
+            newCity.field = city.field
+            newCity.country = city.country
+            newCity.save()
