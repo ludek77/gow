@@ -16,6 +16,12 @@ class Engine:
         self.closeTurn(turn)
         #create new turn
         newTurn = self.nextTurn(game, turn)
+        #cancel attacked commands
+        self.cancelAttacked(game, turn, newTurn)
+        #count defence powers
+        self.countDefencePowers(game, turn)
+        #cound attack powers
+        self.countAttackPowers(game, turn)
         #copy units
         self.copyUnits(game, turn, newTurn)
         #add units
@@ -56,6 +62,41 @@ class Engine:
         for cmd in cmds:
             self.createNewUnit(game, newTurn, cmd.unit.country, cmd.unit.unitType, cmd.unit.field)
         
+    def countDefencePowers(self, game, turn):
+        self.log('Counting defence powers', game, turn)
+        cmds = Command.objects.filter(turn=turn)
+        for cmd in cmds:
+            #count my own power
+            cmd.defencePower += cmd.commandType.defencePower
+            cmd.save()
+            #if support, add power to supported unit (if attackpower not 0, it's supporting attack, otherwise defence)
+            if cmd.commandType.support and cmd.commandType.attackPower == 0 and cmd.result is None:
+                targetField = self.getTargetField(game, cmd)
+                if targetField is not None:
+                    targetCmd = Command.objects.filter(turn=turn, unit__field=targetField)
+                    if len(targetCmd) == 1:
+                        targetCmd = targetCmd.first()
+                        targetCmd.defencePower += cmd.commandType.defencePower
+                        targetCmd.save()
+                        
+    def countAttackPowers(self, game, turn):
+        self.log('Counting attack powers', game, turn)
+        cmds = Command.objects.filter(turn=turn)
+        for cmd in cmds:
+            #count my own power
+            if not cmd.commandType.support:
+                cmd.attackPower += cmd.commandType.attackPower
+                cmd.save()
+            #if support, add power to supported unit (if attackpower > 0, it's supporting attack, otherwise defence)
+            if cmd.commandType.support and cmd.commandType.attackPower > 0 and cmd.result is None:
+                targetField = self.getTargetField(game, cmd)
+                if targetField is not None:
+                    targetCmd = Command.objects.filter(turn=turn, unit__field=targetField)
+                    if len(targetCmd) == 1:
+                        targetCmd = targetCmd.first()
+                        targetCmd.attackPower += cmd.commandType.attackPower
+                        targetCmd.save()
+        
     def addUnits(self, game, turn, newTurn, country, unitPoints):
         #self.log('Adding units for ['+str(country.pk)+'.'+country.name+']:'+str(unitPoints)+'pts', game, turn)
         cmds = CityCommand.objects.filter(city__turn=turn, city__country=country).order_by('priority')
@@ -69,6 +110,29 @@ class Engine:
     
     def removeUnits(self, game, turn, newTurn, country, unitPoints):
         self.log('Removing units for ['+str(country.pk)+'.'+country.name+']:'+str(unitPoints)+'pts', game, turn)
+    
+    def cancelAttacked(self, game, turn, newTurn):
+        self.log('Canceling attacked', game, turn)
+        cmds = Command.objects.filter(turn=turn)
+        for cmd in cmds:
+            if cmd.commandType.attackPower > 0 and not cmd.commandType.support and cmd.result is None:
+                targetField = self.getTargetField(game, cmd)
+                if targetField is not None:
+                    targetCmd = Command.objects.filter(turn=turn, unit__field=targetField)
+                    if len(targetCmd) == 1:
+                        targetCmd = targetCmd.first()
+                        if targetCmd.commandType.cancelByAttack:
+                            targetCmd.result = 'canceled-by-attack'
+                            targetCmd.save()
+                        
+    def getTargetField(self, game, cmd):
+        args = cmd.args.split(',')
+        target = args[len(args)-1]
+        targetField = Field.objects.filter(game=game, pk=target)
+        if len(targetField) == 1:
+            return targetField.first()
+        else:
+            return None
     
     def syncUnits(self, game, turn, newTurn):
         if not turn.newUnits:

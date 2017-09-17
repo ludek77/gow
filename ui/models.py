@@ -28,9 +28,10 @@ class CommandType(models.Model):
     name = models.CharField(max_length=100)
     unitType = models.ManyToManyField(UnitType, blank=True)
     template = models.CharField(max_length=100)
-    attackPower = models.IntegerField(default=0)
-    defencePower = models.IntegerField(default=1)
+    attackPower = models.IntegerField(default=0) # my own attack power or support power if support
+    defencePower = models.IntegerField(default=1) # my own defence power, plus if support and attackPower is 0, it's also supporting defence
     cancelByAttack = models.BooleanField(default=False)
+    support = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name
