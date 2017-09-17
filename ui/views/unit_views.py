@@ -7,7 +7,11 @@ def unitResponse(request, fieldId):
     selectedField = Field.objects.get(pk=fieldId)
     if 'selected_turn' in request.session:
         selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
-        selectedUnit = Unit.objects.get(field__pk=fieldId, turn=selectedTurn)
+        selectedUnit = Unit.objects.filter(field__pk=fieldId, turn=selectedTurn)
+        if len(selectedUnit) == 1:
+            selectedUnit = selectedUnit.first()
+        else:
+            selectedUnit = None
     else:
         selectedTurn = None
         selectedUnit = None

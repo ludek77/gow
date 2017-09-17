@@ -20,12 +20,16 @@
 			else if(value == 'add_paths') configureAddPaths();
 			else if(value == 'delete_paths') configureDeletePaths();
 		});
+		
+		$("#game-start").click(function() {
+			openDialog('/ui/game_dialog', 'Game', function() {});
+		});
 {% endif %}
 	});
 </script>
 
 <select id="select-game"></select>
-{% if perms.ui.change_game %}
+{% if perms.ui.change_game and not turn %}
 	<input id="configure-game" type="button" value="Configure"/>
 	<select id="configure-type" style="display:none">
 		<option value="add_fields">Add fields</option>
@@ -33,4 +37,7 @@
 		<option value="add_paths">Add paths</option>
 		<option value="delete_paths">Delete paths</option>
 	</select>
+	
+	<div id="game-dialog" title="Game" style="display:none"></div>
+	<input id="game-start" type="button" value="Start"/>
 {% endif %}

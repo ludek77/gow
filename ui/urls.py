@@ -6,6 +6,7 @@ urlpatterns = [
     url(r'^$', ui_views.index, name='index'),
     url(r'^field_dialog/', ui_views.field_dialog, name='field_dialog'),
     url(r'^new_field_dialog/', ui_views.new_field_dialog, name='new_field_dialog'),
+    url(r'^game_dialog/', ui_views.game_dialog, name='game_dialog'),
     
     url(r'^logout/', user_views.logout_rest, name='logout'),
     url(r'^login/', user_views.login_rest, name='login'),
@@ -13,6 +14,7 @@ urlpatterns = [
     url(r'^game_list/', game_views.game_list_rest, name='game_list'),
     url(r'^game_select/', game_views.game_select_rest, name='game_select'),
     url(r'^game_setup/', game_views.game_setup_rest, name='game_setup'),
+    url(r'^game_start/', game_views.game_start_rest, name='game_start'),
     
     url(r'^country_setup/', country_views.country_setup_rest, name='country_setup'),
     

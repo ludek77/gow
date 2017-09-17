@@ -1,0 +1,17 @@
+<script>
+	$(document).ready(function() {
+		$('#game-start-now').click(function(e) {
+			var gname = $('#game-name').val();
+			var tname = $('#turn-name').val();
+			$.get('game_start/?g='+gname+'&t='+tname, function( data ) {
+				location.reload();
+			});
+		});
+	});
+</script>
+
+<div id="game-dialog">
+	Name<input id='game-name' type='text'/>
+	Turn name<input id='turn-name' type='text' value='Initial'/>
+	<input id='game-start-now' type='button' value='Start game'/>
+</div>

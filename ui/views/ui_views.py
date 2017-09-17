@@ -12,8 +12,9 @@ def index(request):
                 context['game'] = games[0]
                 countries = Country.objects.filter(owner__id=request.user.id,game=games[0])
                 if request.session.get('selected_turn', None) != None:
-                    turn = Turn.objects.get(pk=request.session.get('selected_turn', None))
-                    context['turn'] = turn
+                    turn = Turn.objects.filter(pk=request.session.get('selected_turn'))
+                    if len(turn) == 1:
+                        context['turn'] = turn
                 if len(countries)>0:
                     context['country'] = countries[0]
     template = loader.get_template('index.html')
@@ -27,3 +28,8 @@ def field_dialog(request):
 @permission_required('change_game')
 def new_field_dialog(request):
     return HttpResponse(loader.get_template('new_field_dialog.html').render())
+
+@login_required
+@permission_required('game_dialog')
+def game_dialog(request):
+    return HttpResponse(loader.get_template('game_dialog.html').render())

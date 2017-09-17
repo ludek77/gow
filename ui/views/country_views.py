@@ -5,15 +5,24 @@ from ui.models import Game, Turn, Field, UnitType, City, Unit, Country
 @login_required
 def country_setup_rest(request):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
-    selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+    selectedCountry = Country.objects.filter(game=selectedGame, owner__id=request.user.id)
+    if len(selectedCountry) > 0:
+        selectedCountry = selectedCountry.first()
+    else:
+        selectedCountry = None
     if 'selected_turn' in request.session:
-        selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
+        selectedTurn = Turn.objects.filter(pk=request.session['selected_turn'], game=selectedGame)
+        if len(selectedTurn) == 1:
+            selectedTurn = selectedTurn.first()
+        else:
+            selectedTurn = None
     else:
         selectedTurn = None
     output = '{'
     
-    output += '"name":"'+selectedCountry.name+'",'
-    output += '"pk":'+str(selectedCountry.pk)+','
+    if selectedCountry is not None:
+        output += '"name":"'+selectedCountry.name+'",'
+        output += '"pk":'+str(selectedCountry.pk)+','
     
     output += '"units":['
     if selectedTurn is not None:

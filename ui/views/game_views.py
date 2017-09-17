@@ -1,6 +1,6 @@
 from django.http import HttpResponse
-from django.contrib.auth.decorators import login_required
-from ui.models import Game, Turn, Field, UnitType, City, Unit
+from django.contrib.auth.decorators import login_required, permission_required
+from ui.models import Game, Turn, Field, UnitType, City, Unit, Country
 
 @login_required
 def game_list_rest(request):
@@ -14,13 +14,23 @@ def game_select_rest(request):
     g = Game.objects.filter(pk=game, user__id=request.user.id)
     if len(g) == 1: 
         request.session['selected_game'] = str(g[0].id)
+        
+        turns = Turn.objects.filter(game=g[0], open=True)
+        if len(turns) == 1:
+            request.session['selected_turn'] = str(turns[0].id)
+        else:
+            request.session['selected_turn'] = 0
     return HttpResponse('OK')
 
 @login_required
 def game_setup_rest(request):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     if 'selected_turn' in request.session:
-        selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
+        selectedTurn = Turn.objects.filter(pk=request.session['selected_turn'], game=selectedGame)
+        if len(selectedTurn) == 1:
+            selectedTurn = selectedTurn.first()
+        else:
+            selectedTurn = None
     else:
         selectedTurn = None
     output = '{'
@@ -73,3 +83,56 @@ def game_setup_rest(request):
     output += '}'
     return HttpResponse(output)
 
+@login_required
+@permission_required('game_start')
+def game_start_rest(request):
+    gname = request.GET.get("g")
+    tname = request.GET.get("t")
+    selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
+    #create game
+    newGame = Game()
+    newGame.name = gname
+    newGame.tileServer = selectedGame.tileServer
+    newGame.save()
+    for u in selectedGame.user.all():
+        newGame.user.add(u)
+    newGame.save()
+    #initialize countries
+    countries = Country.objects.filter(game=selectedGame)
+    for c in countries:
+        c.pk = None
+        c.game = newGame
+        c.save()
+    #create initial turn
+    newTurn = Turn()
+    newTurn.name = tname
+    newTurn.game = newGame
+    newTurn.open = True
+    newTurn.save()
+    #initialize fields
+    fields = Field.objects.filter(game=selectedGame)
+    for f in fields:
+        newField = Field()
+        newField.name = f.name
+        newField.type = f.type
+        newField.game = newGame
+        newField.lat = f.lat
+        newField.lng = f.lng
+        if f.home is not None:
+            newField.home = Country.objects.get(game=selectedGame, name=f.home.name)
+        newField.isCity = f.isCity
+        newField.save()
+        if newField.isCity and newField.home is not None:
+            newCity = City()
+            newCity.turn = newTurn
+            newCity.field = newField
+            newCity.country = newField.home
+            newCity.save()
+        for f_next in f.next.all():
+            newList = Field.objects.filter(game=newGame, name=f_next.name)
+            if len(newList) > 0:
+                newField.next.add(newList.first())
+        newField.save()
+    request.session['selected_game'] = str(newGame.id)
+    request.session['selected_turn'] = str(newTurn.id)
+    return HttpResponse()

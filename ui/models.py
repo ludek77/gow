@@ -24,7 +24,7 @@ class Country(models.Model):
     owner = models.ForeignKey(User, null=True, default=None, blank=True)
     
     def __str__(self):
-        return self.name
+        return self.game.name + '.'+ self.name
     
 class FieldType(models.Model):
     name = models.CharField(max_length=100)
@@ -53,7 +53,7 @@ class Field(models.Model):
     next = models.ManyToManyField('self', blank=True)
     
     def __str__(self):
-        return self.name
+        return self.game.name + '.' + self.name
 
 class Turn(models.Model):
     name = models.CharField(max_length=100)
