@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
-from ui.models import Game, Turn, Field, UnitType, City, Unit, Country
+from ui.models import Game, Turn, Field, UnitType, City, Unit, Country, CityCommand
 
 @login_required
 def game_list_rest(request):
@@ -118,8 +118,10 @@ def game_start_rest(request):
         newField.game = newGame
         newField.lat = f.lat
         newField.lng = f.lng
+        newField.defaultPriority = f.defaultPriority
+        newField.defaultUnitType = f.defaultUnitType
         if f.home is not None:
-            newField.home = Country.objects.get(game=selectedGame, name=f.home.name)
+            newField.home = Country.objects.get(game=newGame, name=f.home.name)
         newField.isCity = f.isCity
         newField.save()
         if newField.isCity and newField.home is not None:
@@ -128,6 +130,12 @@ def game_start_rest(request):
             newCity.field = newField
             newCity.country = newField.home
             newCity.save()
+            #initial command
+            newCityCommand = CityCommand()
+            newCityCommand.city = newCity
+            newCityCommand.priority = newField.defaultPriority
+            newCityCommand.newUnitType = newField.defaultUnitType
+            newCityCommand.save()
         for f_next in f.next.all():
             newList = Field.objects.filter(game=newGame, name=f_next.name)
             if len(newList) > 0:

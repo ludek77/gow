@@ -24,7 +24,7 @@ class Country(models.Model):
     owner = models.ForeignKey(User, null=True, default=None, blank=True)
     
     def __str__(self):
-        return self.game.name + '.'+ self.name
+        return str(self.pk) + '.' + self.game.name + '.'+ self.name
     
 class FieldType(models.Model):
     name = models.CharField(max_length=100)
@@ -50,14 +50,17 @@ class Field(models.Model):
     lng = models.DecimalField(max_digits=5, decimal_places=2)
     home = models.ForeignKey(Country, null=True, default=None, blank=True)
     isCity = models.BooleanField(default=False)
+    defaultPriority = models.IntegerField(null=True, default=None, blank=True)
+    defaultUnitType = models.ForeignKey(UnitType, null=True, default=None, blank=True)
     next = models.ManyToManyField('self', blank=True)
     
     def __str__(self):
-        return self.game.name + '.' + self.name
+        return self.game.name + '.' + self.name + '.' + str(self.pk)
 
 class Turn(models.Model):
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game)
+    newUnits = models.BooleanField(default=False)
     open = models.BooleanField(default=True)
     
     def __str__(self):
@@ -69,7 +72,15 @@ class City(models.Model):
     country = models.ForeignKey(Country, null=True, default=None, blank=True)
     
     def __str__(self):
-        return "[" + self.turn.name + "." + self.country.name + "." + self.field.name + "]"
+        return "[" + str(self.country.pk) + '.' + self.country.name + "," + self.turn.name + "," + str(self.field.pk) + '.' + self.field.name + "]"
+
+class CityCommand(models.Model):
+    city = models.ForeignKey(City)
+    priority = models.IntegerField()
+    newUnitType = models.ForeignKey(UnitType)
+    
+    def __str__(self):
+        return "["+str(self.priority)+"."+self.city.country.name+"."+self.newUnitType.name+"]"
 
 class Unit(models.Model):
     turn = models.ForeignKey(Turn)

@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from ui.models import Unit, CommandType, Game, Turn, Command, Country, Field
+from ui.models import Unit, CommandType, Game, Turn, Command, Country, Field, City, CityCommand, UnitType
 
 def unitResponse(request, fieldId):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
@@ -50,7 +50,21 @@ def unitResponse(request, fieldId):
                 output += separator+'['+str(row.id)+',"'+row.name+'"]'
                 separator = ','
             output += ']'
-
+        selectedCity = City.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+        if len(selectedCity) == 1:
+            selectedCity = selectedCity.first()
+            if selectedField.isCity and selectedCity.country == selectedField.home:
+                cityCommand = CityCommand.objects.filter(city=selectedCity)
+                if len(cityCommand) == 1:
+                    cityCommand = cityCommand.first()
+                    output += ',"fcmd":"'+str(cityCommand.newUnitType.pk)+'"'
+                    newTypes = UnitType.objects.all()
+                    output += ', "fcmds":['
+                    separator = ''
+                    for type in newTypes:
+                        output += separator+'['+str(type.pk)+',"'+type.name+'"]'
+                        separator = ','
+                    output += ']'    
     output += '}'
     return HttpResponse(output)
 

@@ -3,7 +3,7 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 
-from .models import Game, Country, Field, FieldType, UnitType, Unit, Turn, CommandType, Command, Target, City
+from .models import Game, Country, Field, FieldType, UnitType, Unit, Turn, CommandType, Command, Target, City, CityCommand
 
 admin.site.register(Game)
 admin.site.register(Country)
@@ -16,3 +16,4 @@ admin.site.register(CommandType)
 admin.site.register(Command)
 admin.site.register(Target)
 admin.site.register(City)
+admin.site.register(CityCommand)

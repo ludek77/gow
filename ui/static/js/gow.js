@@ -42,13 +42,19 @@ function renderFieldDialog(json) {
 			for(var i = 0; i < json.cmd[2].length; i++) {
 				commandArgs[i] = json.cmd[2][i][0];
 			}
-			$('#field-dialog .owner-only').show();
+			$('#field-dialog .unit-owner-only').show();
 			setOptions($('#unit-command'), json.cmds);
 			$('#unit-command').val(json.cmd[0]);
 			setupUnitDialog(json.cmd[1],json.cmd[2]);
 		} else {
-			$('#field-dialog .owner-only').hide();
+			$('#field-dialog .unit-owner-only').hide();
 			$('#unit-command').html('');
+		}
+		if(json.fcmd) {
+			$('#field-dialog .field-owner-only').show();
+			setOptions($('#add-unit-command'), json.fcmds);
+		} else {
+			$('#field-dialog .field-owner-only').hide();
 		}
 	});
 }
