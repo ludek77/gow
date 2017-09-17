@@ -58,7 +58,7 @@ def unitResponse(request, fieldId):
                 if len(cityCommand) == 1:
                     cityCommand = cityCommand.first()
                     output += ',"fcmd":"'+str(cityCommand.newUnitType.pk)+'"'
-                    newTypes = UnitType.objects.all()
+                    newTypes = UnitType.objects.filter(fieldTypes=selectedField.type)
                     output += ', "fcmds":['
                     separator = ''
                     for type in newTypes:
