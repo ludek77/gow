@@ -28,6 +28,9 @@ class CommandType(models.Model):
     name = models.CharField(max_length=100)
     unitType = models.ManyToManyField(UnitType, blank=True)
     template = models.CharField(max_length=100)
+    attackPower = models.IntegerField(default=0)
+    defencePower = models.IntegerField(default=1)
+    cancelByAttack = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name
@@ -112,14 +115,8 @@ class Command(models.Model):
     commandType = models.ForeignKey(CommandType)
     args = models.CharField(max_length=100, default='',blank=True)
     result = models.CharField(max_length=50, null=True, default=None, blank=True)
+    attackPower = models.IntegerField(default=0)
+    defencePower = models.IntegerField(default=0)
     
     def __str__(self):
         return "[" + self.turn.name + "." + self.unit.country.name + "." + self.unit.field.name + "." + self.commandType.name + "]"
-
-class Target(models.Model):
-    command = models.ForeignKey(Command)
-    seq = models.IntegerField()
-    field = models.ForeignKey(Field)
-    
-    def __str__(self):
-        return "[" + seq + "." + field.name + "]";
