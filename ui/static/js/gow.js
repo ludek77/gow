@@ -34,20 +34,20 @@ function defaultClickField(e,pk) {
 
 function renderFieldDialog(json) {
 	openDialog('/ui/field_dialog', 'Field', function() {
-		$('#unit-dialog .country').text(json.country);
-		$('#unit-dialog .unitType').text(json.type);
-		$('#unit-dialog .field').text(json.field);
+		$('#field-dialog .country').text(json.country);
+		$('#field-dialog .unitType').text(json.type);
+		$('#field-dialog .field').text(json.field);
 		commandArgs = [];
 		if(json.cmds && json.cmd) {
 			for(var i = 0; i < json.cmd[2].length; i++) {
 				commandArgs[i] = json.cmd[2][i][0];
 			}
-			$('#unit-dialog .owner-only').show();
+			$('#field-dialog .owner-only').show();
 			setOptions($('#unit-command'), json.cmds);
 			$('#unit-command').val(json.cmd[0]);
 			setupUnitDialog(json.cmd[1],json.cmd[2]);
 		} else {
-			$('#unit-dialog .owner-only').hide();
+			$('#field-dialog .owner-only').hide();
 			$('#unit-command').html('');
 		}
 	});
