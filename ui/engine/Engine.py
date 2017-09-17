@@ -25,7 +25,7 @@ class Engine:
         self.syncCities(game, turn, newTurn)
             
         self.log('Recalculation done', game, newTurn)
-        return turn
+        return newTurn
         
     def nextTurn(self, game, turn):
         newTurn = Turn()

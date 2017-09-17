@@ -78,7 +78,7 @@ class Turn(models.Model):
     deadline = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
-        return self.name
+        return str(self.pk) + '.' + self.name
 
 class City(models.Model):
     turn = models.ForeignKey(Turn)
