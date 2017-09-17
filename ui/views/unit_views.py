@@ -91,3 +91,18 @@ def unit_command_rest(request):
     selectedCommand.save()
     
     return unitResponse(request, fieldId)
+
+@login_required
+def city_command_rest(request):
+    fieldId = request.GET.get("f")
+    ctid = request.GET.get("ct")
+    selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
+    selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame)
+    selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+    selectedCity = City.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+    selectedCommand = CityCommand.objects.get(city=selectedCity)
+    newUnitType = UnitType.objects.get(pk=ctid)
+    selectedCommand.newUnitType = newUnitType
+    selectedCommand.save()
+    
+    return unitResponse(request, fieldId)

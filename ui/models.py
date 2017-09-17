@@ -40,7 +40,7 @@ class UnitType(models.Model):
     fieldTypes = models.ManyToManyField(FieldType)
 
     def __str__(self):
-        return self.name
+        return str(self.pk) + '.' + self.name
 
 class Field(models.Model):
     name = models.CharField(max_length=100)

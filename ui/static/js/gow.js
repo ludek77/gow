@@ -53,6 +53,7 @@ function renderFieldDialog(json) {
 		if(json.fcmd) {
 			$('#field-dialog .field-owner-only').show();
 			setOptions($('#add-unit-command'), json.fcmds);
+			$('#add-unit-command').val(json.fcmd);
 		} else {
 			$('#field-dialog .field-owner-only').hide();
 		}

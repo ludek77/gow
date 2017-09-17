@@ -27,4 +27,5 @@ urlpatterns = [
     
     url(r'^unit_get/', unit_views.unit_get_rest, name='unit_get'),
     url(r'^unit_command/', unit_views.unit_command_rest, name='unit_command'),
+    url(r'^city_command/', unit_views.city_command_rest, name='city_command'),
 ]

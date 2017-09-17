@@ -6,6 +6,12 @@
 				renderFieldDialog(json);
 			});
 		});
+		$("#add-unit-command").change(function() {
+			$.get("city_command?f="+selectedField+"&ct="+$("#add-unit-command").val(), function( data ) {
+				var json = $.parseJSON(data);
+				renderFieldDialog(json);
+			});
+		});
 	});
 </script>
 
