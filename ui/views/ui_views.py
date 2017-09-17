@@ -17,10 +17,10 @@ def index(request):
                     turn = Turn.objects.filter(pk=request.session.get('selected_turn'))
                     if len(turn) == 1:
                         turn = turn.first()
-                        if turn.deadline <= timezone.now():
+                        if turn.deadline and turn.deadline <= timezone.now():
                             e = Engine(games[0], turn)
-                            e.recalculate()
-                            #turn = e.newTurn()
+                            turn = e.recalculate()
+                            request.session['selected_turn'] = turn.pk
                             context['turn'] = turn
                         else:
                             context['turn'] = turn

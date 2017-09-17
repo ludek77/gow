@@ -108,6 +108,7 @@ def game_start_rest(request):
     newTurn.name = tname
     newTurn.game = newGame
     newTurn.open = True
+    newTurn.newUnits = True
     newTurn.save()
     #initialize fields
     fields = Field.objects.filter(game=selectedGame)
