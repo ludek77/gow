@@ -1,7 +1,9 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
 from django.template import loader
+from django.utils import timezone
 from ui.models import Game, Turn, Country, Unit
+from ui.engine.Engine import Engine
 
 def index(request):
     context = {}
@@ -14,7 +16,14 @@ def index(request):
                 if request.session.get('selected_turn', None) != None:
                     turn = Turn.objects.filter(pk=request.session.get('selected_turn'))
                     if len(turn) == 1:
-                        context['turn'] = turn
+                        turn = turn.first()
+                        if turn.deadline <= timezone.now():
+                            e = Engine(games[0], turn)
+                            e.recalculate()
+                            #turn = e.newTurn()
+                            context['turn'] = turn
+                        else:
+                            context['turn'] = turn
                 if len(countries)>0:
                     context['country'] = countries[0]
     template = loader.get_template('index.html')

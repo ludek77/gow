@@ -62,6 +62,7 @@ class Turn(models.Model):
     game = models.ForeignKey(Game)
     newUnits = models.BooleanField(default=False)
     open = models.BooleanField(default=True)
+    deadline = models.DateTimeField(null=True, blank=True)
     
     def __str__(self):
         return self.name

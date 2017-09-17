@@ -7,5 +7,12 @@
 {% endif %}
 
 <div id="commands" title="Commands for {{country.name}}" style="display:none">
+	<div>
+		Turn {{turn.name}} 
+{% if turn.deadline %}
+		ends at {{turn.deadline}}
+{% endif %}
+	</div>
+
 	<div id="commands-content"></div>
 </div>
