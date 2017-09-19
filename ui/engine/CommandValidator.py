@@ -84,7 +84,6 @@ class CommandValidator:
                 parName = par[0]
                 parTemplate = par[1]
                 #print('par:'+str(parName)+'='+str(parTemplate))
-                #print('i'+str(index)+',a'+str(len(args))+'='+str(args[index]))
                 if index < len(args) and args[index] != '' and args[index] != '0':
                     arg = args[index]
                     #print('arg:'+str(arg))
@@ -99,10 +98,7 @@ class CommandValidator:
                 index += 1
     
     def validateCommand(self, command, field, turn):
-        #try:
         template = command.commandType.template
         args = command.args
         result = self.validateArgs(template, args, field, turn)
-        #except:
-        #    result = 'invalid.validation-failed'
         command.result = result
