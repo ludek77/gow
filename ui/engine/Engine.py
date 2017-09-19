@@ -8,12 +8,15 @@ class Engine:
         turn.save()
         
     def log(self, text, game, turn):
-        print('['+str(timezone.now())+'] game=['+str(game.pk)+'.'+game.name+'], turn=['+str(turn.pk)+'.'+turn.name+'] '+text);
+        now = '{:%x %X}'.format(timezone.now())
+        print('['+now+'] game=['+str(game.pk)+'.'+game.name+'], turn=['+str(turn.pk)+'.'+turn.name+'] '+text);
         
     def recalculate(self, game, turn):
         self.log('Recalculating game', game, turn)
         #close original turn
         self.closeTurn(turn)
+        #check validity of moves
+        self.cancelInvalid(game, turn)
         #create new turn
         newTurn = self.nextTurn(game, turn)
         #cancel attacked commands
@@ -32,6 +35,10 @@ class Engine:
             
         self.log('Recalculation done', game, newTurn)
         return newTurn
+    
+    def cancelInvalid(self, game, turn):
+        self.log('Canceling invalid moves', game, turn)
+        # TODO: check validity of arguments, add this verification to command saving
         
     def nextTurn(self, game, turn):
         newTurn = Turn()
@@ -147,7 +154,7 @@ class Engine:
             unitUnitPoints = 0
             units = Unit.objects.filter(turn=turn, country=country)
             for unit in units:
-                unitUnitPoints += unit.type.unitPoints
+                unitUnitPoints += unit.unitType.unitPoints
             if cityUnitPoints > unitUnitPoints:
                 self.addUnits(game, turn, newTurn, country, cityUnitPoints-unitUnitPoints)
             elif unitUnitPoints > cityUnitPoints:

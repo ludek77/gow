@@ -50,6 +50,7 @@ function renderFieldDialog(json) {
 			$('#field-dialog .unit-owner-only').show();
 			setOptions($('#unit-command'), json.cmds);
 			$('#unit-command').val(json.cmd[0]);
+			$('#command-result').html(json.cmd[3]);
 			setupUnitDialog(json.cmd[1],json.cmd[2]);
 		} else {
 			$('#field-dialog .unit-owner-only').hide();
@@ -66,7 +67,7 @@ function renderFieldDialog(json) {
 }
 
 function appendTarget(index,text,param,arg) {
-	if(arg == null) arg = [null,'Select'];
+	if(arg == null || arg[0] == 0) arg = [null,'Select'];
 	$('#unit-command-targets')
 		.append('<div class="unit-param">')
 		.append('<span class="label">'+text+'</span>')
@@ -83,6 +84,9 @@ function selectTarget(param) {
 
 function clickTarget(e,pk) {
 	commandArgs[selectedTarget] = pk;
+	for(var i = 0; i < commandArgs.length; i++) {
+		if(commandArgs[i] == null) commandArgs[i] = 0;
+	}
 	var ct = $('#unit-command').val();
 	$.get('unit_command/?f='+selectedField+'&ct='+ct+'&args='+commandArgs, function(data) {
 		var json = $.parseJSON(data);

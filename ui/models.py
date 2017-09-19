@@ -27,7 +27,7 @@ class UnitType(models.Model):
 class CommandType(models.Model):
     name = models.CharField(max_length=100)
     unitType = models.ManyToManyField(UnitType, blank=True)
-    template = models.CharField(max_length=100)
+    template = models.CharField(max_length=200)
     attackPower = models.IntegerField(default=0) # my own attack power or support power if support
     defencePower = models.IntegerField(default=1) # my own defence power, plus if support and attackPower is 0, it's also supporting defence
     cancelByAttack = models.BooleanField(default=False)

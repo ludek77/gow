@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from ui.models import Unit, CommandType, Game, Turn, Command, Country, Field, City, CityCommand, UnitType
+from ui.engine.CommandValidator import CommandValidator
 
 def unitResponse(request, fieldId):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
@@ -33,15 +34,27 @@ def unitResponse(request, fieldId):
         
             cmd = Command.objects.filter(turn=selectedTurn, unit=selectedUnit)
             if len(cmd) == 1:
-                output += ',"cmd":['+str(cmd[0].commandType.pk)+',['+cmd[0].commandType.template+'],['
-                if cmd[0].args != '':
-                    flds = cmd[0].args.split(',')
+                cmd = cmd.first()
+                output += ',"cmd":['+str(cmd.commandType.pk)+',['+cmd.commandType.template+'],['
+                if cmd.args != '':
+                    flds = cmd.args.split(',')
                     separator = ''
                     for fld in flds:
-                        f = Field.objects.get(pk=fld)
-                        output += separator+'['+str(f.pk)+',"'+f.name+'"]'
+                        if fld != '0' and fld != '':
+                            f = Field.objects.get(pk=fld)
+                            fpk = f.pk
+                            fname = f.name
+                        else:
+                            fpk = 0
+                            fname = ''
+                        output += separator+'['+str(fpk)+',"'+fname+'"]'
                         separator = ','
-                output += ']]'
+                output += ']'
+                result = ''
+                if cmd.result is not None:
+                    result = CommandValidator().getResult(cmd)
+                output += ',"'+result+'"'
+                output += ']'
             
             cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
             output += ',"cmds":['
@@ -88,6 +101,10 @@ def unit_command_rest(request):
     if(args is None):
         args = '';
     selectedCommand.args = args;
+    # validate command
+    validator = CommandValidator()
+    validator.validateCommand(selectedCommand, selectedUnit.field, selectedTurn)
+    #save command
     selectedCommand.save()
     
     return unitResponse(request, fieldId)

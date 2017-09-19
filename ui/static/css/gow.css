@@ -28,6 +28,10 @@ body {
 	z-index: 9999;
 }
 
+#command-result {
+	color: red;
+}
+
 .unit-param span.label {
 	font-weight: bold;
 }
