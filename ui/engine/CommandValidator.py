@@ -1,4 +1,4 @@
-from ui.models import Field, Unit
+from ui.models import Field, Unit, UnitType
 import json
 
 class CommandValidator:
@@ -7,6 +7,7 @@ class CommandValidator:
         return {
             'invalid.empty': 'No {0} defined',
             'invalid.not_next': 'Unreachable {0}',
+            'invalid.not_reachable': 'Unit cannot go to {0}',
             'invalid.missing_unit': 'Missing unit on {0}',
             'invalid.not_unit': '{1} not found on {0}',
             'invalid.not_field': '{1} not on {0}',
@@ -27,12 +28,19 @@ class CommandValidator:
         # format result
         return self.getError(key).format(parText, type)
         
+    def isReachable(self, unitType, field):
+        unitTypes = UnitType.objects.filter(pk=unitType.pk, fieldTypes=field.type)
+        return len(unitTypes) == 1
     
-    def validatePar(self, template, field, nextField, turn):
+    def validatePar(self, command, template, field, nextField, turn):
         #print('validate:'+str(field)+'-'+str(nextField)+':'+str(template))
         for condition in template:
-            if condition == 'next' and not self.isNext(field, nextField):
-                return 'invalid.not_next:'
+            # handle both next (=must be also reachable) and next-any (=just next)
+            if condition.startswith('next'):
+                if not self.isNext(field, nextField):
+                    return 'invalid.not_next:'
+                if condition == 'next' and not self.isReachable(command.unit.unitType, nextField):
+                    return 'invalid.not_reachable:'
             if condition.startswith('unit_'):
                 unitType = condition[5:]
                 #print unitType
@@ -72,7 +80,10 @@ class CommandValidator:
     def parseTemplate(self, template):
         return json.loads('{"T":['+template+"]}")
     
-    def validateArgs(self, template, args, firstField, turn):
+    def validateArgs(self, command, firstField):
+        turn = command.turn
+        template = command.commandType.template
+        args = command.args
         #print('template:'+str(template))
         #print('args:'+str(args))
         if template != '[]':
@@ -88,7 +99,7 @@ class CommandValidator:
                     arg = args[index]
                     #print('arg:'+str(arg))
                     nextField = Field.objects.get(pk=arg)
-                    result = self.validatePar(parTemplate, field, nextField, turn)
+                    result = self.validatePar(command, parTemplate, field, nextField, turn)
                     if result is not None:
                         return result + 'par_' + str(index)
                     field = nextField
@@ -97,8 +108,7 @@ class CommandValidator:
                         return 'invalid.empty:par_'+str(index)
                 index += 1
     
-    def validateCommand(self, command, field, turn):
-        template = command.commandType.template
-        args = command.args
-        result = self.validateArgs(template, args, field, turn)
+    def validateCommand(self, command):
+        result = self.validateArgs(command, command.unit.field)
         command.result = result
+

@@ -28,10 +28,12 @@ class CommandType(models.Model):
     name = models.CharField(max_length=100)
     unitType = models.ManyToManyField(UnitType, blank=True)
     template = models.CharField(max_length=200)
+    # command arguments
     attackPower = models.IntegerField(default=0) # my own attack power or support power if support
     defencePower = models.IntegerField(default=1) # my own defence power, plus if support and attackPower is 0, it's also supporting defence
     cancelByAttack = models.BooleanField(default=False)
     support = models.BooleanField(default=False)
+    move = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name
@@ -116,8 +118,6 @@ class Command(models.Model):
     commandType = models.ForeignKey(CommandType)
     args = models.CharField(max_length=100, default='',blank=True)
     result = models.CharField(max_length=50, null=True, default=None, blank=True)
-    attackPower = models.IntegerField(default=0)
-    defencePower = models.IntegerField(default=0)
     
     def __str__(self):
         return "[" + self.turn.name + "." + self.unit.country.name + "." + self.unit.field.name + "." + self.commandType.name + "]"

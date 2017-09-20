@@ -104,7 +104,7 @@ def unit_command_rest(request):
     selectedCommand.args = args;
     # validate command
     validator = CommandValidator()
-    validator.validateCommand(selectedCommand, selectedUnit.field, selectedTurn)
+    validator.validateCommand(selectedCommand)
     #save command
     selectedCommand.save()
     
