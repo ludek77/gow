@@ -5,6 +5,10 @@ class CommandValidator:
     
     def getError(self, key):
         return {
+            'ok': 'Success',
+            'fail.not-strongest': 'Not strongest attack to target',
+            'fail.not-stronger-than-opposite': 'Not stronger than counter attack',
+            'fail.canceled-by-attack': 'Canceled by attack',
             'invalid.empty': 'No {0} defined',
             'invalid.not_next': 'Unreachable {0}',
             'invalid.not_reachable': 'Unit cannot go to {0}',
@@ -14,7 +18,8 @@ class CommandValidator:
         }[key]
     
     def getResult(self, command):
-        #print command.result
+        if command.result == 'ok' or command.result.startswith('fail'):
+            return self.getError(command.result)
         # get error key
         index = command.result.find(':')
         key = command.result[:index]
