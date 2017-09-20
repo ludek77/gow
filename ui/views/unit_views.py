@@ -21,9 +21,10 @@ def unitResponse(request, fieldId):
 
     # public data
     output += '"field":"'+selectedField.name+'"'
+    output += ',"type":"'+selectedField.type.name+'"'
     if selectedUnit is not None:
         output += ',"country":"'+selectedUnit.country.name+'"'
-        output += ',"type":"'+selectedUnit.unitType.name+'"'
+        output += ',"unitType":"'+selectedUnit.unitType.name+'"'
     
     # owner restricted data
     if selectedTurn is not None:

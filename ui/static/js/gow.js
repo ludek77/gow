@@ -35,10 +35,11 @@ function defaultClickField(e,pk) {
 function renderFieldDialog(json) {
 	openDialog('/ui/field_dialog', 'Field', function() {
 		$('#field-dialog .field').text(json.field);
-		if(json.type) {
+		$('#field-dialog .type').text(json.type);
+		if(json.unitType) {
 			$('#field-dialog .unit').show();
 			$('#field-dialog .country').text(json.country);
-			$('#field-dialog .unitType').text(json.type);
+			$('#field-dialog .unitType').text(json.unitType);
 		} else {
 			$('#field-dialog .unit').hide();
 		}
