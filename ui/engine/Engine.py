@@ -8,13 +8,16 @@ class Engine:
     turn = None
     # remember game
     game = None
-    # current turn dict, key=fieldPk
+    # current turn dict, key=field
     thisMap = None
-    # next turn dict, key=fieldPk
+    # next turn dict, key=field
     nextMap = None
     # properties
-    defencePower = None
-    attackPower = None
+    defencePower = None # defence power of command
+    attackPower = None # attack power of command
+    maxAttackPower = None # max attack power to field
+    maxAttackers = None # number of attackers with max power to field
+    moves = None # number of moves to field
       
     def closeTurn(self):
         self.turn.open = False
@@ -31,6 +34,9 @@ class Engine:
         self.nextMap = {}
         self.defencePower = {}
         self.attackPower = {}
+        self.maxAttackPower = {}
+        self.maxAttackers = {}
+        self.moves = {}
         # copy commands
         cmds = Command.objects.filter(turn=turn)
         for cmd in cmds:
@@ -47,17 +53,25 @@ class Engine:
         self.cancelInvalid()
         # cancel attacked commands
         self.cancelAttacked()
+        # cancel broken invasions
+        self.cancelBrokenInvasions()
         # count defence powers
         self.countDefencePowers()
         # cound attack powers
         self.countAttackPowers()
-        # copy units
-        self.dropStaticUnits()
-        # proceed attacks
-        self.doAttacks()
+        # cancel reverse attacks that are not stronger than opposite ones
+        self.cancelWeakReverseAttacks()
+        # cancel attacks that are not strongest to target field
+        self.cancelWeakAttacks()
+        # drop units that don't move or commands
+        self.dropUnits()
+        # proceed attacks while situation is changing
+        self.proceedAttacks()
         # add units
         if turn.newUnits:
             self.syncUnits()
+        # save results
+        self.saveResults()
         # create new turn
         newTurn = self.createNextTurn()
             
@@ -70,13 +84,19 @@ class Engine:
         for field in self.thisMap:
             cmd = self.thisMap[field]
             validator.validateCommand(cmd)
+            
+    def dropUnit(self, cmd, newField):
+        for field, command in self.nextMap.iteritems():
+            if command == cmd:
+                self.nextMap.pop(field, None)
+                break
+        self.nextMap[newField] = cmd
     
-    def dropStaticUnits(self):
-        self.log('Dropping static units')
+    def dropUnits(self):
+        self.log('Dropping units to new map')
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            if not cmd.commandType.move:
-                self.nextMap[field] = cmd
+            self.dropUnit(cmd, field)
 
     def cancelAttacked(self):
         self.log('Canceling attacked')
@@ -88,7 +108,11 @@ class Engine:
                 targetCmd = self.thisMap.get(targetField)
                 if targetCmd is not None:
                     if targetCmd.commandType.cancelByAttack:
-                        targetCmd.result = 'canceled-by-attack'
+                        targetCmd.result = 'fail.canceled-by-attack'
+    
+    def cancelBrokenInvasions(self):
+        # TODO implement
+        return None
         
     def addDefencePower(self, cmd, addedPower):
         power = 0
@@ -120,6 +144,7 @@ class Engine:
                         
     def countAttackPowers(self):
         self.log('Counting attack powers')
+        # count attack powers of commands
         for field in self.thisMap:
             cmd = self.thisMap[field]
             ct = cmd.commandType
@@ -128,13 +153,58 @@ class Engine:
                 self.addAttackPower(cmd, ct.attackPower)
             #if support, add power to supported unit (if attackpower > 0, it's supporting attack, otherwise defence)
             if ct.support and ct.attackPower > 0 and cmd.result is None:
-                targetField = self.getTargetField(game, cmd)
+                targetField = self.getTargetField(cmd)
                 targetCmd = self.thisMap[targetField]
                 if targetCmd is not None:
                     self.addAttackPower(targetCmd, ct.attackPower)
+        # store max attack powers and numbers
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            ct = cmd.commandType
+            if not ct.support and ct.attackPower > 0 and cmd.result is None:
+                power = self.attackPower.get(cmd)
+                if power is not None:
+                    targetField = self.getTargetField(cmd)
+                    maxPower = self.maxAttackPower.get(targetField)
+                    if maxPower is None:
+                        maxPower = 0
+                    if power > maxPower:
+                        self.maxAttackPower[targetField] = power
+                        self.maxAttackers[targetField] = 1
+                    elif power == maxPower:
+                        maxAttackers = self.maxAttackers[targetField]
+                        self.maxAttackers[targetField] = maxAttackers + 1
         
-    def doAttacks(self):
-        self.log('Processing attacks')
+    def cancelWeakReverseAttacks(self):
+        self.log('Canceling weak reverse attacks')
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            ct = cmd.commandType
+            if ct.move and ct.attackPower > 0 and cmd.result is None:
+                targetField = self.getTargetField(cmd)
+                targetCmd = self.thisMap.get(targetField)
+                if targetCmd is not None:
+                    rev_ct = targetCmd.commandType
+                    if rev_ct.move and rev_ct.attackPower > 0:
+                        revTargetField = self.getTargetField(targetCmd)
+                        if revTargetField == field:
+                            rev_power = self.attackPower.get(targetCmd)
+                            power = self.attackPower.get(cmd)
+                            if rev_power is not None and rev_power >= power:
+                                cmd.result = 'fail.not-stronger-than-opposite'
+    
+    def cancelWeakAttacks(self):
+        self.log('Canceling weak attacks')
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            ct = cmd.commandType
+            if ct.move and ct.attackPower > 0 and cmd.result is None:
+                targetField = self.getTargetField(cmd)
+                if self.attackPower[cmd] < self.maxAttackPower[targetField] or self.maxAttackers[targetField] > 1:
+                    cmd.result = 'fail.not-strongest'
+        
+    def tryAttacks(self):
+        changed = False
         for field in self.thisMap:
             cmd = self.thisMap[field]
             ct = cmd.commandType
@@ -142,12 +212,27 @@ class Engine:
                 targetField = self.getTargetField(cmd)
                 targetCmd = self.nextMap.get(targetField)
                 if targetCmd is None:
-                    self.nextMap[targetField] = cmd
+                    self.dropUnit(cmd, targetField)
                     cmd.result = 'ok'
+                    changed = True
+        self.log('   next round changed:'+str(changed))
+        return changed
+    
+    def proceedAttacks(self):
+        self.log('Processing attacks')
+        changed = True
+        while changed:
+            changed = self.tryAttacks()
+    
+    def proceedAllAttacks(self):
+        self.log('Processing remaining attacks')
+        return None
                         
     def getTargetField(self, cmd):
         args = cmd.args.split(',')
         target = args[len(args)-1]
+        if target == '':
+            target = 0
         targetField = Field.objects.filter(game=self.game, pk=target)
         if len(targetField) == 1:
             return targetField.first()
@@ -162,7 +247,9 @@ class Engine:
                 newUnit = Unit()
                 newUnit.country = country
                 newUnit.unitType = cmd.newUnitType
-                self.nextMap[cmd.city.field] = newUnit
+                newCommand = Command()
+                newCommand.unit = newUnit
+                self.dropUnit(newCommand, cmd.city.field)
                 cmd.result = 'ok'
                 unitPoints -= cmd.newUnitType.unitPoints
    
@@ -189,6 +276,14 @@ class Engine:
             elif unitUnitPoints > cityUnitPoints:
                 self.removeUnits(country, unitUnitPoints-cityUnitPoints)
         return None
+    
+    def saveResults(self):
+        self.log('Saving results')
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            if cmd.result is None:
+                cmd.result = 'ok'
+            cmd.save()
     
     def createNextTurn(self):
         self.log('Building next turn')
