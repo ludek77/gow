@@ -6,8 +6,10 @@ class CommandValidator:
     def getError(self, key):
         return {
             'ok': 'Success',
+            'flee': 'Under attack, escaping',
             'fail.not-strongest': 'Not strongest attack to target',
             'fail.not-stronger-than-opposite': 'Not stronger than counter attack',
+            'fail.defence-stronger': 'Attack not stronger than defence',
             'fail.canceled-by-attack': 'Canceled by attack',
             'invalid.empty': 'No {0} defined',
             'invalid.not_next': 'Unreachable {0}',
@@ -18,20 +20,21 @@ class CommandValidator:
         }[key]
     
     def getResult(self, command):
-        if command.result == 'ok' or command.result.startswith('fail'):
+        if command.result.startswith('invalid'):
+            # get error key
+            index = command.result.find(':')
+            key = command.result[:index]
+            # get parameter from template
+            data = self.parseTemplate(command.commandType.template)
+            parIndex = command.result.find('par_')
+            par = int(command.result[parIndex+4:])
+            parText = str(data['T'][par][0]).lower()
+            # get type
+            type = command.result[index+1:parIndex-1]
+            # format result
+            return self.getError(key).format(parText, type)
+        else:
             return self.getError(command.result)
-        # get error key
-        index = command.result.find(':')
-        key = command.result[:index]
-        # get parameter from template
-        data = self.parseTemplate(command.commandType.template)
-        parIndex = command.result.find('par_')
-        par = int(command.result[parIndex+4:])
-        parText = str(data['T'][par][0]).lower()
-        # get type
-        type = command.result[index+1:parIndex-1]
-        # format result
-        return self.getError(key).format(parText, type)
         
     def isReachable(self, unitType, field):
         unitTypes = UnitType.objects.filter(pk=unitType.pk, fieldTypes=field.type)

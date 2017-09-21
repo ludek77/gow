@@ -208,13 +208,31 @@ class Engine:
         for field in self.thisMap:
             cmd = self.thisMap[field]
             ct = cmd.commandType
+            # for each attack not processed yet
             if ct.attackPower > 0 and ct.move and not ct.support and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 targetCmd = self.nextMap.get(targetField)
+                # if target field is empty, drop unit to that field
                 if targetCmd is None:
                     self.dropUnit(cmd, targetField)
                     cmd.result = 'ok'
                     changed = True
+                # if target field is not empty
+                else:
+                    # and target will not move (not move or cancelled)
+                    if not targetCmd.commandType.move or targetCmd.result is not None:
+                        attackPower = self.attackPower[cmd]
+                        defencePower = self.defencePower[targetCmd]
+                        # if attack is stronger than defence, attacker succeeds
+                        if attackPower > defencePower:
+                            self.dropUnit(cmd, targetField)
+                            cmd.result = 'ok'
+                            targetCmd.result = 'flee'
+                            changed = True
+                        else:
+                            cmd.result = 'fail.defence-stronger'
+                            changed = True
+                        
         self.log('   next round changed:'+str(changed))
         return changed
     
