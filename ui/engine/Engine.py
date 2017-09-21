@@ -293,6 +293,7 @@ class Engine:
         newTurn.newUnits = not self.turn.newUnits
         newTurn.open = True
         newTurn.deadline = timezone.now() + timezone.timedelta(minutes = 5)
+        newTurn.previous = self.turn
         newTurn.save()
         # setup new cities
         cities = City.objects.filter(turn=self.turn)

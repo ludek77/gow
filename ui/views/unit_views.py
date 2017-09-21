@@ -22,14 +22,21 @@ def unitResponse(request, fieldId):
     # public data
     output += '"field":"'+selectedField.name+'"'
     output += ',"type":"'+selectedField.type.name+'"'
+    if selectedTurn is not None and selectedTurn.open:
+        output += ',"open":true'
+    else:
+        output += ',"open":false'
     if selectedUnit is not None:
         output += ',"country":"'+selectedUnit.country.name+'"'
         output += ',"unitType":"'+selectedUnit.unitType.name+'"'
     
-    # owner restricted data
+    # owner restricted data if turn is open
     if selectedTurn is not None:
         selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
-        selectedUnit = Unit.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+        if selectedTurn.open:
+            selectedUnit = Unit.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+        else:
+            selectedUnit = Unit.objects.filter(field__pk=fieldId, turn=selectedTurn)
         if len(selectedUnit) == 1:
             selectedUnit = selectedUnit.first(); 
         
@@ -64,7 +71,10 @@ def unitResponse(request, fieldId):
                 output += separator+'['+str(row.id)+',"'+row.name+'"]'
                 separator = ','
             output += ']'
-        selectedCity = City.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+        if selectedTurn.open:
+            selectedCity = City.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+        else:
+            selectedCity = City.objects.filter(field__pk=fieldId, turn=selectedTurn)
         if len(selectedCity) == 1:
             selectedCity = selectedCity.first()
             if selectedField.isCity and selectedCity.country == selectedField.home:

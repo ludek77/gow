@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'^game_select/', game_views.game_select_rest, name='game_select'),
     url(r'^game_setup/', game_views.game_setup_rest, name='game_setup'),
     url(r'^game_start/', game_views.game_start_rest, name='game_start'),
+    url(r'^turn_previous/', game_views.turn_previous_rest, name='turn_previous'),
+    url(r'^turn_next/', game_views.turn_next_rest, name='turn_next'),
     
     url(r'^country_setup/', country_views.country_setup_rest, name='country_setup'),
     

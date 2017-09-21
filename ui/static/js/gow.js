@@ -9,9 +9,15 @@ function login() {
 }
 
 function logout() {
-	$.get("logout", function( data ) {
-		location.reload();
-	});
+	$.get("logout", function(data) {location.reload()});
+}
+
+function previousTurn() {
+	$.get('turn_previous', function(data) {location.reload()});
+}
+
+function nextTurn() {
+	$.get('turn_next', function(data) {location.reload()});
 }
 
 var mapClickHandler = null;
@@ -50,9 +56,9 @@ function renderFieldDialog(json) {
 			}
 			$('#field-dialog .unit-owner-only').show();
 			setOptions($('#unit-command'), json.cmds);
-			$('#unit-command').val(json.cmd[0]);
+			$('#unit-command').val(json.cmd[0]).prop('disabled',!json.open);
 			$('#command-result').html(json.cmd[3]);
-			setupUnitDialog(json.cmd[1],json.cmd[2]);
+			setupArguments(json.cmd[1],json.cmd[2],json.open);
 		} else {
 			$('#field-dialog .unit-owner-only').hide();
 			$('#unit-command').html('');
@@ -67,12 +73,25 @@ function renderFieldDialog(json) {
 	});
 }
 
-function appendTarget(index,text,param,arg) {
+function setupArguments(template,args,enabled) {
+	$('#unit-command-targets').html('');
+	for(var i = 0; i < template.length; i++) {
+		if(template[i] != '') {
+			var arg = null;
+			if(args.length >= i) arg = args[i];
+			appendTarget(i,template[i][0],template[i][1],arg,enabled);
+		}
+	}
+}
+
+function appendTarget(index,text,param,arg,enabled) {
 	if(arg == null || arg[0] == 0) arg = [null,'Select'];
+	var target = '<span id="target-'+index+'">'+arg[1]+'</span>';;
+	if(enabled) target = '<span id="target-'+index+'" class="clickable" onclick="selectTarget('+index+')">'+arg[1]+'</span>';    
 	$('#unit-command-targets')
 		.append('<div class="unit-param">')
 		.append('<span class="label">'+text+'</span>')
-		.append('<span id="target-'+index+'" class="clickable" onclick="selectTarget('+index+')">'+arg[1]+'</span>')
+		.append(target)
 		.append('</div>');
 }
 
@@ -94,17 +113,6 @@ function clickTarget(e,pk) {
 		renderFieldDialog(json);
 	});
 	fieldClickHandler = defaultClickField;
-}
-
-function setupUnitDialog(template,args) {
-	$('#unit-command-targets').html('');
-	for(var i = 0; i < template.length; i++) {
-		if(template[i] != '') {
-			var arg = null;
-			if(args.length >= i) arg = args[i];
-			appendTarget(i,template[i][0],template[i][1],arg);
-		}
-	}
 }
 
 function setupGameList(selectedGame) {

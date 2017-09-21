@@ -17,12 +17,14 @@ def index(request):
                     turn = Turn.objects.filter(pk=request.session.get('selected_turn'))
                     if len(turn) == 1:
                         turn = turn.first()
-                        if turn.deadline and turn.deadline <= timezone.now():
+                        if turn.open and turn.deadline and turn.deadline <= timezone.now():
                             newTurn = Engine().recalculate(games[0], turn)
                             request.session['selected_turn'] = newTurn.pk
-                            context['turn'] = newTurn
-                        else:
-                            context['turn'] = turn
+                            turn = newTurn
+                        context['turn'] = turn
+                        nextTurn=Turn.objects.filter(previous=turn)
+                        if len(nextTurn) == 1:
+                            context['nextTurn'] = nextTurn
                 if len(countries)>0:
                     context['country'] = countries[0]
     template = loader.get_template('index.html')

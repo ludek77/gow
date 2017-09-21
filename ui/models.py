@@ -82,6 +82,7 @@ class Turn(models.Model):
     newUnits = models.BooleanField(default=False)
     open = models.BooleanField(default=True)
     deadline = models.DateTimeField(null=True, blank=True)
+    previous = models.ForeignKey('self', null=True, default=None, blank=True)
     
     def __str__(self):
         return str(self.pk) + '.' + self.name

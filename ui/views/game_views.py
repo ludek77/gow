@@ -149,3 +149,25 @@ def game_start_rest(request):
     request.session['selected_game'] = str(newGame.id)
     request.session['selected_turn'] = str(newTurn.id)
     return HttpResponse()
+
+@login_required
+def turn_previous_rest(request):
+    selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
+    if 'selected_turn' in request.session:
+        selectedTurn = Turn.objects.filter(pk=request.session['selected_turn'], game=selectedGame)
+        if len(selectedTurn) == 1:
+            selectedTurn = selectedTurn.first()
+            if selectedTurn.previous is not None:
+                request.session['selected_turn'] = selectedTurn.previous.pk
+    return HttpResponse()
+
+@login_required
+def turn_next_rest(request):
+    selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
+    if 'selected_turn' in request.session:
+        selectedTurn = Turn.objects.filter(previous__pk=request.session['selected_turn'], game=selectedGame)
+        if len(selectedTurn) == 1:
+            selectedTurn = selectedTurn.first()
+            if selectedTurn is not None:
+                request.session['selected_turn'] = selectedTurn.pk
+    return HttpResponse()
