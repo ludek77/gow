@@ -28,9 +28,9 @@ class Engine:
         now = '{:%x %X}'.format(timezone.now())
         print('['+now+'] game=['+str(self.game.pk)+'.'+self.game.name+'], turn=['+str(self.turn.pk)+'.'+self.turn.name+'] '+text);
         
-    def initialize(self, game, turn):
+    def initialize(self, turn):
         self.turn = turn
-        self.game = game
+        self.game = turn.game
         self.thisMap = {}
         self.nextMap = {}
         self.defencePower = {}
@@ -43,9 +43,9 @@ class Engine:
         for cmd in cmds:
             self.thisMap[cmd.unit.field] = cmd
         
-    def recalculate(self, game, turn):
+    def calculateNextTurn(self, turn):
         # initialize turn
-        self.initialize(game, turn)
+        self.initialize(turn)
         # log start
         self.log('Recalculating game')
         # close original turn
