@@ -1,5 +1,6 @@
 from ui.models import Turn, Field, Unit, City, Country, CityCommand, Command, CommandType
 from ui.engine.CommandValidator import CommandValidator
+from ui.engine.TurnProcessor import TurnProcessor
 from django.utils import timezone
 
 class Engine:
@@ -74,7 +75,8 @@ class Engine:
         # save results
         self.saveResults()
         # create new turn
-        newTurn = self.createNextTurn()
+        self.log('Building next turn')
+        newTurn = TurnProcessor().createNextTurn(turn, self.nextMap)
             
         self.log('Recalculation done')
         return newTurn
@@ -303,45 +305,4 @@ class Engine:
             if cmd.result is None:
                 cmd.result = 'ok'
             cmd.save()
-    
-    def createNextTurn(self):
-        self.log('Building next turn')
-        newTurn = Turn()
-        newTurn.name = str(int(self.turn.name)+1)
-        newTurn.game = self.game
-        newTurn.newUnits = not self.turn.newUnits
-        newTurn.open = True
-        newTurn.deadline = timezone.now() + timezone.timedelta(minutes = 5)
-        newTurn.previous = self.turn
-        newTurn.save()
-        # setup new cities
-        cities = City.objects.filter(turn=self.turn)
-        for city in cities:
-            newCity = City()
-            newCity.turn = newTurn
-            newCity.field = city.field
-            # if some unit is on field, copy its owner
-            if self.turn.newUnits and self.nextMap.get(city.field) is not None:
-                newCity.country = self.nextMap[city.field].unit.country
-            else:
-                newCity.country = city.country
-            newCity.save()
-        # setup new units
-        for field in self.nextMap:
-            cmd = self.nextMap[field]
-            # add unit
-            newUnit = Unit()
-            newUnit.country = cmd.unit.country
-            newUnit.turn = newTurn
-            newUnit.unitType = cmd.unit.unitType
-            newUnit.field = field
-            newUnit.save()
-            # add default command
-            newCommand = Command()
-            newCommand.unit = newUnit
-            newCommand.turn = newTurn
-            newCommand.commandType = self.game.defaultCommandType
-            newCommand.save()
-        return newTurn
-            
-            
+        

@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
 from ui.models import Game, Turn, Field, UnitType, City, Unit, Country, CityCommand
+from ui.engine.TurnProcessor import TurnProcessor
 
 @login_required
 def game_list_rest(request):
@@ -89,63 +90,10 @@ def game_start_rest(request):
     gname = request.GET.get("g")
     tname = request.GET.get("t")
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
-    #create game
-    newGame = Game()
-    newGame.name = gname
-    newGame.tileServer = selectedGame.tileServer
-    newGame.winPoints = selectedGame.winPoints
-    newGame.defaultCommandType = selectedGame.defaultCommandType
-    newGame.save()
-    for u in selectedGame.user.all():
-        newGame.user.add(u)
-    newGame.save()
-    #initialize countries
-    countries = Country.objects.filter(game=selectedGame)
-    for c in countries:
-        c.pk = None
-        c.game = newGame
-        c.save()
-    #create initial turn
-    newTurn = Turn()
-    newTurn.name = tname
-    newTurn.game = newGame
-    newTurn.open = True
-    newTurn.newUnits = True
-    newTurn.save()
-    #initialize fields
-    fields = Field.objects.filter(game=selectedGame)
-    for f in fields:
-        newField = Field()
-        newField.name = f.name
-        newField.type = f.type
-        newField.game = newGame
-        newField.lat = f.lat
-        newField.lng = f.lng
-        newField.defaultPriority = f.defaultPriority
-        newField.defaultUnitType = f.defaultUnitType
-        newField.winPoints = f.winPoints
-        newField.unitPoints = f.unitPoints
-        if f.home is not None:
-            newField.home = Country.objects.get(game=newGame, name=f.home.name)
-        newField.isCity = f.isCity
-        newField.save()
-        if newField.isCity and newField.home is not None:
-            newCity = City()
-            newCity.turn = newTurn
-            newCity.field = newField
-            newCity.country = newField.home
-            newCity.save()
-            #initial command
-            newCityCommand = CityCommand()
-            newCityCommand.city = newCity
-            newCityCommand.priority = newField.defaultPriority
-            newCityCommand.newUnitType = newField.defaultUnitType
-            newCityCommand.save()
-        for f_next in f.next.all():
-            newList = Field.objects.filter(game=newGame, name=f_next.name)
-            if len(newList) > 0:
-                newField.next.add(newList.first())
-        newField.save()
+    # create new game
+    newGame = TurnProcessor().startGame(selectedGame, gname, tname)
+    newTurn = Turn.objects.get(game=newGame)
+    # set is as active
     request.session['selected_game'] = str(newGame.id)
     request.session['selected_turn'] = str(newTurn.id)
     return HttpResponse()
