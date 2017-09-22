@@ -1,0 +1,24 @@
+[
+	{"model": "ui.game", "pk": 1, "fields": {"name": "TestWorld", "tileServer": "http://tileserver.maptiler.com/nasa/{z}/{x}/{y}.jpg", "winPoints": 5, "defaultCommandType": 2, "user": [4]}},
+
+	{"model": "ui.country", "pk": 1, "fields": {"name": "Spain", "game": 1, "color": "yellow", "lat": "50.00", "lng": "10.00", "owner": 1}}, 
+	{"model": "ui.country", "pk": 2, "fields": {"name": "Russia", "game": 1, "color": "red", "lat": "50.00", "lng": "10.00", "owner": 1}},
+	
+	{"model": "ui.field", "pk": 1, "fields": {"name": "Spain", "type": 3, "game": 1, "lat": "39.98", "lng": "355.78", "home": 1, "isCity": true, "defaultPriority": 1, "defaultUnitType": 1, "unitPoints": 1, "winPoints": 1, "next": [3, 17]}}, 
+	{"model": "ui.field", "pk": 2, "fields": {"name": "London", "type": 3, "game": 1,"lat": "52.21", "lng": "358.68", "home": 1, "isCity": true, "defaultPriority": 3, "defaultUnitType": 1, "unitPoints": 1, "winPoints": 1, "next": [3, 10, 4, 16]}}, 
+	{"model": "ui.field", "pk": 3, "fields": {"name": "France", "type": 3, "game": 1, "lat": "46.20", "lng": "2.72", "home": 1, "isCity": true, "defaultPriority": 2, "defaultUnitType": 2, "unitPoints": 1, "winPoints": 1, "next": [1, 2, 6, 4, 16, 17]}}, 
+	{"model": "ui.field", "pk": 4, "fields": {"name": "Germany", "type": 2, "game": 1, "lat": "51.56", "lng": "9.58", "home": null, "isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0,"next": [13, 10, 2, 5, 6, 3]}}, 
+	{"model": "ui.field", "pk": 5, "fields": {"name": "Poland", "type": 2, "game": 1, "lat": "51.73", "lng": "17.31", "home": null,"isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0, "next": [8, 4, 9, 12, 7, 6]}}, 
+	{"model": "ui.field", "pk": 6, "fields": {"name": "Austria", "type": 2, "game": 1, "lat": "47.28", "lng": "12.48", "home": null, "isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0, "next": [12, 3, 4, 5]}}, 
+	{"model": "ui.field", "pk": 7, "fields": {"name": "Ukraine", "type": 2, "game": 1, "lat": "49.67", "lng": "27.69", "home": 2, "isCity": true, "defaultPriority": 2, "defaultUnitType": 2, "unitPoints": 1, "winPoints": 1, "next": [11, 8, 5, 12]}}, 
+	{"model": "ui.field", "pk": 8, "fields": {"name": "Latvia", "type": 3, "game": 1, "lat": "55.18", "lng": "25.31", "home": 2, "isCity": true, "defaultPriority": 3, "defaultUnitType": 1, "unitPoints": 1, "winPoints": 1, "next": [9, 11, 7, 5]}}, 
+	{"model": "ui.field", "pk": 9, "fields": {"name": "Baltic Sea", "type": 1, "game": 1, "lat": "56.24", "lng": "18.81", "home": null, "isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0, "next": [14, 8, 13, 5]}}, 
+	{"model": "ui.field", "pk": 10, "fields": {"name": "North Sea", "type": 1, "game": 1, "lat": "55.63", "lng": "3.78", "home": null, "isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0, "next": [2, 13, 4, 15]}}, 
+	{"model": "ui.field", "pk": 11, "fields": {"name": "Moscow", "type": 2, "game": 1, "lat": "53.28", "lng": "36.83", "home": 2, "isCity": true, "defaultPriority": 1, "defaultUnitType": 2, "unitPoints": 1, "winPoints": 1, "next": [8, 7]}}, 
+	{"model": "ui.field", "pk": 12, "fields": {"name": "Croatia", "type": 3, "game": 1, "lat": "45.03", "lng": "19.42", "home": null, "isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0, "next": [5, 7, 6]}}, 
+	{"model": "ui.field", "pk": 13, "fields": {"name": "Denmark", "type": 3, "game": 1, "lat": "55.80", "lng": "9.18", "home": null, "isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0, "next": [10, 14, 9, 4]}}, 
+	{"model": "ui.field", "pk": 14, "fields": {"name": "Sweden", "type": 3, "game": 1, "lat": "58.29", "lng": "14.37", "home": null, "isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0, "next": [13, 9]}}, 
+	{"model": "ui.field", "pk": 15, "fields": {"name": "Norwegian Sea", "type": 1, "game": 1, "lat": "62.88", "lng": "0.26", "home": null, "isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0, "next": [10, 16]}}, 
+	{"model": "ui.field", "pk": 16, "fields": {"name": "Atlantic Ocean", "type": 1, "game": 1, "lat": "54.57", "lng": "336.88", "home": null, "isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0, "next":[15, 2, 17, 3]}}, 
+	{"model": "ui.field", "pk": 17, "fields": {"name": "Azores", "type": 1, "game": 1, "lat": "37.65", "lng": "333.90", "home": null, "isCity": false, "defaultPriority": null, "defaultUnitType": null, "unitPoints": 0, "winPoints": 0, "next": [16, 1, 3]}}
+]
