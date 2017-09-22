@@ -69,7 +69,8 @@ class Engine:
         self.proceedAttacks()
         # add units
         if turn.newUnits:
-            self.syncUnits()
+            # add or remove units
+            self.addRemoveUnits()
         # save results
         self.saveResults()
         # create new turn
@@ -275,7 +276,7 @@ class Engine:
         self.log('Removing units for ['+str(country.pk)+'.'+country.name+']:'+str(unitPoints)+'pts')
         # TODO finish
     
-    def syncUnits(self):
+    def addRemoveUnits(self):
         if not self.turn.newUnits:
             return
         self.log('Synchronizing units')
@@ -319,7 +320,11 @@ class Engine:
             newCity = City()
             newCity.turn = newTurn
             newCity.field = city.field
-            newCity.country = city.country
+            # if some unit is on field, copy its owner
+            if self.turn.newUnits and self.nextMap.get(city.field) is not None:
+                newCity.country = self.nextMap[city.field].unit.country
+            else:
+                newCity.country = city.country
             newCity.save()
         # setup new units
         for field in self.nextMap:

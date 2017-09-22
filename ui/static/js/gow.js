@@ -45,6 +45,7 @@ function renderFieldDialog(json) {
 		if(json.unitType) {
 			$('#field-dialog .unit').show();
 			$('#field-dialog .country').text(json.country);
+			$('#field-dialog .unitCountry').text(json.unitCountry);
 			$('#field-dialog .unitType').text(json.unitType);
 		} else {
 			$('#field-dialog .unit').hide();

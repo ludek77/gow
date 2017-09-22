@@ -22,12 +22,15 @@ def unitResponse(request, fieldId):
     # public data
     output += '"field":"'+selectedField.name+'"'
     output += ',"type":"'+selectedField.type.name+'"'
+    if selectedField.isCity:
+        city = City.objects.get(turn=selectedTurn, field=selectedField)
+        output += ',"country":"'+city.country.name+'"'
     if selectedTurn is not None and selectedTurn.open:
         output += ',"open":true'
     else:
         output += ',"open":false'
     if selectedUnit is not None:
-        output += ',"country":"'+selectedUnit.country.name+'"'
+        output += ',"unitCountry":"'+selectedUnit.country.name+'"'
         output += ',"unitType":"'+selectedUnit.unitType.name+'"'
     
     # owner restricted data if turn is open
