@@ -8,7 +8,7 @@
 
 	{"model": "ui.commandtype", "pk": 1, "fields": {"name": "attack", "template": "[\"Target\",[\"next\"]]", "attackPower": 1, "defencePower": 1, "cancelByAttack": false, "support": false, "move": true, "unitType": [1, 2]}}, 
  	{"model": "ui.commandtype", "pk": 2, "fields": {"name": "defend", "template": "[]", "attackPower": 0, "defencePower": 1, "cancelByAttack": false, "support": false, "move": false, "unitType": [1, 2]}}, 
- 	{"model": "ui.commandtype", "pk": 3, "fields": {"name": "move", "template": "[\"Target\",[\"next\"]],[\"Optional 2nd target\",[\"opt\",\"next\"]]", "attackPower": 0, "defencePower": 1, "cancelByAttack": true, "support": false, "move": true, "unitType": [1, 2]}}, 
+ 	{"model": "ui.commandtype", "pk": 3, "fields": {"name": "move", "template": "[\"Target\",[\"next-or-self\"]],[\"Optional 2nd target\",[\"opt\",\"next-or-self\"]]", "attackPower": 0, "defencePower": 1, "cancelByAttack": true, "support": false, "move": true, "unitType": [1, 2]}}, 
 	{"model": "ui.commandtype", "pk": 4, "fields": {"name": "support_defence", "template": "[\"Supported unit\",[\"next\",\"unit_any\"]]", "attackPower": 0, "defencePower": 1, "cancelByAttack": true, "support": true, "move": false, "unitType": [1, 2]}}, 
 	{"model": "ui.commandtype", "pk": 5, "fields": {"name": "support_attack", "template": "[\"Target\",[\"next\"]],[\"Supported unit\",[\"next-any\",\"unit_any\"]]", "attackPower": 1, "defencePower": 1, "cancelByAttack": true, "support": true, "move": false, "unitType": [1, 2]}}, 
 	{"model": "ui.commandtype", "pk": 6, "fields": {"name": "transport", "template": "[\"Transported unit\",[\"unit_Soldier\",\"field_Beach\"]]", "attackPower": 0, "defencePower": 1, "cancelByAttack": true, "support": false, "move": false, "unitType": [1]}}, 

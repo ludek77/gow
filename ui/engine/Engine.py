@@ -70,12 +70,13 @@ class Engine:
         self.proceedAttacks()
         # proceed all remaining attacks
         self.proceedRemainingAttacks()
-        # cancel moves to attacked fields or there are more moves
-        self.cancelWeakMoves()
-        # proceed first step of moves
-        self.proceedMoves()
-        # do all remaining moves
-        self.proceedRemainingMoves()
+        for index in [0, 1]:
+            # cancel moves to attacked fields or there are more moves
+            self.cancelWeakMoves(index)
+            # proceed first step of moves
+            self.proceedMoves(index)
+            # do all remaining moves
+            self.proceedRemainingMoves(index)
         # add units
         if turn.newUnits:
             # add or remove units
@@ -263,74 +264,79 @@ class Engine:
                 self.dropUnit(cmd, targetField)
                 cmd.result = 'ok'
     
-    def cancelWeakMoves(self):
-        self.log('Canceling weak moves')
+    def cancelWeakMoves(self, index):
+        self.log('Canceling weak moves '+str(index))
         # count moves
         moveCounter = {}
         for field in self.thisMap:
             cmd = self.thisMap[field]
             ct = cmd.commandType
             if ct.move and ct.attackPower == 0 and cmd.result is None:
-                targetField = self.getTargetField(cmd)
-                if moveCounter.get(targetField) is None:
-                    moveCounter[targetField] = 1
-                else:
-                    moveCounter[targetField] = moveCounter[targetField] + 1
+                targetField = self.getTargetField(cmd, index)
+                if targetField is not None:
+                    if moveCounter.get(targetField) is None:
+                        moveCounter[targetField] = 1
+                    else:
+                        moveCounter[targetField] = moveCounter[targetField] + 1
         # cancel commands with more moves
         for field in self.thisMap:
             cmd = self.thisMap[field]
             ct = cmd.commandType
             if ct.move and ct.attackPower == 0 and cmd.result is None:
-                targetField = self.getTargetField(cmd)
-                if self.maxAttackers.get(targetField) is not None:
-                    cmd.result = 'fail.target-attacked'
-                elif moveCounter[targetField] > 1:
-                    cmd.result = 'fail.more-moves-to-target'
+                targetField = self.getTargetField(cmd, index)
+                if targetField is not None:
+                    if self.maxAttackers.get(targetField) is not None:
+                        cmd.result = 'fail.target-attacked:par_'+str(index)
+                    elif moveCounter[targetField] > 1:
+                        cmd.result = 'fail.more-moves-to-target:par_'+str(index)
     
-    def tryMoves(self):
+    def tryMoves(self, index):
         changed = False
         for field in self.thisMap:
             cmd = self.thisMap[field]
             ct = cmd.commandType
             if ct.move and ct.attackPower == 0 and cmd.result is None:
-                targetField = self.getTargetField(cmd)
-                targetCmd = self.nextMap.get(targetField)
-                # target not empty and will not move
-                if targetCmd is not None and targetCmd.result is not None:
-                    cmd.result = 'fail.target-not-empty'
-                    changed = True
-                elif targetCmd is None:
-                    self.dropUnit(cmd, targetField)
-                    cmd.result = 'ok'
-                    changed = True
+                targetField = self.getTargetField(cmd, index)
+                if targetField is not None:
+                    targetCmd = self.nextMap.get(targetField)
+                    # target not empty and will not move
+                    if targetCmd is not None and targetCmd.result is not None:
+                        cmd.result = 'fail.target-not-empty:par_'+str(index)
+                        changed = True
+                    elif targetCmd is None:
+                        self.dropUnit(cmd, targetField)
+                        changed = True
+        self.log('   next round changed:'+str(changed))
         return changed
                     
-    def proceedMoves(self):
-        self.log('Processing moves')
+    def proceedMoves(self, index):
+        self.log('Processing moves '+str(index))
         changed = True
         while changed:
-            changed = self.tryMoves()
+            changed = self.tryMoves(index)
             
-    def proceedRemainingMoves(self):
-        self.log('Processing all remaining moves')
+    def proceedRemainingMoves(self, index):
+        self.log('Processing all remaining moves '+str(index))
         for field in self.thisMap:
             cmd = self.thisMap[field]
             ct = cmd.commandType
             if ct.move and ct.attackPower == 0 and cmd.result is None:
-                targetField = self.getTargetField(cmd)
-                self.dropUnit(cmd, targetField)
-                cmd.result = 'ok'
+                targetField = self.getTargetField(cmd, index)
+                if targetField is not None:
+                    self.dropUnit(cmd, targetField)
                         
-    def getTargetField(self, cmd):
+    def getTargetField(self, cmd, index=99):
         args = cmd.args.split(',')
-        target = args[len(args)-1]
-        if target == '':
-            target = 0
-        targetField = Field.objects.filter(game=self.game, pk=target)
-        if len(targetField) == 1:
-            return targetField.first()
-        else:
-            return None
+        if index == 99:
+            index = len(args) - 1
+        if index <= len(args) - 1:
+            target = args[index]
+            if target == '':
+                target = 0
+            targetField = Field.objects.filter(game=self.game, pk=target)
+            if len(targetField) == 1:
+                return targetField.first()    
+        return None
     
     def addUnits(self, country, unitPoints):
         self.log('Adding units for ['+str(country.pk)+'.'+country.name+']:'+str(unitPoints)+'pts')

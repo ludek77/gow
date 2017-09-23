@@ -13,7 +13,7 @@ class CommandValidator:
             'fail.canceled-by-attack': 'Canceled by attack',
             'fail.target-not-empty': '{0} is not empty',
             'fail.more-moves-to-target': 'More moves to {0}',
-            'fail.target-attacked': '{0} attacked',
+            'fail.target-attacked': '{0} under attack',
             'invalid.empty': 'No {0} defined',
             'invalid.not_next': 'Unreachable {0}',
             'invalid.not_reachable': 'Unit cannot go to {0}',
@@ -23,7 +23,7 @@ class CommandValidator:
         }[key]
     
     def getResult(self, command):
-        if command.result.startswith('invalid'):
+        if command.result.contains(':'):
             # get error key
             index = command.result.find(':')
             key = command.result[:index]
@@ -46,11 +46,16 @@ class CommandValidator:
     def validatePar(self, command, template, field, nextField, turn):
         #print('validate:'+str(field)+'-'+str(nextField)+':'+str(template))
         for condition in template:
-            # handle both next (=must be also reachable) and next-any (=just next)
             if condition.startswith('next'):
-                if not self.isNext(field, nextField):
-                    return 'invalid.not_next:'
-                if condition == 'next' and not self.isReachable(command.unit.unitType, nextField):
+                isNext = self.isNext(field, nextField)
+                isReachable = self.isReachable(command.unit.unitType, nextField)
+                if condition == 'next-or-self':
+                    if field != nextField and not isNext:
+                        return 'invalid.not_next:'
+                else:
+                    if not isNext:
+                        return 'invalid.not_next:'
+                if condition != 'next-any' and not isReachable:
                     return 'invalid.not_reachable:'
             if condition.startswith('unit_'):
                 unitType = condition[5:]

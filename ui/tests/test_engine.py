@@ -87,7 +87,7 @@ class EngineTests(TestCase):
         self.assertUnit(turn, 'London', 'Ship', 'Spain')
         self.assertUnit(turn, 'Latvia', 'Ship', 'Russia')
         self.assertUnit(turn, 'Moscow', 'Soldier', 'Russia')
-        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Russia')
+        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
         # set commands
         self.setAssertCommand(turn, 'France', 'attack', 'Germany', None) # OK - beach
         self.setAssertCommand(turn, 'France', 'attack', 'Austria', None) # OK - ground
@@ -111,7 +111,7 @@ class EngineTests(TestCase):
         self.assertResult(turn.previous, 'London', 'ok')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
         self.assertResult(turn.previous, 'Ukraine', 'ok')
-        self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
+        self.assertUnit(turn, 'Poland', 'Soldier', 'Ukraine')
         self.assertResult(turn.previous, 'Latvia', 'ok')
         self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
         self.assertResult(turn.previous, 'Moscow', 'ok')
@@ -136,7 +136,7 @@ class EngineTests(TestCase):
         self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
         self.assertUnit(turn, 'Germany', 'Soldier', 'Spain')
         self.assertUnit(turn, 'France', 'Ship', 'Spain')
-        self.assertUnit(turn, 'Austria', 'Soldier', 'Russia')
+        self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
         self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
         # set commands
         self.setAssertCommand(turn, 'France', 'attack', 'Austria', 'invalid.not_reachable:par_0') #  fail sea
@@ -151,14 +151,14 @@ class EngineTests(TestCase):
         # verify units
         self.assertResult(turn.previous, 'North Sea', 'ok')
         self.assertUnit(turn, 'Denmark', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Baltic Sea', 'fail.target-attacked')
+        self.assertResult(turn.previous, 'Baltic Sea', 'fail.target-attacked:par_0')
         self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
         self.assertResult(turn.previous, 'Germany', 'fail.canceled-by-attack')
         self.assertUnit(turn, 'Germany', 'Soldier', 'Spain')
         self.assertResult(turn.previous, 'France', 'ok')
         self.assertUnit(turn, 'France', 'Ship', 'Spain')
         self.assertResult(turn.previous, 'Austria', 'fail.defence-stronger')
-        self.assertUnit(turn, 'Austria', 'Soldier', 'Russia')
+        self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
         self.assertResult(turn.previous, 'Poland', 'ok')
         self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
         # set commands
@@ -182,7 +182,7 @@ class EngineTests(TestCase):
         self.assertResult(turn.previous, 'France', 'invalid.not_reachable:par_0')
         self.assertUnit(turn, 'France', 'Ship', 'Spain')
         self.assertResult(turn.previous, 'Austria', 'ok')
-        self.assertUnit(turn, 'Croatia', 'Soldier', 'Russia')
+        self.assertUnit(turn, 'Croatia', 'Soldier', 'Ukraine')
         # set commands
         self.setAssertCommand(turn, 'Poland', 'move', 'Ukraine', None)
         self.setAssertCommand(turn, 'Ukraine', 'move', 'Croatia', None)
@@ -195,7 +195,7 @@ class EngineTests(TestCase):
         self.assertResult(turn.previous, 'Ukraine', 'ok')
         self.assertUnit(turn, 'Croatia', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Croatia', 'ok')
-        self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
+        self.assertUnit(turn, 'Poland', 'Soldier', 'Ukraine')
         # set commands
         self.setAssertCommand(turn, 'Poland', 'attack', 'Ukraine', None)
         self.setAssertCommand(turn, 'Ukraine', 'attack', 'Croatia', None)
@@ -204,7 +204,7 @@ class EngineTests(TestCase):
         turn = self.assertNextTurn(turn, '2006')
         # verify units
         self.assertResult(turn.previous, 'Poland', 'ok')
-        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Russia')
+        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
         self.assertResult(turn.previous, 'Ukraine', 'ok')
         self.assertUnit(turn, 'Croatia', 'Soldier', 'Spain')
         self.assertResult(turn.previous, 'Croatia', 'ok')
@@ -219,8 +219,8 @@ class EngineTests(TestCase):
         self.assertResult(turn.previous, 'Poland', 'fail.defence-stronger')
         self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Ukraine', 'fail.canceled-by-attack')
-        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Croatia', 'fail.target-not-empty')
+        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
+        self.assertResult(turn.previous, 'Croatia', 'fail.target-not-empty:par_0')
         self.assertUnit(turn, 'Croatia', 'Soldier', 'Spain')
         # set commands
         self.setAssertCommand(turn, 'Poland', 'attack', 'Ukraine', None)
@@ -232,7 +232,7 @@ class EngineTests(TestCase):
         self.assertResult(turn.previous, 'Poland', 'fail.defence-stronger')
         self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Ukraine', 'fail.canceled-by-attack')
-        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Russia')
+        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
         self.assertResult(turn.previous, 'Croatia', 'ok')
         self.assertUnit(turn, 'Austria', 'Soldier', 'Spain')
         # set commands
@@ -242,11 +242,11 @@ class EngineTests(TestCase):
         
         turn = self.assertNextTurn(turn, '2009')
         # verify units
-        self.assertResult(turn.previous, 'Poland', 'fail.more-moves-to-target')
+        self.assertResult(turn.previous, 'Poland', 'fail.more-moves-to-target:par_0')
         self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Ukraine', 'fail.more-moves-to-target')
-        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Austria', 'fail.more-moves-to-target')
+        self.assertResult(turn.previous, 'Ukraine', 'fail.more-moves-to-target:par_0')
+        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
+        self.assertResult(turn.previous, 'Austria', 'fail.more-moves-to-target:par_0')
         self.assertUnit(turn, 'Austria', 'Soldier', 'Spain')
         # set commands
         self.setAssertCommand(turn, 'Poland', 'attack', 'Croatia', None)
@@ -258,8 +258,60 @@ class EngineTests(TestCase):
         self.assertResult(turn.previous, 'Poland', 'fail.not-strongest')
         self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Ukraine', 'fail.not-strongest')
-        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Austria', 'fail.target-attacked')
+        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
+        self.assertResult(turn.previous, 'Austria', 'fail.target-attacked:par_0')
         self.assertUnit(turn, 'Austria', 'Soldier', 'Spain')
+        # set commands
+        self.setAssertCommand(turn, 'Poland', 'move', ['Ukraine', 'Croatia'], None)
+        self.setAssertCommand(turn, 'Ukraine', 'move', ['Poland', 'Ukraine'], None)
+        self.setAssertCommand(turn, 'Austria', 'move', ['Croatia', 'Poland'], None)
+        
+        turn = self.assertNextTurn(turn, '2011')
+        # verify units
+        self.assertResult(turn.previous, 'Poland', 'ok')
+        self.assertUnit(turn, 'Croatia', 'Soldier', 'Russia')
+        self.assertResult(turn.previous, 'Ukraine', 'ok')
+        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
+        self.assertResult(turn.previous, 'Austria', 'ok')
+        self.assertUnit(turn, 'Poland', 'Soldier', 'Spain')
+        # set commands
+        self.setAssertCommand(turn, 'Poland', 'move', ['Poland', 'Ukraine'], None)
+        self.setAssertCommand(turn, 'Ukraine', 'move', ['Croatia', 'Croatia'], None)
+        self.setAssertCommand(turn, 'Croatia', 'move', ['Ukraine', 'Poland'], None)
+        
+        turn = self.assertNextTurn(turn, '2012')
+        # verify units
+        self.assertResult(turn.previous, 'Poland', 'ok')
+        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Spain')
+        self.assertResult(turn.previous, 'Ukraine', 'ok')
+        self.assertUnit(turn, 'Croatia', 'Soldier', 'Ukraine')
+        self.assertResult(turn.previous, 'Croatia', 'ok')
+        self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
+        # set commands
+        self.setAssertCommand(turn, 'Poland', 'move', ['Poland', 'Croatia'], None)
+        self.setAssertCommand(turn, 'Ukraine', 'move', ['Croatia', 'Ukraine'], None)
+        self.setAssertCommand(turn, 'Croatia', 'move', ['Austria', 'Croatia'], None)
+        
+        turn = self.assertNextTurn(turn, '2013')
+        # verify units
+        self.assertResult(turn.previous, 'Poland', 'fail.more-moves-to-target:par_1')
+        self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
+        self.assertResult(turn.previous, 'Croatia', 'fail.more-moves-to-target:par_1')
+        self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
+        self.assertResult(turn.previous, 'Ukraine', 'ok')
+        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Spain')
+        # set commands
+        self.setAssertCommand(turn, 'Poland', 'attack', 'Croatia', None)
+        self.setAssertCommand(turn, 'Austria', 'attack', 'Croatia', None)
+        self.setAssertCommand(turn, 'Ukraine', 'move', ['Ukraine', 'Croatia'], None)
+        
+        turn = self.assertNextTurn(turn, '2014')
+        # verify units
+        self.assertResult(turn.previous, 'Poland', 'fail.not-strongest')
+        self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
+        self.assertResult(turn.previous, 'Austria', 'fail.not-strongest')
+        self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
+        self.assertResult(turn.previous, 'Ukraine', 'fail.target-attacked:par_1')
+        self.assertUnit(turn, 'Ukraine', 'Soldier', 'Spain')
         
         
