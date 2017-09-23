@@ -116,10 +116,14 @@ class Engine:
             cmd = self.thisMap[field]
             ct = cmd.commandType
             if ct.attackPower > 0 and not ct.support and cmd.result is None:
-                targetField = self.getTargetField(cmd)
+                targetField = self.getTargetField(cmd, 0)
                 targetCmd = self.thisMap.get(targetField)
-                if targetCmd is not None:
-                    if targetCmd.commandType.cancelByAttack:
+                # there is active target command
+                if targetCmd is not None and targetCmd.result is None and targetCmd.commandType.cancelByAttack:
+                    tct = targetCmd.commandType
+                    ttField = self.getTargetField(targetCmd, 0)
+                    isSupportingAttackAtMe = tct.attackPower > 0 and tct.support and ttField == field
+                    if not isSupportingAttackAtMe:
                         targetCmd.result = 'fail.canceled-by-attack'
     
     def cancelBrokenInvasions(self):
@@ -165,10 +169,10 @@ class Engine:
                 self.addAttackPower(cmd, ct.attackPower)
             #if support, add power to supported unit (if attackpower > 0, it's supporting attack, otherwise defence)
             if ct.support and ct.attackPower > 0 and cmd.result is None:
-                targetField = self.getTargetField(cmd)
-                targetCmd = self.thisMap[targetField]
-                if targetCmd is not None:
-                    self.addAttackPower(targetCmd, ct.attackPower)
+                supportedField = self.getTargetField(cmd, 1)
+                supportedCmd = self.thisMap[supportedField]
+                if supportedCmd is not None:
+                    self.addAttackPower(supportedCmd, ct.attackPower)
         # store max attack powers and numbers
         for field in self.thisMap:
             cmd = self.thisMap[field]
@@ -176,7 +180,7 @@ class Engine:
             if not ct.support and ct.attackPower > 0 and cmd.result is None:
                 power = self.attackPower.get(cmd)
                 if power is not None:
-                    targetField = self.getTargetField(cmd)
+                    targetField = self.getTargetField(cmd, 0)
                     maxPower = self.maxAttackPower.get(targetField)
                     if maxPower is None:
                         maxPower = 0
