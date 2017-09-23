@@ -106,4 +106,27 @@ class EngineTests(TestCase):
         self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
         self.assertResult(turn.previous, 'Moscow', 'ok')
         self.assertUnit(turn, 'Latvia', 'Soldier', 'Russia')
+        self.assertNoUnit(turn, 'Moscow')
+        self.assertNoUnit(turn, 'Ukraine')
+        self.assertNoUnit(turn, 'London')
+        # set commands
+        self.setAssertCommand(turn, 'North Sea', 'attack', 'Denmark', None)
+        self.setAssertCommand(turn, 'Baltic Sea', 'attack', 'Denmark', None)
+        self.setAssertCommand(turn, 'France', 'attack', 'Germany', None)
+        self.setAssertCommand(turn, 'Spain', 'attack', 'France', None)
+        self.setAssertCommand(turn, 'France', 'attack', 'Germany', None)
+        self.setAssertCommand(turn, 'Poland', 'attack', 'Austria', None)
+        self.setAssertCommand(turn, 'Latvia', 'attack', 'Poland', None)
+        
+        turn = self.assertNextTurn(turn, '2002')
+        # verify units
+        self.assertResult(turn.previous, 'North Sea', 'fail.not-strongest')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'Baltic Sea', 'fail.not-strongest')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
+        self.assertUnit(turn, 'Germany', 'Soldier', 'Spain')
+        self.assertUnit(turn, 'France', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Austria', 'Soldier', 'Russia')
+        self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
+        
         
