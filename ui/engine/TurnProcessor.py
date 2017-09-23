@@ -85,6 +85,13 @@ class TurnProcessor:
             else:
                 newCity.country = city.country
             newCity.save()
+            if newTurn.newUnits:
+                if newCity.country == newCity.field.home:
+                    newCC = CityCommand()
+                    newCC.city = newCity
+                    newCC.priority = newCity.field.defaultPriority
+                    newCC.newUnitType = newCity.field.defaultUnitType
+                    newCC.save()
         # setup new units
         for field in nextMap:
             cmd = nextMap[field]

@@ -102,7 +102,7 @@ class CityCommand(models.Model):
     result = models.CharField(max_length=50, null=True, default=None, blank=True)
     
     def __str__(self):
-        return "["+str(self.priority)+"."+self.city.country.name+"."+self.newUnitType.name+"]"
+        return "["+str(self.city.turn.name)+"."+self.city.country.name+"."+self.newUnitType.name+"]"
 
 class Unit(models.Model):
     turn = models.ForeignKey(Turn)
