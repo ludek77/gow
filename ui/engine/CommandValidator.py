@@ -119,4 +119,5 @@ class CommandValidator:
     def validateCommand(self, command):
         result = self.validateArgs(command, command.unit.field)
         command.result = result
+        return result
 
