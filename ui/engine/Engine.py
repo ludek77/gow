@@ -68,6 +68,14 @@ class Engine:
         self.dropUnits()
         # proceed attacks while situation is changing
         self.proceedAttacks()
+        # proceed all remaining attacks
+        self.proceedRemainingAttacks()
+        # cancel moves to attacked fields or there are more moves
+        self.cancelWeakMoves()
+        # proceed first step of moves
+        self.proceedMoves()
+        # do all remaining moves
+        self.proceedRemainingMoves()
         # add units
         if turn.newUnits:
             # add or remove units
@@ -245,9 +253,73 @@ class Engine:
         while changed:
             changed = self.tryAttacks()
     
-    def proceedAllAttacks(self):
-        self.log('Processing remaining attacks')
-        return None
+    def proceedRemainingAttacks(self):
+        self.log('Processing all remaining attacks')
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            ct = cmd.commandType
+            if ct.move and ct.attackPower > 0 and cmd.result is None:
+                targetField = self.getTargetField(cmd)
+                self.dropUnit(cmd, targetField)
+                cmd.result = 'ok'
+    
+    def cancelWeakMoves(self):
+        self.log('Canceling weak moves')
+        # count moves
+        moveCounter = {}
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            ct = cmd.commandType
+            if ct.move and ct.attackPower == 0 and cmd.result is None:
+                targetField = self.getTargetField(cmd)
+                if moveCounter.get(targetField) is None:
+                    moveCounter[targetField] = 1
+                else:
+                    moveCounter[targetField] = moveCounter[targetField] + 1
+        # cancel commands with more moves
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            ct = cmd.commandType
+            if ct.move and ct.attackPower == 0 and cmd.result is None:
+                targetField = self.getTargetField(cmd)
+                if self.maxAttackers.get(targetField) is not None:
+                    cmd.result = 'fail.target-attacked'
+                elif moveCounter[targetField] > 1:
+                    cmd.result = 'fail.more-moves-to-target'
+    
+    def tryMoves(self):
+        changed = False
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            ct = cmd.commandType
+            if ct.move and ct.attackPower == 0 and cmd.result is None:
+                targetField = self.getTargetField(cmd)
+                targetCmd = self.nextMap.get(targetField)
+                # target not empty and will not move
+                if targetCmd is not None and targetCmd.result is not None:
+                    cmd.result = 'fail.target-not-empty'
+                    changed = True
+                elif targetCmd is None:
+                    self.dropUnit(cmd, targetField)
+                    cmd.result = 'ok'
+                    changed = True
+        return changed
+                    
+    def proceedMoves(self):
+        self.log('Processing moves')
+        changed = True
+        while changed:
+            changed = self.tryMoves()
+            
+    def proceedRemainingMoves(self):
+        self.log('Processing all remaining moves')
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            ct = cmd.commandType
+            if ct.move and ct.attackPower == 0 and cmd.result is None:
+                targetField = self.getTargetField(cmd)
+                self.dropUnit(cmd, targetField)
+                cmd.result = 'ok'
                         
     def getTargetField(self, cmd):
         args = cmd.args.split(',')
