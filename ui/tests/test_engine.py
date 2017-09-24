@@ -64,6 +64,16 @@ class EngineTests(TestCase):
         self.assertEqual(nextTurn.previous, turn)
         self.assertEqual(nextTurn.name, turnName)
         return nextTurn
+    
+    def assertFlees(self, turn, fieldName, expectedFlees):
+        command = Command.objects.get(turn=turn, unit__field__name=fieldName)
+        expectedResult = ''
+        separator = ''
+        for fleeName in expectedFlees:
+            flee = Field.objects.get(game=turn.game, name=fleeName)
+            expectedResult += separator+str(flee.pk)
+            separator = ','
+        self.assertEqual(command.flee, expectedResult)
         
     def test_Engine(self):
         gameTemplate = Game.objects.get(pk=1) 
@@ -89,6 +99,13 @@ class EngineTests(TestCase):
         self.assertUnit(turn, 'Latvia', 'Ship', 'Russia')
         self.assertUnit(turn, 'Moscow', 'Soldier', 'Russia')
         self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
+        # verify flees
+        self.assertFlees(turn, 'Spain', ['France','Azores'])
+        self.assertFlees(turn, 'France', ['Spain','London', 'Germany', 'Austria'])
+        self.assertFlees(turn, 'London', ['France','Atlantic Ocean', 'Germany', 'North Sea'])
+        self.assertFlees(turn, 'Ukraine', ['Poland','Latvia','Moscow','Croatia'])
+        self.assertFlees(turn, 'Latvia', ['Poland','Baltic Sea'])
+        self.assertFlees(turn, 'Moscow', ['Latvia','Ukraine'])
         # set commands
         self.setAssertCommand(turn, 'France', 'attack', 'Germany', None) # OK - beach
         self.setAssertCommand(turn, 'France', 'attack', 'Austria', None) # OK - ground

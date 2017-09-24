@@ -66,7 +66,6 @@ class TurnProcessor:
         return newGame
     
     def createNextTurn(self, lastTurn, nextMap):
-        mapProcessor = MapProcessor()
         newTurn = Turn()
         newTurn.name = str(int(lastTurn.name)+1)
         newTurn.game = lastTurn.game
@@ -94,6 +93,7 @@ class TurnProcessor:
                     newCC.priority = newCity.field.defaultPriority
                     newCC.newUnitType = newCity.field.defaultUnitType
                     newCC.save()
+        mapProcessor = MapProcessor(newTurn)
         # setup new units
         for field in nextMap:
             cmd = nextMap[field]
@@ -109,9 +109,10 @@ class TurnProcessor:
             newCommand.unit = newUnit
             newCommand.turn = newTurn
             newCommand.commandType = lastTurn.game.defaultCommandType
-            newCommand.flee = mapProcessor.getFleeFields(newUnit.field, newUnit.country, newTurn)
-            newCommand.removePriority = mapProcessor.getFleeIndex(newUnit.field, newUnit.country, newTurn)
+            newCommand.flee = mapProcessor.getFleeFieldPks(newUnit)
+            newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)
             newCommand.save()
+        print('.')
         return newTurn
     
             
