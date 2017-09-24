@@ -118,6 +118,8 @@ class Command(models.Model):
     unit = models.ForeignKey(Unit)
     commandType = models.ForeignKey(CommandType)
     args = models.CharField(max_length=100, default='',blank=True)
+    flee = models.CharField(max_length=100, default='',blank=True)
+    removePriority = models.IntegerField(default=0)
     result = models.CharField(max_length=50, null=True, default=None, blank=True)
     
     def __str__(self):

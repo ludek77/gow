@@ -1,5 +1,6 @@
 from ui.models import Game, Turn, Field, Country, City, CityCommand, Unit, Command
 from ui.engine.CommandValidator import CommandValidator
+from ui.engine.MapProcessor import MapProcessor
 from django.utils import timezone
 
 class TurnProcessor:
@@ -65,6 +66,7 @@ class TurnProcessor:
         return newGame
     
     def createNextTurn(self, lastTurn, nextMap):
+        mapProcessor = MapProcessor()
         newTurn = Turn()
         newTurn.name = str(int(lastTurn.name)+1)
         newTurn.game = lastTurn.game
@@ -107,6 +109,9 @@ class TurnProcessor:
             newCommand.unit = newUnit
             newCommand.turn = newTurn
             newCommand.commandType = lastTurn.game.defaultCommandType
+            newCommand.flee = mapProcessor.getFleeFields(newUnit.field, newUnit.country, newTurn)
+            newCommand.removePriority = mapProcessor.getFleeIndex(newUnit.field, newUnit.country, newTurn)
             newCommand.save()
         return newTurn
+    
             
