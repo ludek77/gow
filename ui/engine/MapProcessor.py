@@ -110,7 +110,7 @@ class MapProcessor:
         self.orderByHomeDistanceBuffer = result
         return result
     
-    def getFleeFieldPks(self, unit):
+    def getEscapeFieldPks(self, unit):
         neighbours = self.getNeighbours(unit.field)
         reachable = self.filterReachable(unit.unitType, neighbours)
         homeDists = self.orderByHomeDistance(unit.country)

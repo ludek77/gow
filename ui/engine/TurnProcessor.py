@@ -109,7 +109,7 @@ class TurnProcessor:
             newCommand.unit = newUnit
             newCommand.turn = newTurn
             newCommand.commandType = lastTurn.game.defaultCommandType
-            newCommand.flee = mapProcessor.getFleeFieldPks(newUnit)
+            newCommand.escape = mapProcessor.getEscapeFieldPks(newUnit)
             newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)
             newCommand.save()
         print('.')

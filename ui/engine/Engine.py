@@ -19,6 +19,7 @@ class Engine:
     maxAttackPower = None # max attack power to field
     maxAttackers = None # number of attackers with max power to field
     moves = None # number of moves to field
+    escapes = None # number of escapes to field
       
     def closeTurn(self):
         self.turn.open = False
@@ -77,6 +78,8 @@ class Engine:
             self.proceedMoves(index)
             # do all remaining moves
             self.proceedRemainingMoves(index)
+        # escape units
+        self.doEscapes()
         # add units
         if turn.newUnits:
             # add or remove units
@@ -97,12 +100,12 @@ class Engine:
             cmd = self.thisMap[field]
             validator.validateCommand(cmd)
             
-    def dropUnit(self, cmd, newField):
+    def dropUnit(self, cmd, targetField):
         for field, command in self.nextMap.iteritems():
             if command == cmd:
                 self.nextMap.pop(field, None)
                 break
-        self.nextMap[newField] = cmd
+        self.nextMap[targetField] = cmd
     
     def dropUnits(self):
         self.log('Dropping units to new map')
@@ -243,7 +246,7 @@ class Engine:
                         if attackPower > defencePower:
                             self.dropUnit(cmd, targetField)
                             cmd.result = 'ok'
-                            targetCmd.result = 'flee'
+                            targetCmd.result = 'to-escape'
                             changed = True
                         else:
                             cmd.result = 'fail.defence-stronger'
@@ -328,6 +331,57 @@ class Engine:
                 targetField = self.getTargetField(cmd, index)
                 if targetField is not None:
                     self.dropUnit(cmd, targetField)
+         
+    def tryEscapes(self, index):
+        changed = False
+        # initialize array of escapess
+        self.escapes = {}
+        # count escapes
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            if cmd.result == 'to-escape':
+                changed = True
+                eList = cmd.escape.split(',')
+                if index <= len(eList):
+                    escape = eList[index]
+                    if escape in self.escapes:
+                        self.escapes[escape] = self.escapes[escape] + 1
+                    else:
+                        self.escapes[escape] = 1
+                else:
+                    cmd.result = 'destroyed'
+        # try to escape
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            if cmd.result == 'to-escape':
+                eList = cmd.escape.split(',')
+                if index <= len(eList):
+                    escape = eList[index]
+                    if self.escapes[escape] == 1:
+                        field = self.getField(escape)
+                        targetCmd = self.nextMap.get(field)
+                        attackers = self.maxAttackers.get(field)
+                        attackCmd = self.nextMap.get(cmd.unit.field)
+                        if targetCmd is None and attackers is None and field != attackCmd.unit.field:
+                            self.dropUnit(cmd, field)
+                            cmd.result = 'escaped'
+        self.log('   next round changed:'+str(changed))
+        return changed
+                    
+    def doEscapes(self):
+        self.log('Escaping units')
+        changed = True
+        index = 0
+        while changed:
+            # try to escape
+            changed = self.tryEscapes(index)
+            index += 1
+            
+    def getField(self, pk):
+        fields = Field.objects.filter(game=self.game, pk=pk)
+        if len(fields) == 1:
+            result = fields.first()
+        return result
                         
     def getTargetField(self, cmd, index=99):
         args = cmd.args.split(',')
@@ -337,9 +391,9 @@ class Engine:
             target = args[index]
             if target == '':
                 target = 0
-            targetField = Field.objects.filter(game=self.game, pk=target)
-            if len(targetField) == 1:
-                return targetField.first()    
+            targetField = self.getField(target)
+            if targetField is not None:
+                return targetField    
         return None
     
     def addUnits(self, country, unitPoints):

@@ -65,15 +65,15 @@ class EngineTests(TestCase):
         self.assertEqual(nextTurn.name, turnName)
         return nextTurn
     
-    def assertFlees(self, turn, fieldName, expectedFlees):
+    def assertEscapes(self, turn, fieldName, expectedEscapes):
         command = Command.objects.get(turn=turn, unit__field__name=fieldName)
         expectedResult = ''
         separator = ''
-        for fleeName in expectedFlees:
-            flee = Field.objects.get(game=turn.game, name=fleeName)
-            expectedResult += separator+str(flee.pk)
+        for escapeName in expectedEscapes:
+            escape = Field.objects.get(game=turn.game, name=escapeName)
+            expectedResult += separator+str(escape.pk)
             separator = ','
-        self.assertEqual(command.flee, expectedResult)
+        self.assertEqual(command.escape, expectedResult)
         
     def test_Engine(self):
         gameTemplate = Game.objects.get(pk=1) 
@@ -100,12 +100,12 @@ class EngineTests(TestCase):
         self.assertUnit(turn, 'Moscow', 'Soldier', 'Russia')
         self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
         # verify flees
-        self.assertFlees(turn, 'Spain', ['France','Azores'])
-        self.assertFlees(turn, 'France', ['Spain','London', 'Germany', 'Austria'])
-        self.assertFlees(turn, 'London', ['France','Atlantic Ocean', 'Germany', 'North Sea'])
-        self.assertFlees(turn, 'Ukraine', ['Poland','Latvia','Moscow','Croatia'])
-        self.assertFlees(turn, 'Latvia', ['Poland','Baltic Sea'])
-        self.assertFlees(turn, 'Moscow', ['Latvia','Ukraine'])
+        self.assertEscapes(turn, 'Spain', ['France','Azores'])
+        self.assertEscapes(turn, 'France', ['Spain','London', 'Germany', 'Austria'])
+        self.assertEscapes(turn, 'London', ['France','Atlantic Ocean', 'Germany', 'North Sea'])
+        self.assertEscapes(turn, 'Ukraine', ['Poland','Latvia','Moscow','Croatia'])
+        self.assertEscapes(turn, 'Latvia', ['Poland','Baltic Sea'])
+        self.assertEscapes(turn, 'Moscow', ['Latvia','Ukraine'])
         # set commands
         self.setAssertCommand(turn, 'France', 'attack', 'Germany', None) # OK - beach
         self.setAssertCommand(turn, 'France', 'attack', 'Austria', None) # OK - ground
@@ -356,6 +356,6 @@ class EngineTests(TestCase):
         self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Croatia', 'ok')
         self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
-        self.assertResult(turn.previous, 'Ukraine', 'flee')
-        #self.assertUnit(turn, 'Ukraine', 'Soldier', 'Spain')
+        self.assertResult(turn.previous, 'Ukraine', 'escaped')
+        self.assertUnit(turn, 'Latvia', 'Soldier', 'Spain')
         
