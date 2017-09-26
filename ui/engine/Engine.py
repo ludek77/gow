@@ -26,8 +26,24 @@ class Engine:
         self.turn.save()
         
     def log(self, text):
-        now = '{:%x %X}'.format(timezone.now())
-        print('['+now+'] game=['+str(self.game.pk)+'.'+self.game.name+'], turn=['+str(self.turn.pk)+'.'+self.turn.name+'] '+text);
+        #now = '{:%x %X}'.format(timezone.now())
+        #print('['+now+'] game=['+str(self.game.pk)+'.'+self.game.name+'], turn=['+str(self.turn.pk)+'.'+self.turn.name+'] '+text);
+        return None
+        
+    def isAttack(self, ct):
+        return ct.attackPower > 0 and not ct.support and ct.move
+    
+    def isMove(self, ct):
+        return ct.attackPower == 0 and not ct.support and ct.move
+    
+    def isSupportAttack(self, ct):
+        return ct.attackPower > 0 and ct.support
+    
+    def isSupportDefence(self, ct):
+        return ct.attackPower == 0 and ct.support and ct.defencePower > 0
+    
+    def isTransport(self, ct):
+        return ct.attackPower == 0 and not ct.support and not ct.move
         
     def initialize(self, turn):
         self.turn = turn
@@ -117,15 +133,13 @@ class Engine:
         self.log('Canceling attacked')
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
-            if ct.attackPower > 0 and not ct.support and cmd.result is None:
-                targetField = self.getTargetField(cmd, 0)
+            if self.isAttack(cmd.commandType) and cmd.result is None:
+                targetField = self.getTargetField(cmd)
                 targetCmd = self.thisMap.get(targetField)
                 # there is active target command
                 if targetCmd is not None and targetCmd.result is None and targetCmd.commandType.cancelByAttack:
-                    tct = targetCmd.commandType
                     ttField = self.getTargetField(targetCmd, 0)
-                    isSupportingAttackAtMe = tct.attackPower > 0 and tct.support and ttField == field
+                    isSupportingAttackAtMe = self.isSupportAttack(targetCmd.commandType) and ttField == field
                     if not isSupportingAttackAtMe:
                         targetCmd.result = 'fail.canceled-by-attack'
     
@@ -133,12 +147,26 @@ class Engine:
         self.log('Canceling broken invasions')
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
-            if ct.attackPower > 0 and not ct.support and cmd.result is None:
+            if self.isAttack(cmd.commandType) and cmd.result is None:
                 args = cmd.args.split(',')
                 index = 0
+                transportCanceled = False
+                transportMissing = False
                 while index < len(args)-1:
                     pathField = self.getTargetField(cmd, index)
+                    if pathField in self.thisMap:
+                        pathCmd = self.thisMap[pathField]
+                        if not self.isTransport(pathCmd.commandType):
+                            transportMissing = True
+                        elif pathCmd.result is not None:
+                            transportCanceled = True
+                    else:
+                        transportMissing = True 
+                    index += 1
+                if transportMissing:
+                    cmd.result = 'fail.transport-missing'
+                elif transportCanceled:
+                    cmd.result = 'fail.transport-canceled'
         
     def addDefencePower(self, cmd, addedPower):
         power = 0
@@ -151,15 +179,14 @@ class Engine:
         self.log('Counting defence powers')
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
             #count my own power
-            self.addDefencePower(cmd, ct.defencePower)
+            self.addDefencePower(cmd, cmd.commandType.defencePower)
             #if support, add power to supported unit (if attackpower not 0, it's supporting attack, otherwise defence)
-            if ct.support and ct.attackPower == 0 and cmd.result is None:
+            if self.isSupportDefence(cmd.commandType) and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 targetCmd = self.thisMap[targetField]
                 if targetCmd is not None:
-                    self.addDefencePower(targetCmd, ct.defencePower)
+                    self.addDefencePower(targetCmd, cmd.commandType.defencePower)
                         
     def addAttackPower(self, cmd, addedPower):
         power = 0
@@ -178,7 +205,7 @@ class Engine:
             if not ct.support:
                 self.addAttackPower(cmd, ct.attackPower)
             #if support, add power to supported unit (if attackpower > 0, it's supporting attack, otherwise defence)
-            if ct.support and ct.attackPower > 0 and cmd.result is None:
+            if self.isSupportAttack(ct) and cmd.result is None:
                 supportedField = self.getTargetField(cmd, 1)
                 supportedCmd = self.thisMap[supportedField]
                 if supportedCmd is not None:
@@ -186,11 +213,10 @@ class Engine:
         # store max attack powers and numbers
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
-            if not ct.support and ct.attackPower > 0 and cmd.result is None:
+            if self.isAttack(cmd.commandType) and cmd.result is None:
                 power = self.attackPower.get(cmd)
                 if power is not None:
-                    targetField = self.getTargetField(cmd, 0)
+                    targetField = self.getTargetField(cmd)
                     maxPower = self.maxAttackPower.get(targetField)
                     if maxPower is None:
                         maxPower = 0
@@ -205,13 +231,11 @@ class Engine:
         self.log('Canceling weak reverse attacks')
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
-            if ct.move and ct.attackPower > 0 and cmd.result is None:
+            if self.isAttack(cmd.commandType) and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 targetCmd = self.thisMap.get(targetField)
                 if targetCmd is not None:
-                    rev_ct = targetCmd.commandType
-                    if rev_ct.move and rev_ct.attackPower > 0:
+                    if self.isAttack(targetCmd.commandType):
                         revTargetField = self.getTargetField(targetCmd)
                         if revTargetField == field:
                             rev_power = self.attackPower.get(targetCmd)
@@ -223,8 +247,7 @@ class Engine:
         self.log('Canceling weak attacks')
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
-            if ct.move and ct.attackPower > 0 and cmd.result is None:
+            if self.isAttack(cmd.commandType) and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 if self.attackPower[cmd] < self.maxAttackPower[targetField] or self.maxAttackers[targetField] > 1:
                     cmd.result = 'fail.not-strongest'
@@ -233,9 +256,8 @@ class Engine:
         changed = False
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
             # for each attack not processed yet
-            if ct.attackPower > 0 and ct.move and not ct.support and cmd.result is None:
+            if self.isAttack(cmd.commandType) and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 targetCmd = self.nextMap.get(targetField)
                 # if target field is empty, drop unit to that field
@@ -272,8 +294,7 @@ class Engine:
         self.log('Processing all remaining attacks')
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
-            if ct.move and ct.attackPower > 0 and cmd.result is None:
+            if self.isAttack(cmd.commandType) and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 self.dropUnit(cmd, targetField)
                 cmd.result = 'ok'
@@ -284,8 +305,7 @@ class Engine:
         moveCounter = {}
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
-            if ct.move and ct.attackPower == 0 and cmd.result is None:
+            if self.isMove(cmd.commandType) and cmd.result is None:
                 targetField = self.getTargetField(cmd, index)
                 if targetField is not None:
                     if moveCounter.get(targetField) is None:
@@ -295,8 +315,7 @@ class Engine:
         # cancel commands with more moves
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
-            if ct.move and ct.attackPower == 0 and cmd.result is None:
+            if self.isMove(cmd.commandType) and cmd.result is None:
                 targetField = self.getTargetField(cmd, index)
                 if targetField is not None:
                     if self.maxAttackers.get(targetField) is not None:
@@ -308,8 +327,7 @@ class Engine:
         changed = False
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
-            if ct.move and ct.attackPower == 0 and cmd.result is None:
+            if self.isMove(cmd.commandType) and cmd.result is None:
                 targetField = self.getTargetField(cmd, index)
                 if targetField is not None:
                     targetCmd = self.nextMap.get(targetField)
@@ -333,8 +351,7 @@ class Engine:
         self.log('Processing all remaining moves '+str(index))
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            ct = cmd.commandType
-            if ct.move and ct.attackPower == 0 and cmd.result is None:
+            if self.isMove(cmd.commandType) and cmd.result is None:
                 targetField = self.getTargetField(cmd, index)
                 if targetField is not None:
                     self.dropUnit(cmd, targetField)

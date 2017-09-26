@@ -64,7 +64,9 @@ class TestBase(TestCase):
         result = self.validator.validateCommand(command)
         self.assertEqual(result, expectedResult)
         
-    def assertNextTurn(self, turn, turnName):
+    def assertNextTurn(self, turn, turnName, message=None):
+        if message is not None:
+            print(turnName + ':' + message)
         nextTurn = self.engine.calculateNextTurn(turn)
         self.assertEqual(nextTurn.previous, turn)
         self.assertEqual(nextTurn.name, turnName)

@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.core.management import call_command
 from django.urls import reverse
 
-class UserTests(TestCase):
+class TestUser(TestCase):
     
     def setUp(self):
         call_command('loaddata', 'user', verbosity=0)

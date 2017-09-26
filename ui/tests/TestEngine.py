@@ -1,7 +1,7 @@
 from ui.tests.TestBase import TestBase
 from ui.models import Turn, Game
 
-class EngineTests(TestBase):
+class TestEngine(TestBase):
         
     def test_Engine(self):
         gameTemplate = Game.objects.get(pk=1) 
@@ -30,7 +30,7 @@ class EngineTests(TestBase):
         # verify flees
         self.assertEscapes(turn, 'Spain', ['France','Azores'])
         self.assertEscapes(turn, 'France', ['Spain','London', 'Germany', 'Austria'])
-        self.assertEscapes(turn, 'London', ['France','Atlantic Ocean', 'Germany', 'North Sea'])
+        self.assertEscapes(turn, 'London', ['France','Atlantic Ocean', 'North Sea'])
         self.assertEscapes(turn, 'Ukraine', ['Poland','Latvia','Moscow','Croatia'])
         self.assertEscapes(turn, 'Latvia', ['Poland','Baltic Sea'])
         self.assertEscapes(turn, 'Moscow', ['Latvia','Ukraine'])

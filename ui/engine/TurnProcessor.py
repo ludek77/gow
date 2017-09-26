@@ -112,7 +112,6 @@ class TurnProcessor:
             newCommand.escape = mapProcessor.getEscapeFieldPks(newUnit)
             newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)
             newCommand.save()
-        print('.')
         return newTurn
     
             
