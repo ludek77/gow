@@ -130,8 +130,15 @@ class Engine:
                         targetCmd.result = 'fail.canceled-by-attack'
     
     def cancelBrokenInvasions(self):
-        # TODO implement
-        return None
+        self.log('Canceling broken invasions')
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            ct = cmd.commandType
+            if ct.attackPower > 0 and not ct.support and cmd.result is None:
+                args = cmd.args.split(',')
+                index = 0
+                while index < len(args)-1:
+                    pathField = self.getTargetField(cmd, index)
         
     def addDefencePower(self, cmd, addedPower):
         power = 0

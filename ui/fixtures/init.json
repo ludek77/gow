@@ -3,11 +3,11 @@
     {"model": "ui.fieldtype", "pk": 2, "fields": {"name": "Ground"}}, 
     {"model": "ui.fieldtype", "pk": 3, "fields": {"name": "Beach"}}, 
 
-    {"model": "ui.unittype", "pk": 1, "fields": {"name": "Ship", "icon": "/static/icon/ship.png", "width": 48, "height": 48, "fieldTypes": [1, 3]}}, 
-    {"model": "ui.unittype", "pk": 2, "fields": {"name": "Soldier", "icon": "/static/icon/soldier.png", "width": 24, "height": 64, "fieldTypes": [2, 3]}},
-
-	{"model": "ui.commandtype", "pk": 1, "fields": {"name": "attack", "template": "[\"Target\",[\"next\"]]", "attackPower": 1, "defencePower": 1, "cancelByAttack": false, "support": false, "move": true, "unitType": [1, 2]}}, 
- 	{"model": "ui.commandtype", "pk": 2, "fields": {"name": "defend", "template": "[]", "attackPower": 0, "defencePower": 1, "cancelByAttack": false, "support": false, "move": false, "unitType": [1, 2]}}, 
+	{"model": "ui.unittype", "pk": 1, "fields": {"name": "Soldier", "icon": "/static/icon/soldier.png", "width": 24, "height": 64, "fieldTypes": [2, 3]}},
+    {"model": "ui.unittype", "pk": 2, "fields": {"name": "Ship", "icon": "/static/icon/ship.png", "width": 48, "height": 48, "fieldTypes": [1, 3]}}, 
+    
+ 	{"model": "ui.commandtype", "pk": 1, "fields": {"name": "defend", "template": "[]", "attackPower": 0, "defencePower": 1, "cancelByAttack": false, "support": false, "move": false, "unitType": [1, 2]}}, 
+	{"model": "ui.commandtype", "pk": 2, "fields": {"name": "attack", "template": "[\"Target\",[\"next\"]]", "attackPower": 1, "defencePower": 1, "cancelByAttack": false, "support": false, "move": true, "unitType": [1, 2]}}, 
  	{"model": "ui.commandtype", "pk": 3, "fields": {"name": "move", "template": "[\"Target\",[\"next-or-self\"]],[\"Optional 2nd target\",[\"opt\",\"next-or-self\"]]", "attackPower": 0, "defencePower": 1, "cancelByAttack": true, "support": false, "move": true, "unitType": [1, 2]}}, 
 	{"model": "ui.commandtype", "pk": 4, "fields": {"name": "support_defence", "template": "[\"Supported unit\",[\"next\",\"unit_any\"]]", "attackPower": 0, "defencePower": 1, "cancelByAttack": true, "support": true, "move": false, "unitType": [1, 2]}}, 
 	{"model": "ui.commandtype", "pk": 5, "fields": {"name": "support_attack", "template": "[\"Target\",[\"next\"]],[\"Supported unit\",[\"next-any\",\"unit_any\"]]", "attackPower": 1, "defencePower": 1, "cancelByAttack": true, "support": true, "move": false, "unitType": [1, 2]}}, 
