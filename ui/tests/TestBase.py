@@ -66,7 +66,7 @@ class TestBase(TestCase):
         
     def assertNextTurn(self, turn, turnName, message=None):
         if message is not None:
-            print(turnName + ':' + message)
+            print(turnName + ' : ' + message)
         nextTurn = self.engine.calculateNextTurn(turn)
         self.assertEqual(nextTurn.previous, turn)
         self.assertEqual(nextTurn.name, turnName)

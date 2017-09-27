@@ -3,7 +3,7 @@
 	
 	{"model": "ui.city", "pk": 1, "fields": {"turn": 1, "field": 1, "country": 1}}, 
 	{"model": "ui.city", "pk": 2, "fields": {"turn": 1, "field": 2, "country": 1}}, 
-	{"model": "ui.city", "pk": 3, "fields": {"turn": 1, "field": 3, "country": 1}}, 
+	{"model": "ui.city", "pk": 3, "fields": {"turn": 1, "field": 3, "country": 3}}, 
 	{"model": "ui.city", "pk": 4, "fields": {"turn": 1, "field": 8, "country": 2}}, 
 	{"model": "ui.city", "pk": 5, "fields": {"turn": 1, "field": 11, "country": 2}}, 
 	{"model": "ui.city", "pk": 6, "fields": {"turn": 1, "field": 7, "country": 3}},
@@ -17,7 +17,7 @@
 	 
 	{"model": "ui.unit", "pk": 1, "fields": {"turn": 1, "country": 1, "unitType": 2, "field": 16}}, 
 	{"model": "ui.unit", "pk": 2, "fields": {"turn": 1, "country": 1, "unitType": 2, "field": 10}}, 
-	{"model": "ui.unit", "pk": 3, "fields": {"turn": 1, "country": 1, "unitType": 2, "field": 15}}, 
+	{"model": "ui.unit", "pk": 3, "fields": {"turn": 1, "country": 3, "unitType": 2, "field": 15}}, 
 	{"model": "ui.unit", "pk": 4, "fields": {"turn": 1, "country": 2, "unitType": 1, "field": 2}}, 
 	{"model": "ui.unit", "pk": 5, "fields": {"turn": 1, "country": 2, "unitType": 1, "field": 13}}, 
 	{"model": "ui.unit", "pk": 6, "fields": {"turn": 1, "country": 3, "unitType": 1, "field": 6}}, 

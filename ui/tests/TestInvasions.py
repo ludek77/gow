@@ -5,7 +5,7 @@ class TestInvasions(TestBase):
     
     def setUp(self):
         TestBase.setUp(self)
-        self.importJson('test/test_invasions')
+        self.importJson('test/test_units_1')
 
     def test(self):
         turn = Turn.objects.get(pk=1)
