@@ -35,6 +35,7 @@ def unitResponse(request, fieldId):
     
     # owner restricted data if turn is open
     if selectedTurn is not None:
+        commandValidator = CommandValidator()
         selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
         if selectedTurn.open:
             selectedUnit = Unit.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
@@ -63,7 +64,7 @@ def unitResponse(request, fieldId):
                 output += ']'
                 result = ''
                 if cmd.result is not None:
-                    result = CommandValidator().getResult(cmd)
+                    result = commandValidator.getResult(cmd)
                 output += ',"'+result+'"'
                 output += ']'
             

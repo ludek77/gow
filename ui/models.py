@@ -34,6 +34,7 @@ class CommandType(models.Model):
     cancelByAttack = models.BooleanField(default=False)
     support = models.BooleanField(default=False)
     move = models.BooleanField(default=False)
+    transport = models.BooleanField(default=False)
     
     def __str__(self):
         return self.name

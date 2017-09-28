@@ -50,8 +50,11 @@ class TestBase(TestCase):
             args = ''
             separator = ''
             for tName in targetName:
-                field = Field.objects.get(game=turn.game, name=tName)
-                args += separator + str(field.pk)
+                if tName is not None:
+                    field = Field.objects.get(game=turn.game, name=tName)
+                    args += separator + str(field.pk)
+                else:
+                    args += separator+'0'
                 separator = ','
             args 
         else:

@@ -7,7 +7,7 @@ class TestAttacks(TestBase):
         TestBase.setUp(self)
         self.importJson('test/test_units_1')
 
-    def testSetup(self):
+    def test(self):
         turn = Turn.objects.get(pk=1)
         # verify units
         self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
@@ -16,9 +16,7 @@ class TestAttacks(TestBase):
         self.assertUnit(turn, 'London', 'Soldier', 'Russia')
         self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
         self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
-
-    def test_1(self):
-        turn = Turn.objects.get(pk=1)
+        
         # set commands
         self.setAssertCommand(turn, 'Atlantic Ocean', 'attack', 'Azores')
         self.setAssertCommand(turn, 'North Sea', 'attack', 'London')
@@ -36,7 +34,7 @@ class TestAttacks(TestBase):
         self.assertResult(turn.previous, 'Norwegian Sea', 'fail.defence-stronger')
         self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
         self.assertResult(turn.previous, 'London', 'fail.not-strongest')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
+        self.assertUnit(turn, 'London', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Denmark', 'ok')
         self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Austria', 'fail.not-strongest')

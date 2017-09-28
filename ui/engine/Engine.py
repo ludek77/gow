@@ -31,7 +31,7 @@ class Engine:
         return None
         
     def isAttack(self, ct):
-        return ct.attackPower > 0 and not ct.support and ct.move
+        return ct.attackPower > 0 and not ct.support and not ct.transport and ct.move
     
     def isMove(self, ct):
         return ct.attackPower == 0 and not ct.support and ct.move
@@ -43,7 +43,10 @@ class Engine:
         return ct.attackPower == 0 and ct.support and ct.defencePower > 0
     
     def isTransport(self, ct):
-        return ct.attackPower == 0 and not ct.support and not ct.move
+        return ct.attackPower == 0 and ct.transport and not ct.move
+    
+    def isInvasion(self, ct):
+        return ct.attackPower > 0 and ct.transport and ct.move
         
     def initialize(self, turn):
         self.turn = turn
@@ -73,6 +76,8 @@ class Engine:
         self.cancelAttacked()
         # cancel broken invasions
         self.cancelBrokenInvasions()
+        # cancel commands on successfully invaded field
+        self.cancelInvaded()
         # count defence powers
         self.countDefencePowers()
         # cound attack powers
@@ -80,13 +85,13 @@ class Engine:
         # cancel reverse attacks that are not stronger than opposite ones
         self.cancelWeakReverseAttacks()
         # cancel attacks that are not strongest to target field
-        self.cancelWeakAttacks()
+        self.cancelWeakAttacksAndInvasions()
         # drop units that don't move or commands
         self.dropUnits()
         # proceed attacks while situation is changing
-        self.proceedAttacks()
+        self.proceedAttacksAndInvasions()
         # proceed all remaining attacks
-        self.proceedRemainingAttacks()
+        self.proceedRemainingAttacksAndInvasions()
         for index in [0, 1]:
             # cancel moves to attacked fields or there are more moves
             self.cancelWeakMoves(index)
@@ -147,26 +152,38 @@ class Engine:
         self.log('Canceling broken invasions')
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            if self.isAttack(cmd.commandType) and cmd.result is None:
+            if self.isInvasion(cmd.commandType) and cmd.result is None:
                 args = cmd.args.split(',')
                 index = 0
                 transportCanceled = False
                 transportMissing = False
                 while index < len(args)-1:
                     pathField = self.getTargetField(cmd, index)
-                    if pathField in self.thisMap:
-                        pathCmd = self.thisMap[pathField]
-                        if not self.isTransport(pathCmd.commandType):
-                            transportMissing = True
-                        elif pathCmd.result is not None:
-                            transportCanceled = True
-                    else:
-                        transportMissing = True 
+                    if pathField is not None:
+                        if pathField in self.thisMap:
+                            pathCmd = self.thisMap[pathField]
+                            if not self.isTransport(pathCmd.commandType):
+                                transportMissing = True
+                            elif pathCmd.result is not None:
+                                transportCanceled = True
+                        else:
+                            transportMissing = True 
                     index += 1
                 if transportMissing:
                     cmd.result = 'fail.transport-missing'
                 elif transportCanceled:
                     cmd.result = 'fail.transport-canceled'
+                    
+    def cancelInvaded(self):
+        self.log('Canceling successfully invaded')
+        for field in self.thisMap:
+            cmd = self.thisMap[field]
+            if self.isInvasion(cmd.commandType) and cmd.result is None:
+                targetField = self.getTargetField(cmd)
+                targetCmd = self.thisMap.get(targetField)
+                # there is active target command
+                if targetCmd is not None and targetCmd.result is None and targetCmd.commandType.cancelByAttack:
+                    targetCmd.result = 'fail.canceled-by-invasion'
         
     def addDefencePower(self, cmd, addedPower):
         power = 0
@@ -208,12 +225,18 @@ class Engine:
             if self.isSupportAttack(ct) and cmd.result is None:
                 supportedField = self.getTargetField(cmd, 1)
                 supportedCmd = self.thisMap[supportedField]
-                if supportedCmd is not None:
-                    self.addAttackPower(supportedCmd, ct.attackPower)
+                if supportedCmd is not None and (self.isAttack(supportedCmd.commandType) or self.isInvasion(supportedCmd.commandType)):
+                    sField = self.getTargetField(supportedCmd)
+                    if sField == self.getTargetField(cmd, 0):
+                        self.addAttackPower(supportedCmd, ct.attackPower)
+                    else:
+                        cmd.result = 'fail.unit-attacking-elsewhere'
+                else:
+                    cmd.result = 'fail.unit-not-attacking'
         # store max attack powers and numbers
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            if self.isAttack(cmd.commandType) and cmd.result is None:
+            if (self.isAttack(cmd.commandType) or self.isInvasion(cmd.commandType)) and cmd.result is None:
                 power = self.attackPower.get(cmd)
                 if power is not None:
                     targetField = self.getTargetField(cmd)
@@ -243,11 +266,11 @@ class Engine:
                             if rev_power is not None and rev_power >= power:
                                 cmd.result = 'fail.not-stronger-than-opposite'
     
-    def cancelWeakAttacks(self):
-        self.log('Canceling weak attacks')
+    def cancelWeakAttacksAndInvasions(self):
+        self.log('Canceling weak attacks and invasions')
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            if self.isAttack(cmd.commandType) and cmd.result is None:
+            if (self.isAttack(cmd.commandType) or self.isInvasion(cmd.commandType)) and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 if self.attackPower[cmd] < self.maxAttackPower[targetField] or self.maxAttackers[targetField] > 1:
                     cmd.result = 'fail.not-strongest'
@@ -257,7 +280,7 @@ class Engine:
         for field in self.thisMap:
             cmd = self.thisMap[field]
             # for each attack not processed yet
-            if self.isAttack(cmd.commandType) and cmd.result is None:
+            if (self.isAttack(cmd.commandType) or self.isInvasion(cmd.commandType)) and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 targetCmd = self.nextMap.get(targetField)
                 # if target field is empty, drop unit to that field
@@ -284,17 +307,17 @@ class Engine:
         self.log('   next round changed:'+str(changed))
         return changed
     
-    def proceedAttacks(self):
-        self.log('Processing attacks')
+    def proceedAttacksAndInvasions(self):
+        self.log('Processing attacks and invasions')
         changed = True
         while changed:
             changed = self.tryAttacks()
     
-    def proceedRemainingAttacks(self):
-        self.log('Processing all remaining attacks')
+    def proceedRemainingAttacksAndInvasions(self):
+        self.log('Processing all remaining attacks and invasions')
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            if self.isAttack(cmd.commandType) and cmd.result is None:
+            if (self.isAttack(cmd.commandType) or self.isInvasion(cmd.commandType)) and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 self.dropUnit(cmd, targetField)
                 cmd.result = 'ok'
@@ -413,11 +436,10 @@ class Engine:
             index = len(args) - 1
         if index <= len(args) - 1:
             target = args[index]
-            if target == '':
-                target = 0
-            targetField = self.getField(target)
-            if targetField is not None:
-                return targetField    
+            if target != '' and target != '0':
+                targetField = self.getField(target)
+                if targetField is not None:
+                    return targetField    
         return None
     
     def addUnits(self, country, unitPoints):

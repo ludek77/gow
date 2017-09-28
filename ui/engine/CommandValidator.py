@@ -46,6 +46,10 @@ class CommandValidator:
     def validatePar(self, command, template, field, nextField, turn):
         #print('validate:'+str(field)+'-'+str(nextField)+':'+str(template))
         for condition in template:
+            # if optional and not defined, return 'ok' and dont continue validation
+            if condition == 'opt' and field is None:
+                return None
+            # verify availability on map if required
             if condition.startswith('next'):
                 isNext = self.isNext(field, nextField)
                 isReachable = self.isReachable(command.unit.unitType, nextField)
@@ -57,6 +61,7 @@ class CommandValidator:
                         return 'invalid.not_next:'
                 if condition != 'next-any' and not isReachable:
                     return 'invalid.not_reachable:'
+            # validate unit type
             if condition.startswith('unit_'):
                 unitType = condition[5:]
                 #print unitType
@@ -66,6 +71,7 @@ class CommandValidator:
                 else:
                     if not self.isUnitType(nextField, unitType, turn):
                         return 'invalid.not_unit:'+unitType+'.'
+            # validate field type
             if condition.startswith('field_'):
                 fieldType = condition[6:]
                 if not self.isFieldType(nextField, fieldType):
@@ -114,17 +120,29 @@ class CommandValidator:
                 if index < len(args) and args[index] != '' and args[index] != '0':
                     arg = args[index]
                     #print('arg:'+str(arg))
-                    nextField = Field.objects.get(pk=arg)
-                    result = self.validatePar(command, parTemplate, field, nextField, turn)
+                    result = None
+                    if arg != '0':
+                        nextField = Field.objects.get(pk=arg)
+                        result = self.validatePar(command, parTemplate, field, nextField, turn)
+                    else:
+                        nextField = field
+                        result = self.validatePar(command, parTemplate, field, None, turn)
+                    field = nextField
                     if result is not None:
                         return result + 'par_' + str(index)
-                    field = nextField
                 else:
                     if self.isMandatory(parTemplate):
                         return 'invalid.empty:par_'+str(index)
                 index += 1
+            if len(args) > len(data['T']):
+                return 'invalid.too-many-parameters'
+        else:
+            if args != None and args != '':
+                return 'invalid.too-many-parameters'
     
     def validateCommand(self, command):
+        if not command.unit.unitType in command.commandType.unitType.all():
+            return 'invalid.not-command-for-unit'
         result = self.validateArgs(command, command.unit.field)
         command.result = result
         return result
