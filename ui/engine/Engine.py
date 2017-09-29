@@ -157,15 +157,22 @@ class Engine:
                 index = 0
                 transportCanceled = False
                 transportMissing = False
+                # iterate paths
                 while index < len(args)-1:
                     pathField = self.getTargetField(cmd, index)
+                    # if transporter defined
                     if pathField is not None:
                         if pathField in self.thisMap:
                             pathCmd = self.thisMap[pathField]
-                            if not self.isTransport(pathCmd.commandType):
+                            pathCmdTarget = self.getTargetField(pathCmd)
+                            # if targeting me
+                            if pathCmdTarget == field:
+                                if not self.isTransport(pathCmd.commandType):
+                                    transportMissing = True
+                                elif pathCmd.result is not None:
+                                    transportCanceled = True
+                            else:
                                 transportMissing = True
-                            elif pathCmd.result is not None:
-                                transportCanceled = True
                         else:
                             transportMissing = True 
                     index += 1
