@@ -178,3 +178,26 @@ class TestAttacks(TestBase):
         self.assertResult(turn.previous, 'Austria', 'fail.not-strongest')
         self.assertUnit(turn, 'Austria', 'Soldier', 'Russia')
         
+        # set commands
+        self.setAssertCommand(turn, 'Atlantic Ocean', 'defend')
+        self.setAssertCommand(turn, 'North Sea', 'defend')
+        self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
+        self.setAssertCommand(turn, 'France', 'move', ['Austria', 'Croatia'])
+        self.setAssertCommand(turn, 'Poland', 'defend')
+        self.setAssertCommand(turn, 'Austria', 'move', ['Austria', 'Croatia'])
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2007', 'Moves: Blocked first move to self, failed second move')
+        # verify units
+        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
+        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Ukraine')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'France', 'fail.more-moves-to-target:par_0')
+        self.assertUnit(turn, 'France', 'Soldier', 'Ukraine')
+        self.assertResult(turn.previous, 'Poland', 'ok')
+        self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
+        self.assertResult(turn.previous, 'Austria', 'fail.more-moves-to-target:par_0')
+        self.assertUnit(turn, 'Austria', 'Soldier', 'Russia')
+        
