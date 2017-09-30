@@ -4,10 +4,14 @@ var emptyColor = 'gray';
 function openDialog(url, title, handler) {
 	$.get(url, function(data) {
 		$('#dialog').html(data);
+		setDialogTitle(title);
 		if(handler != null) handler();
-		$('#dialog').dialog('option', 'title', title);
 		$('#dialog').dialog();
 	});
+}
+
+function setDialogTitle(title) {
+	$('#dialog').dialog('option', 'title', title);
 }
 
 function closeDialog() {

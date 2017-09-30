@@ -29,7 +29,7 @@ class CommandValidator:
         }[key]
     
     def getResult(self, command):
-        if command.result.contains(':'):
+        if ':' in command.result:
             # get error key
             index = command.result.find(':')
             key = command.result[:index]

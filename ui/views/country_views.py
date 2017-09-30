@@ -1,15 +1,10 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from ui.models import Game, Turn, Field, UnitType, City, Unit, Country, CityCommand
+from ui.models import Game, Turn, Field, UnitType, City, Unit, Country, CityCommand, Command
 
 @login_required
 def country_setup_rest(request):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
-    selectedCountry = Country.objects.filter(game=selectedGame, owner__id=request.user.id)
-    if len(selectedCountry) > 0:
-        selectedCountry = selectedCountry.first()
-    else:
-        selectedCountry = None
     if 'selected_turn' in request.session:
         selectedTurn = Turn.objects.filter(pk=request.session['selected_turn'], game=selectedGame)
         if len(selectedTurn) == 1:
@@ -18,29 +13,67 @@ def country_setup_rest(request):
             selectedTurn = None
     else:
         selectedTurn = None
-    output = '{'
+        
+    if selectedTurn.open:
+        countries = Country.objects.filter(game=selectedGame, owner__id=request.user.id)
+    else:
+        countries = Country.objects.filter(game=selectedGame)
+    separator = ''
+    output = '{"countries":['
+    for country in countries:
+        output += separator + renderCountry(country, selectedTurn)
+        separator = ','
+    output += ']}'
+    return HttpResponse(output)
     
-    if selectedCountry is not None:
-        output += '"name":"'+selectedCountry.name+'"'
-        output += ',"pk":'+str(selectedCountry.pk)+''
+def renderCountry(country, turn):
+    output = '{'
+    output += '"name":"'+country.name+'"'
+    output += ',"pk":'+str(country.pk)+''
     
     output += ',"units":['
-    if selectedTurn is not None:
-        units = Unit.objects.filter(country=selectedCountry, turn=selectedTurn)
+    if turn is not None:
+        commands = Command.objects.filter(turn=turn,unit__country=country)
         separator = ''
-        for row in units:
-            output += separator+'['+str(row.pk)+','+str(row.unitType.pk)+','+str(row.field.pk)+',"'+row.field.name+'",['+str(row.field.lat)+','+str(row.field.lng)+']]'
+        for command in commands:
+            unit = command.unit
+            field = command.unit.field
+            output += separator+'{'
+            output += '"id":'+str(unit.pk)
+            output += ',"type":'+str(unit.unitType.pk)
+            output += ',"fieldId":'+str(field.pk)
+            output += ',"field":"'+field.name+'"'
+            output += ',"latlng":['+str(field.lat)+','+str(field.lng)+']'
+            output += ',"command":"'+command.commandType.name+'"'
+            if command.args != '':
+                args = ''
+                cargs = command.args.split(',')
+                aseparator = ''
+                for arg in cargs:
+                    fld = Field.objects.get(pk=arg)
+                    args += aseparator+'"'+fld.name+'"'
+                    aseparator = ','
+                output += ',"args":['+args+']'
+            output += '}'
             separator = ','
     output += ']'
     
     output += ',"cities":['
-    if selectedTurn is not None:
-        cmds = CityCommand.objects.filter(city__country=selectedCountry, city__turn=selectedTurn).order_by('priority')
+    if turn is not None:
+        cmds = CityCommand.objects.filter(city__country=country, city__turn=turn).order_by('priority')
         separator = ''
         for row in cmds:
-            output += separator+'['+str(row.city.pk)+',"'+str(row.newUnitType.name)+'",'+str(row.city.field.pk)+',"'+row.city.field.name+'",['+str(row.city.field.lat)+','+str(row.city.field.lng)+']]'
+            output += separator+'{'
+            output += '"id":'+str(row.city.pk)
+            output += ',"unitType":"'+str(row.newUnitType.name)+'"'
+            output += ',"fieldId":'+str(row.city.field.pk)
+            output += ',"field":"'+row.city.field.name+'"'
+            output += ',"latlng":['+str(row.city.field.lat)+','+str(row.city.field.lng)+']'
+            output += '}'
             separator = ','
     output += ']'
     
     output += '}'
-    return HttpResponse(output)
+    return output
+    
+    

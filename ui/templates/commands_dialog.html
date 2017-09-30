@@ -6,11 +6,14 @@
 </script>
 {% endif %}
 
-<div id="commands" title="Commands for {{country.name}}" style="display:none">
+{% if turn.open %}
+	<div id="commands" title="Open turn {{turn.name}}" style="display:none">
+{% else %}
+	<div id="commands" title="Closed Turn {{turn.name}}" style="display:none">
+{% endif %}
 	<div>
-		Turn {{turn.name}} 
-{% if turn.deadline %}
-		ends at {{turn.deadline}}
+{% if turn.deadline and turn.open %}
+	Deadline: {{turn.deadline}}
 {% endif %}
 	</div>
 

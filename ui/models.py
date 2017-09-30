@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.utils import timezone
 
 #reference to django user model
 User = get_user_model()

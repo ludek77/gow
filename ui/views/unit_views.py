@@ -90,8 +90,10 @@ def unitResponse(request, fieldId,message=None):
                 if len(cityCommand) == 1:
                     cityCommand = cityCommand.first()
                     output += ',"fcmd":"'+str(cityCommand.newUnitType.pk)+'"'
+                    if cityCommand.result is not None:
+                        output += ',"fresult":"'+commandValidator.getResult(cityCommand)+'"'
                     newTypes = UnitType.objects.filter(fieldTypes=selectedField.type)
-                    output += ', "fcmds":['
+                    output += ',"fcmds":['
                     separator = ''
                     for type in newTypes:
                         output += separator+'['+str(type.pk)+',"'+type.name+'"]'

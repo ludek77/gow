@@ -40,8 +40,7 @@ function defaultClickField(e,pk) {
 
 function renderFieldDialog(json) {
 	openDialog('/ui/field_dialog', 'Field', function() {
-		$('#field-dialog .field').text(json.field);
-		$('#field-dialog .type').text(json.type);
+		setDialogTitle(json.field + ': ' + json.type);
 		if(json.unitType) {
 			$('#field-dialog .unit').show();
 			$('#field-dialog .country').text(json.country);
@@ -58,16 +57,20 @@ function renderFieldDialog(json) {
 			$('#field-dialog .unit-owner-only').show();
 			setOptions($('#unit-command'), json.cmds);
 			$('#unit-command').val(json.cmd[0]).prop('disabled',!json.open);
-			$('#command-result').html(json.cmd[3]);
-			setupArguments(json.cmd[1],json.cmd[2],json.open);
+			$('#unit-command-result').html(json.cmd[3]);
+			firstEmpty = setupArguments(json.cmd[1],json.cmd[2],json.open);
+			if(firstEmpty != null) {
+				selectTarget(firstEmpty);
+			}
 		} else {
 			$('#field-dialog .unit-owner-only').hide();
 			$('#unit-command').html('');
 		}
 		if(json.fcmd) {
 			$('#field-dialog .field-owner-only').show();
-			setOptions($('#add-unit-command'), json.fcmds);
-			$('#add-unit-command').val(json.fcmd);
+			setOptions($('#field-command'), json.fcmds);
+			$('#field-command').val(json.fcmd).prop('disabled',!json.open);
+			$('#field-command-result').html(json.fresult);
 		} else {
 			$('#field-dialog .field-owner-only').hide();
 		}
@@ -76,17 +79,27 @@ function renderFieldDialog(json) {
 
 function setupArguments(template,args,enabled) {
 	$('#unit-command-targets').html('');
+	var firstEmpty = null;
 	for(var i = 0; i < template.length; i++) {
 		if(template[i] != '') {
 			var arg = null;
 			if(args.length >= i) arg = args[i];
-			appendTarget(i,template[i][0],template[i][1],arg,enabled);
+			empty = appendTarget(i,template[i][0],template[i][1],arg,enabled);
+			if(empty && firstEmpty == null) {
+				firstEmpty = i;
+			}
 		}
 	}
+	return firstEmpty;
 }
 
 function appendTarget(index,text,param,arg,enabled) {
-	if(arg == null || arg[0] == 0) arg = [null,'Select'];
+	var empty = true;
+	if(arg == null || arg[0] == 0) {
+		arg = [null,'Select'];
+	} else {
+		empty = false;
+	}
 	var target = '<span id="target-'+index+'">'+arg[1]+'</span>';;
 	if(enabled) target = '<span id="target-'+index+'" class="clickable" onclick="selectTarget('+index+')">'+arg[1]+'</span>';    
 	$('#unit-command-targets')
@@ -94,6 +107,7 @@ function appendTarget(index,text,param,arg,enabled) {
 		.append('<span class="label">'+text+'</span>')
 		.append(target)
 		.append('</div>');
+	return empty;
 }
 
 var selectedTarget = null;
@@ -112,6 +126,7 @@ function clickTarget(e,pk) {
 	$.get('unit_command/?f='+selectedField+'&ct='+ct+'&args='+commandArgs, function(data) {
 		var json = $.parseJSON(data);
 		renderFieldDialog(json);
+		renderCountryDialog();
 	});
 	fieldClickHandler = defaultClickField;
 }
@@ -170,22 +185,36 @@ function renderCountryDialog() {
 	$.get('country_setup/',function(data){
 		$('#commands-content').html('');
 		var json= $.parseJSON(data);
-		for(var i in json.units) {
-			appendUnitCommand(json.units[i]);
-		}
-		for(var i in json.cities) {
-			appendCityCommand(json.cities[i]);
+		for(var c in json.countries) {
+			country = json.countries[c];
+			$('#commands-content').append('<div class="country">'+country.name+'</div>');
+			for(var i in country.units) {
+				appendUnitCommand(country.units[i]);
+			}
+			for(var i in country.cities) {
+				appendCityCommand(country.cities[i]);
+			}
 		}
 	});
 }
 
 function appendUnitCommand(unit) {
-	var type = unitTypes[unit[1]];
-	var ll = unit[4];
-	$('#commands-content').append('<div><span class="clickable" onclick="focusLatLng('+ll[0]+','+ll[1]+');onClickField('+unit[0]+','+unit[2]+')">'+unit[3]+'</span><span>'+type[4]+'</span></div>');
+	var unitType = unitTypes[unit.type][4];
+	content  = '<div>';
+	content += '<span class="clickable" onclick="focusLatLng('+unit.latlng[0]+','+unit.latlng[1]+');onClickField('+unit.id+','+unit.fieldId+')">'+unit.field+'</span>';
+	content += '<span>'+unitType+'</span>';
+	content += '<span>'+unit.command+'</span>';
+	for(var i in unit.args) {
+		content += '<span>'+unit.args[i]+'</span>'
+	}
+	content += '</div>';
+	$('#commands-content').append(content);
 }
 
 function appendCityCommand(city) {
-	var ll = city[4];
-	$('#commands-content').append('<div><span class="clickable" onclick="focusLatLng('+ll[0]+','+ll[1]+');onClickField('+city[0]+','+city[2]+')">'+city[3]+'</span><span>add '+city[1]+'</span></div>');
+	content =  '<div>';
+	content += '<span class="clickable" onclick="focusLatLng('+city.latlng[0]+','+city.latlng[0]+');onClickField('+city.id+','+city.fieldId+')">'+city.field+'</span>';
+	content += '<span>add '+city.field+'</span>';
+	content += '</div>';
+	$('#commands-content').append(content);
 }
