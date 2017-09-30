@@ -45,6 +45,7 @@ class Game(models.Model):
     tileServer= models.CharField(max_length = 100)
     winPoints = models.IntegerField(default=50) #win points needed to win the game
     defaultCommandType = models.ForeignKey(CommandType)
+    turnMinutes = models.IntegerField(default=5)
     
     def __str__(self):
         return self.name

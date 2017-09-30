@@ -14,6 +14,10 @@ function closeDialog() {
 	$('#dialog').dialog('close');
 }
 
+function displayMessage(message) {
+	alert(message);
+}
+
 function renderPathElement(lat1,lng1,lat2,lng2, pk1, pk2) {
 	L.polyline([[lat1,lng1],[lat2,lng2]], {color: emptyColor, opacity:0.5, className: 'p-id-'+pk1+'-'+pk2}).addTo(map);
 }

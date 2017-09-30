@@ -2,8 +2,9 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from ui.models import Unit, CommandType, Game, Turn, Command, Country, Field, City, CityCommand, UnitType
 from ui.engine.CommandValidator import CommandValidator
+from django.utils import timezone
 
-def unitResponse(request, fieldId):
+def unitResponse(request, fieldId,message=None):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedField = Field.objects.get(pk=fieldId)
     if 'selected_turn' in request.session:
@@ -32,6 +33,9 @@ def unitResponse(request, fieldId):
     if selectedUnit is not None:
         output += ',"unitCountry":"'+selectedUnit.country.name+'"'
         output += ',"unitType":"'+selectedUnit.unitType.name+'"'
+        
+    if message is not None:
+        output += ',"message":"'+message+'"'
     
     # owner restricted data if turn is open
     if selectedTurn is not None:
@@ -106,35 +110,43 @@ def unit_command_rest(request):
     fieldId = request.GET.get("f")
     ctid = request.GET.get("ct")
     args = request.GET.get("args")
+    message = None
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
-    selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
-    selectedUnit = Unit.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
-    selectedCommand = Command.objects.get(unit=selectedUnit, turn=selectedTurn)
-    commandType = CommandType.objects.get(pk=ctid)
-    selectedCommand.commandType = commandType
-    if(args is None):
-        args = '';
-    selectedCommand.args = args;
-    # validate command
-    validator = CommandValidator()
-    validator.validateCommand(selectedCommand)
-    #save command
-    selectedCommand.save()
-    
-    return unitResponse(request, fieldId)
+    if selectedTurn.deadline > timezone.now():
+        selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+        selectedUnit = Unit.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+        selectedCommand = Command.objects.get(unit=selectedUnit, turn=selectedTurn)
+        commandType = CommandType.objects.get(pk=ctid)
+        selectedCommand.commandType = commandType
+        if(args is None):
+            args = '';
+        selectedCommand.args = args;
+        # validate command
+        validator = CommandValidator()
+        validator.validateCommand(selectedCommand)
+        #save command
+        selectedCommand.save()
+    else:
+        message = 'Turn closed, please refresh' 
+
+    return unitResponse(request, fieldId, message)
 
 @login_required
 def city_command_rest(request):
     fieldId = request.GET.get("f")
     ctid = request.GET.get("ct")
+    message = None
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
-    selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
-    selectedCity = City.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
-    selectedCommand = CityCommand.objects.get(city=selectedCity)
-    newUnitType = UnitType.objects.get(pk=ctid)
-    selectedCommand.newUnitType = newUnitType
-    selectedCommand.save()
-    
-    return unitResponse(request, fieldId)
+    if selectedTurn.deadline > timezone.now():
+        selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+        selectedCity = City.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+        selectedCommand = CityCommand.objects.get(city=selectedCity)
+        newUnitType = UnitType.objects.get(pk=ctid)
+        selectedCommand.newUnitType = newUnitType
+        selectedCommand.save()
+    else:
+        message = 'Turn closed, please refresh'
+        
+    return unitResponse(request, fieldId, message)

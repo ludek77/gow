@@ -6,7 +6,8 @@ class CommandValidator:
     def getError(self, key):
         return {
             'ok': 'Success',
-            'flee': 'Under attack, escaping',
+            'escaped': 'Under attack, escaping',
+            'destroyed': 'Unable to escape, destroyed',
             'fail.not-strongest': 'Not strongest attack to target',
             'fail.not-stronger-than-opposite': 'Not stronger than counter attack',
             'fail.defence-stronger': 'Attack not stronger than defence',
@@ -14,6 +15,11 @@ class CommandValidator:
             'fail.target-not-empty': '{0} is not empty',
             'fail.more-moves-to-target': 'More moves to {0}',
             'fail.target-attacked': '{0} under attack',
+            'fail.transport-missing': 'Transport missing',
+            'fail.transport-canceled': 'Transport under attack',
+            'fail.canceled-by-invasion': 'Canceled by invasion',
+            'fail.unit-attacking-elsewhere': 'Supported unit attacks different target',
+            'fail.unit-not-attacking': 'Supported unit does not attack',
             'invalid.empty': 'No {0} defined',
             'invalid.not_next': 'Unreachable {0}',
             'invalid.not_reachable': 'Unit cannot go to {0}',

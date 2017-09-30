@@ -3,6 +3,7 @@
 		$("#unit-command").change(function() {
 			$.get("unit_command?f="+selectedField+"&ct="+$("#unit-command").val(), function( data ) {
 				var json = $.parseJSON(data);
+				if(json.message) displayMessage(json.message);
 				renderFieldDialog(json);
 				renderCountryDialog();
 			});
@@ -10,6 +11,7 @@
 		$("#add-unit-command").change(function() {
 			$.get("city_command?f="+selectedField+"&ct="+$("#add-unit-command").val(), function( data ) {
 				var json = $.parseJSON(data);
+				if(json.message) displayMessage(json.message);
 				renderFieldDialog(json);
 				renderCountryDialog();
 			});
