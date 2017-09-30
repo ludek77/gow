@@ -41,9 +41,14 @@ function defaultClickField(e,pk) {
 function renderFieldDialog(json) {
 	openDialog('/ui/field_dialog', 'Field', function() {
 		setDialogTitle(json.field + ': ' + json.type);
+		if(json.country) {
+			$('#field-dialog .country').show();
+			$('#field-dialog .countryName').text(json.country);
+		} else {
+			$('#field-dialog .country').hide();
+		}
 		if(json.unitType) {
 			$('#field-dialog .unit').show();
-			$('#field-dialog .country').text(json.country);
 			$('#field-dialog .unitCountry').text(json.unitCountry);
 			$('#field-dialog .unitType').text(json.unitType);
 		} else {
