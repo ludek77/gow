@@ -198,18 +198,34 @@ function renderCountryDialog() {
 			country = json.countries[c];
 			$('#commands-content').append('<div class="country">'+country.name+'</div>');
 			for(var i in country.units) {
-				appendUnitCommand(country.units[i]);
+				appendUnitCommand(country.units[i],json.open);
 			}
 			for(var i in country.cities) {
 				appendCityCommand(country.cities[i]);
 			}
 		}
+		
+		$('#commands .prio').click(function() {
+			var eId = $(this).attr('id');
+			var idx = eId.indexOf('_');
+			var fId = eId.substring(0,idx);
+			var direction = eId.substring(idx+1);
+			$.get('unit_command/?f='+fId+'&ct=prio&args='+direction, function(data) {
+				renderCountryDialog();
+			});
+		});
 	});
 }
 
-function appendUnitCommand(unit) {
+function appendUnitCommand(unit,open) {
 	var unitType = unitTypes[unit.type][4];
 	content  = '<div>';
+	if(open) {
+		content += '<input class="prio first" type="button" value="A" id="'+unit.fieldId+'_-9"/>'
+		content += '<input class="prio prev" type="button" value="^"  id="'+unit.fieldId+'_-1"/>'
+		content += '<input class="prio next" type="button" value="v"  id="'+unit.fieldId+'_+1"/>'
+		content += '<input class="prio last" type="button" value="V" id="'+unit.fieldId+'_+9"/>'
+	}
 	content += '<span class="clickable" onclick="focusLatLng('+unit.latlng[0]+','+unit.latlng[1]+');onClickField('+unit.id+','+unit.fieldId+')">'+unit.field+'</span>';
 	content += '<span>'+unitType+'</span>';
 	content += '<span>'+unit.command+'</span>';

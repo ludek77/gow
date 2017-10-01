@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, permission_required
-from ui.models import Game, Turn, Field, UnitType, City, Unit, Country, CityCommand
+from ui.models import Game, Turn, Field, UnitType, City, Unit, Country, CityCommand, Command
 from ui.engine.TurnProcessor import TurnProcessor
 
 @login_required
@@ -40,7 +40,13 @@ def game_setup_rest(request):
     output += '"unitTypes":['
     separator = ''
     for row in unitTypes:
-        output += separator+'['+str(row.pk)+',"'+row.icon+'",'+str(row.width)+','+str(row.height)+',"'+row.name+'"]'
+        output += separator+'['
+        output += str(row.pk)
+        output += ',"'+row.icon+'"'
+        output += ','+str(row.width)
+        output += ','+str(row.height)+','
+        output += '"'+row.name+'"'
+        output += ']'
         separator = ','
     output += ']'
     
@@ -76,16 +82,29 @@ def game_setup_rest(request):
     for f in fields:
         for n in f.next.all():
             if(n.pk < f.pk):
-                output += separator+'[['+str(f.lat)+','+str(f.lng)+'],['+str(n.lat)+','+str(n.lng)+'],'+str(f.pk)+','+str(n.pk)+']'
+                output += separator+'['
+                output += '['+str(f.lat)+','+str(f.lng)+']'
+                output += ',['+str(n.lat)+','+str(n.lng)+']'
+                output += ','+str(f.pk)
+                output += ','+str(n.pk)
+                output += ']'
                 separator = ','
     output += ']'
     
     if selectedTurn is not None:
-        units = Unit.objects.filter(turn=selectedTurn)
+        commands = Command.objects.filter(turn=selectedTurn).order_by('removePriority')
         output += ',"units":['
         separator = ''
-        for row in units:
-            output += separator+'['+str(row.pk)+','+str(row.field.pk)+',['+str(row.field.lat)+','+str(row.field.lng)+'],"'+row.country.color+'",'+str(row.unitType.pk)+']'
+        for command in commands:
+            unit = command.unit
+            field = unit.field
+            output += separator+'['
+            output += str(unit.pk)
+            output += ','+str(field.pk)
+            output += ',['+str(field.lat)+','+str(field.lng)+']'
+            output += ',"'+unit.country.color+'"'
+            output += ','+str(unit.unitType.pk)
+            output +=']'
             separator = ','
         output += ']'
     

@@ -1,5 +1,6 @@
-from ui.models import Field, City
+from ui.models import Field, City, Command
 from ui.engine.CommandValidator import CommandValidator
+import cmd
 
 class MapProcessor:
     
@@ -109,6 +110,40 @@ class MapProcessor:
         # store and return result
         self.orderByHomeDistanceBuffer = result
         return result
+    
+    def orderCommand(self, command, priority):
+        commands = Command.objects.filter(turn=self.turn,unit__country=command.unit.country).order_by('removePriority')
+        # start from 2 so we can set command to first easily
+        index = 2
+        # iterate commands
+        lastCmd = None
+        for cmd in commands:
+            # trick for moving command to next priority
+            if command is None:
+                command = cmd
+            # command to be changed
+            if cmd.pk == command.pk:
+                if priority == -9:
+                    cmd.removePriority = 1
+                if priority == -1:
+                    if lastCmd is not None:
+                        lastCmd.removePriority = index
+                        lastCmd.save()
+                    cmd.removePriority = index -1 
+                if priority == 1:
+                    cmd.removePriority = index
+                    priority = -1
+                    # trick: if moving to next, next command should be switched with current
+                    command = None
+                if priority == 9:
+                    cmd.removePriority = len(commands) + 1
+                cmd.save()
+            # other commands
+            else:
+                cmd.removePriority = index
+                cmd.save()
+                index += 1
+            lastCmd = cmd
     
     def getEscapeFieldPks(self, unit):
         neighbours = self.getNeighbours(unit.field)

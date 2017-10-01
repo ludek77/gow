@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from ui.models import Unit, CommandType, Game, Turn, Command, Country, Field, City, CityCommand, UnitType
 from ui.engine.CommandValidator import CommandValidator
+from ui.engine.MapProcessor import MapProcessor
 from django.utils import timezone
 
 def unitResponse(request, fieldId,message=None):
@@ -122,16 +123,22 @@ def unit_command_rest(request):
         selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
         selectedUnit = Unit.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
         selectedCommand = Command.objects.get(unit=selectedUnit, turn=selectedTurn)
-        commandType = CommandType.objects.get(pk=ctid)
-        selectedCommand.commandType = commandType
-        if(args is None):
-            args = '';
-        selectedCommand.args = args;
-        # validate command
-        validator = CommandValidator()
-        validator.validateCommand(selectedCommand)
-        #save command
-        selectedCommand.save()
+        # changing remove priority
+        if ctid == 'prio':
+            processor = MapProcessor(selectedTurn)
+            processor.orderCommand(selectedCommand, int(args))
+        # setting command and arguments
+        else:
+            commandType = CommandType.objects.get(pk=ctid)
+            selectedCommand.commandType = commandType
+            if(args is None):
+                args = '';
+            selectedCommand.args = args;
+            # validate command
+            validator = CommandValidator()
+            validator.validateCommand(selectedCommand)
+            #save command
+            selectedCommand.save()
     else:
         message = 'Turn closed, please refresh' 
 

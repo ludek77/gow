@@ -19,11 +19,15 @@ def country_setup_rest(request):
     else:
         countries = Country.objects.filter(game=selectedGame)
     separator = ''
-    output = '{"countries":['
+    output =  '{'
+    if selectedTurn.open:
+        output += '"open":true,'
+    output += '"countries":['
     for country in countries:
         output += separator + renderCountry(country, selectedTurn)
         separator = ','
-    output += ']}'
+    output += ']'
+    output += '}'
     return HttpResponse(output)
     
 def renderCountry(country, turn):
@@ -33,7 +37,7 @@ def renderCountry(country, turn):
     
     output += ',"units":['
     if turn is not None:
-        commands = Command.objects.filter(turn=turn,unit__country=country)
+        commands = Command.objects.filter(turn=turn,unit__country=country).order_by('removePriority')
         separator = ''
         for command in commands:
             unit = command.unit
