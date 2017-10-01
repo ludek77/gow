@@ -11,6 +11,9 @@
 {% else %}
 	<div id="commands" title="Closed Turn {{turn.name}}" style="display:none">
 {% endif %}
+{% if turn.newUnits %}
+	<div>Units synced after this move</div>
+{% endif %}
 	<div>
 {% if turn.deadline and turn.open %}
 	Deadline: {{turn.deadline}}
