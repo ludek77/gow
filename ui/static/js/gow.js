@@ -163,14 +163,12 @@ function setupGame() {
 			renderPath(ll1[0],ll1[1],ll2[0],ll2[1], pk1, pk2);
 		}
 		for(var i in json.fields) {
-			var pk = json.fields[i][0];
-		    var latlng = json.fields[i][1];
-		    var clr = json.fields[i][2];
-			if(clr != '') {
-				if(clr == '-') clr = emptyColor;
-				renderCity(latlng[0],latlng[1], pk, clr);
+			var field = json.fields[i];
+			if(field.color != '') {
+				if(field.color == '-') field.color = emptyColor;
+				renderCity(field.latlng[0],field.latlng[1], field.id, field.color, field.home);
 			} else {
-		    	renderField(latlng[0],latlng[1], pk);
+		    	renderField(field.latlng[0],field.latlng[1], field.id);
 		    }
 		}
 		for(var i in json.units) {

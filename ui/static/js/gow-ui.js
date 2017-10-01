@@ -54,21 +54,23 @@ function renderField(lat, lng, pk) {
 	if(lng < 180) renderFieldElement(lat, lng+360, pk);
 }
 
-function renderCityElement(lat, lng, fpk, clr) {
+function renderCityElement(lat, lng, fpk, clr, home) {
+	var opacity = 0.5;
+	if(home) opacity = 1;
 	L.rectangle([[lat-1.5,lng-2],[lat+1.5,lng+2]], {
 		color: clr,
 		fillColor: clr,
-		fillOpacity: 0.5,
+		fillOpacity: opacity,
 		className: 'c-id-'+fpk
 	}).on('click', function(e){
 		onClickField(e,fpk);
 	}).addTo(map);
 }
 
-function renderCity(lat, lng, fpk, clr) {
-	renderCityElement(lat, lng, fpk, clr);
-	if(lng > 180) renderCityElement(lat, lng-360, fpk, clr);
-	if(lng < 180) renderCityElement(lat, lng+360, fpk, clr);
+function renderCity(lat, lng, fpk, clr, home) {
+	renderCityElement(lat, lng, fpk, clr, home);
+	if(lng > 180) renderCityElement(lat, lng-360, fpk, clr, home);
+	if(lng < 180) renderCityElement(lat, lng+360, fpk, clr, home);
 }
 
 function renderUnitElement(lat, lng, upk, fpk, clr, markerIcon) {

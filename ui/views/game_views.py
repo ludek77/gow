@@ -51,15 +51,23 @@ def game_setup_rest(request):
         cities = None
     output += ',"fields":['
     separator = ''
-    for row in fields:
-        color = '';
-        if(row.isCity):
+    for field in fields:
+        color = ''
+        currentCountry = None
+        if(field.isCity):
             color='-'
         if cities is not None:
-            city = cities.filter(field=row)
+            city = cities.filter(field=field)
             if len(city)==1:
                 color = city[0].country.color
-        output += separator+'['+str(row.pk)+',['+str(row.lat)+','+str(row.lng)+'],"'+color+'"]'
+                currentCountry = city[0].country
+        output += separator+'{'
+        output += '"id":'+str(field.pk)
+        output += ',"latlng":['+str(field.lat)+','+str(field.lng)+']'
+        output += ',"color":"'+color+'"'
+        if field.home is not None and field.home == currentCountry:
+            output += ',"home":true'
+        output += '}'
         separator = ','
     output += ']'
     
