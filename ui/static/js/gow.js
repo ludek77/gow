@@ -47,6 +47,12 @@ function renderFieldDialog(json) {
 		} else {
 			$('#field-dialog .country').hide();
 		}
+		if(json.home) {
+			$('#field-dialog .home').show();
+			$('#field-dialog .homeName').text(json.home);
+		} else {
+			$('#field-dialog .home').hide();
+		}
 		if(json.unitType) {
 			$('#field-dialog .unit').show();
 			$('#field-dialog .unitCountry').text(json.unitCountry);

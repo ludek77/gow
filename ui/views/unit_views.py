@@ -24,8 +24,11 @@ def unitResponse(request, fieldId,message=None):
     output += '"field":"'+selectedField.name+'"'
     output += ',"type":"'+selectedField.type.name+'"'
     if selectedField.isCity:
-        city = City.objects.get(turn=selectedTurn, field=selectedField)
-        output += ',"country":"'+city.country.name+'"'
+        city = City.objects.filter(turn=selectedTurn, field=selectedField)
+        if len(city) == 1:
+            output += ',"country":"'+city[0].country.name+'"'
+        if selectedField.home is not None:
+            output += ',"home":"'+selectedField.home.name+'"'
     if selectedTurn is not None and selectedTurn.open:
         output += ',"open":true'
     else:
