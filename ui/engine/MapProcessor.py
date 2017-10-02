@@ -113,36 +113,25 @@ class MapProcessor:
     
     def orderCommand(self, command, priority):
         commands = Command.objects.filter(turn=self.turn,unit__country=command.unit.country).order_by('removePriority')
-        # start from 2 so we can set command to first easily
-        index = 2
         # iterate commands
-        lastCmd = None
+        index = 4
         for cmd in commands:
-            # trick for moving command to next priority
-            if command is None:
-                command = cmd
             # command to be changed
             if cmd.pk == command.pk:
                 if priority == -9:
                     cmd.removePriority = 1
                 if priority == -1:
-                    if lastCmd is not None:
-                        lastCmd.removePriority = index
-                        lastCmd.save()
-                    cmd.removePriority = index -1 
+                    cmd.removePriority = index - 3
                 if priority == 1:
-                    cmd.removePriority = index
-                    priority = -1
-                    # trick: if moving to next, next command should be switched with current
-                    command = None
+                    cmd.removePriority = index + 3
                 if priority == 9:
-                    cmd.removePriority = len(commands) + 1
-                cmd.save()
+                    cmd.removePriority = 2*len(commands) + 3
             # other commands
             else:
                 cmd.removePriority = index
-                cmd.save()
-                index += 1
+            print str(cmd) + '>'+str(cmd.removePriority)
+            cmd.save()
+            index += 2
             lastCmd = cmd
     
     def getEscapeFieldPks(self, unit):
