@@ -92,7 +92,7 @@ def game_setup_rest(request):
     output += ']'
     
     if selectedTurn is not None:
-        commands = Command.objects.filter(turn=selectedTurn).order_by('removePriority')
+        commands = Command.objects.filter(unit__turn=selectedTurn).order_by('removePriority')
         output += ',"units":['
         separator = ''
         for command in commands:

@@ -109,7 +109,7 @@ class CommandValidator:
         return json.loads('{"T":['+template+"]}")
     
     def validateArgs(self, command, firstField):
-        turn = command.turn
+        turn = command.unit.turn
         template = command.commandType.template
         args = command.args
         #print('template:'+str(template))

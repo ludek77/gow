@@ -1,4 +1,4 @@
-from ui.models import Field, City, Command
+from ui.models import Field, City, Command, CityCommand
 from ui.engine.CommandValidator import CommandValidator
 import cmd
 
@@ -111,25 +111,26 @@ class MapProcessor:
         self.orderByHomeDistanceBuffer = result
         return result
     
-    def orderCommand(self, command, priority):
-        commands = Command.objects.filter(turn=self.turn,unit__country=command.unit.country).order_by('removePriority')
+    def orderCommand(self, command, priority, commands):
         # iterate commands
         index = 4
         for cmd in commands:
             # command to be changed
+            newPriority = index
             if cmd.pk == command.pk:
                 if priority == -9:
-                    cmd.removePriority = 1
+                    newPriority = 1
                 if priority == -1:
-                    cmd.removePriority = index - 3
+                    newPriority = index - 3
                 if priority == 1:
-                    cmd.removePriority = index + 3
+                    newPriority = index + 3
                 if priority == 9:
-                    cmd.removePriority = 2*len(commands) + 3
+                    newPriority = 2*len(commands) + 3
             # other commands
+            if type(cmd) is Command:
+                cmd.removePriority = newPriority
             else:
-                cmd.removePriority = index
-            print str(cmd) + '>'+str(cmd.removePriority)
+                cmd.priority = newPriority
             cmd.save()
             index += 2
             lastCmd = cmd

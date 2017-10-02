@@ -117,7 +117,6 @@ class Unit(models.Model):
         return "[" + self.turn.name + "." + self.country.name + "." + self.unitType.name + "." + self.field.name + "]"
 
 class Command(models.Model):
-    turn = models.ForeignKey(Turn)
     unit = models.ForeignKey(Unit)
     commandType = models.ForeignKey(CommandType)
     args = models.CharField(max_length=100, default='',blank=True)

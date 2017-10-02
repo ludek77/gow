@@ -52,7 +52,7 @@ def unitResponse(request, fieldId,message=None):
         if len(selectedUnit) == 1:
             selectedUnit = selectedUnit.first(); 
         
-            cmd = Command.objects.filter(turn=selectedTurn, unit=selectedUnit)
+            cmd = Command.objects.filter(unit__turn=selectedTurn, unit=selectedUnit)
             if len(cmd) == 1:
                 cmd = cmd.first()
                 output += ',"cmd":['+str(cmd.commandType.pk)+',['+cmd.commandType.template+'],['
@@ -122,11 +122,12 @@ def unit_command_rest(request):
     if selectedTurn.deadline > timezone.now():
         selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
         selectedUnit = Unit.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
-        selectedCommand = Command.objects.get(unit=selectedUnit, turn=selectedTurn)
+        selectedCommand = Command.objects.get(unit=selectedUnit)
         # changing remove priority
         if ctid == 'prio':
+            commands = Command.objects.filter(unit__turn=selectedTurn,unit__country=selectedCountry).order_by('removePriority')
             processor = MapProcessor(selectedTurn)
-            processor.orderCommand(selectedCommand, int(args))
+            processor.orderCommand(selectedCommand, int(args), commands)
         # setting command and arguments
         else:
             commandType = CommandType.objects.get(pk=ctid)
@@ -148,6 +149,7 @@ def unit_command_rest(request):
 def city_command_rest(request):
     fieldId = request.GET.get("f")
     ctid = request.GET.get("ct")
+    args = request.GET.get("args")
     message = None
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
@@ -155,9 +157,14 @@ def city_command_rest(request):
         selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
         selectedCity = City.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
         selectedCommand = CityCommand.objects.get(city=selectedCity)
-        newUnitType = UnitType.objects.get(pk=ctid)
-        selectedCommand.newUnitType = newUnitType
-        selectedCommand.save()
+        if ctid == 'prio':
+            commands = CityCommand.objects.filter(city__turn=selectedTurn,city__country=selectedCountry).order_by('priority')
+            processor = MapProcessor(selectedTurn)
+            processor.orderCommand(selectedCommand, int(args), commands)
+        else:
+            newUnitType = UnitType.objects.get(pk=ctid)
+            selectedCommand.newUnitType = newUnitType
+            selectedCommand.save()
     else:
         message = 'Turn closed, please refresh'
         

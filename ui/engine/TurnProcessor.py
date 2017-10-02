@@ -107,7 +107,6 @@ class TurnProcessor:
             # add default command
             newCommand = Command()
             newCommand.unit = newUnit
-            newCommand.turn = newTurn
             newCommand.commandType = lastTurn.game.defaultCommandType
             newCommand.escape = mapProcessor.getEscapeFieldPks(newUnit)
             newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)

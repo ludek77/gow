@@ -37,7 +37,7 @@ def renderCountry(country, turn):
     
     output += ',"units":['
     if turn is not None:
-        commands = Command.objects.filter(turn=turn,unit__country=country).order_by('removePriority')
+        commands = Command.objects.filter(unit__turn=turn,unit__country=country).order_by('removePriority')
         separator = ''
         for command in commands:
             unit = command.unit
@@ -69,7 +69,7 @@ def renderCountry(country, turn):
         for row in cmds:
             output += separator+'{'
             output += '"id":'+str(row.city.pk)
-            output += ',"unitType":"'+str(row.newUnitType.name)+'"'
+            output += ',"newUnit":"'+str(row.newUnitType.name)+'"'
             output += ',"fieldId":'+str(row.city.field.pk)
             output += ',"field":"'+row.city.field.name+'"'
             output += ',"latlng":['+str(row.city.field.lat)+','+str(row.city.field.lng)+']'
