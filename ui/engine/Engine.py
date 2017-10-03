@@ -2,6 +2,7 @@ from ui.models import Turn, Field, Unit, City, Country, CityCommand, Command, Co
 from ui.engine.CommandValidator import CommandValidator
 from ui.engine.TurnProcessor import TurnProcessor
 from django.utils import timezone
+import cmd
 
 class Engine:
     
@@ -26,8 +27,8 @@ class Engine:
         self.turn.save()
         
     def log(self, text):
-        #now = '{:%x %X}'.format(timezone.now())
-        #print('['+now+'] game=['+str(self.game.pk)+'.'+self.game.name+'], turn=['+str(self.turn.pk)+'.'+self.turn.name+'] '+text);
+        now = '{:%x %X}'.format(timezone.now())
+        print('['+now+'] game=['+str(self.game.pk)+'.'+self.game.name+'], turn=['+str(self.turn.pk)+'.'+self.turn.name+'] '+text);
         return None
         
     def isAttack(self, ct):
@@ -101,15 +102,22 @@ class Engine:
             self.proceedRemainingMoves(index)
         # escape units
         self.doEscapes()
+        # create new turn
+        turnProcessor = TurnProcessor()
+        self.log('Creating next turn')
+        newTurn = turnProcessor.createNextTurn(turn)
+        # create new cities
+        self.log('Creating cities')
+        turnProcessor.createCities(turn, newTurn, self.nextMap)
         # add units
-        if turn.newUnits:
+        if self.turn.newUnits:
             # add or remove units
-            self.addRemoveUnits()
+            self.synchronizeUnits(newTurn)
+        # create new units
+        self.log('Creating units')
+        turnProcessor.createUnits(newTurn, self.nextMap)
         # save results
         self.saveResults()
-        # create new turn
-        self.log('Building next turn')
-        newTurn = TurnProcessor().createNextTurn(turn, self.nextMap)
             
         self.log('Recalculation done')
         return newTurn
@@ -453,7 +461,7 @@ class Engine:
         return None
     
     def addUnits(self, country, unitPoints):
-        self.log('Adding units for ['+str(country.pk)+'.'+country.name+']:'+str(unitPoints)+'pts')
+        self.log('Adding units for ['+str(country.pk)+'.'+country.name+']: '+str(unitPoints)+'pts')
         cmds = CityCommand.objects.filter(city__turn=self.turn, city__country=country).order_by('priority')
         for cmd in cmds:
             if unitPoints >= cmd.newUnitType.unitPoints:
@@ -467,23 +475,41 @@ class Engine:
                 unitPoints -= cmd.newUnitType.unitPoints
    
     def removeUnits(self, country, unitPoints):
-        self.log('Removing units for ['+str(country.pk)+'.'+country.name+']:'+str(unitPoints)+'pts')
-        # TODO finish
+        self.log('Removing units for ['+str(country.pk)+'.'+country.name+']: '+str(unitPoints)+'pts')
+        while unitPoints > 0:
+            minField = None
+            # find command with lowest priority
+            for field in self.nextMap:
+                cmd = self.nextMap[field]
+                if cmd is not None and cmd.unit.country == country:
+                    if minField is None or cmd.removePriority < self.nextMap[minField].removePriority:
+                        minField = field
+            if minField is not None:
+                cmd = self.nextMap[minField]
+                if cmd.result is None:
+                    cmd.result = 'removed'
+                else:
+                    cmd.result += ',removed'
+                unitPoints -= cmd.unit.unitType.unitPoints
+                cmd.save()
+                self.nextMap[minField] = None
     
-    def addRemoveUnits(self):
-        if not self.turn.newUnits:
-            return
+    def synchronizeUnits(self, newTurn):
         self.log('Synchronizing units')
         countries = Country.objects.filter(game=self.game)
         for country in countries:
+            # count city points
             cityUnitPoints = 0
-            cities = City.objects.filter(turn=self.turn, country=country)
+            cities = City.objects.filter(turn=newTurn, country=country)
             for city in cities:
                 cityUnitPoints += city.field.unitPoints
+            # count unit points
             unitUnitPoints = 0
-            units = Unit.objects.filter(turn=self.turn, country=country)
-            for unit in units:
-                unitUnitPoints += unit.unitType.unitPoints
+            for field in self.nextMap:
+                cmd = self.nextMap[field]
+                if cmd.unit.country == country:
+                    unitUnitPoints += cmd.unit.unitType.unitPoints
+            # if unit points differ, remove or add units
             if cityUnitPoints > unitUnitPoints:
                 self.addUnits(country, cityUnitPoints-unitUnitPoints)
             elif unitUnitPoints > cityUnitPoints:

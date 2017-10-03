@@ -8,6 +8,7 @@ class CommandValidator:
             'ok': 'Success',
             'escaped': 'Under attack, escaping',
             'destroyed': 'Unable to escape, destroyed',
+            'removed': 'Not enough cities, removed',
             'fail.not-strongest': 'Not strongest attack to target',
             'fail.not-stronger-than-opposite': 'Not stronger than counter attack',
             'fail.defence-stronger': 'Attack not stronger than defence',
@@ -29,21 +30,30 @@ class CommandValidator:
         }[key]
     
     def getResult(self, command):
-        if ':' in command.result:
+        keys = command.result.split(',')
+        result = ''
+        separator = ''
+        for key in keys:
+            result += separator+self.getResultFromKey(key, command.commandType.template)
+            separator = '<br/>'
+        return result
+             
+    def getResultFromKey(self, resultKey, template):
+        if ':' in resultKey:
             # get error key
-            index = command.result.find(':')
-            key = command.result[:index]
+            index = resultKey.find(':')
+            key = resultKey[:index]
             # get parameter from template
-            data = self.parseTemplate(command.commandType.template)
-            parIndex = command.result.find('par_')
-            par = int(command.result[parIndex+4:])
+            data = self.parseTemplate(template)
+            parIndex = resultKey.find('par_')
+            par = int(resultKey[parIndex+4:])
             parText = str(data['T'][par][0]).lower()
             # get type
-            type = command.result[index+1:parIndex-1]
+            type = resultKey[index+1:parIndex-1]
             # format result
             return self.getError(key).format(parText, type)
         else:
-            return self.getError(command.result)
+            return self.getError(resultKey)
         
     def isReachable(self, unitType, field):
         unitTypes = UnitType.objects.filter(pk=unitType.pk, fieldTypes=field.type)

@@ -125,4 +125,4 @@ class Command(models.Model):
     result = models.CharField(max_length=50, null=True, default=None, blank=True)
     
     def __str__(self):
-        return "[" + self.turn.name + "." + self.unit.country.name + "." + self.unit.field.name + "." + self.commandType.name + "]"
+        return "[" + self.unit.country.name + "." + self.unit.field.name + "." + self.commandType.name + "]"

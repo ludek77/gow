@@ -65,7 +65,7 @@ class TurnProcessor:
             newField.save()
         return newGame
     
-    def createNextTurn(self, lastTurn, nextMap):
+    def createNextTurn(self, lastTurn):
         newTurn = Turn()
         newTurn.name = str(int(lastTurn.name)+1)
         newTurn.game = lastTurn.game
@@ -75,6 +75,9 @@ class TurnProcessor:
             newTurn.deadline = lastTurn.deadline + timezone.timedelta(minutes=lastTurn.game.turnMinutes)
         newTurn.previous = lastTurn
         newTurn.save()
+        return newTurn
+        
+    def createCities(self, lastTurn, newTurn, nextMap):
         # setup new cities
         cities = City.objects.filter(turn=lastTurn)
         for city in cities:
@@ -94,24 +97,24 @@ class TurnProcessor:
                     newCC.priority = newCity.field.defaultPriority
                     newCC.newUnitType = newCity.field.defaultUnitType
                     newCC.save()
+                    
+    def createUnits(self, newTurn, nextMap):
         mapProcessor = MapProcessor(newTurn)
         # setup new units
         for field in nextMap:
             cmd = nextMap[field]
-            # add unit
-            newUnit = Unit()
-            newUnit.country = cmd.unit.country
-            newUnit.turn = newTurn
-            newUnit.unitType = cmd.unit.unitType
-            newUnit.field = field
-            newUnit.save()
-            # add default command
-            newCommand = Command()
-            newCommand.unit = newUnit
-            newCommand.commandType = lastTurn.game.defaultCommandType
-            newCommand.escape = mapProcessor.getEscapeFieldPks(newUnit)
-            newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)
-            newCommand.save()
-        return newTurn
-    
-            
+            if cmd is not None:
+                # add unit
+                newUnit = Unit()
+                newUnit.country = cmd.unit.country
+                newUnit.turn = newTurn
+                newUnit.unitType = cmd.unit.unitType
+                newUnit.field = field
+                newUnit.save()
+                # add default command
+                newCommand = Command()
+                newCommand.unit = newUnit
+                newCommand.commandType = newTurn.game.defaultCommandType
+                newCommand.escape = mapProcessor.getEscapeFieldPks(newUnit)
+                newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)
+                newCommand.save()

@@ -119,7 +119,7 @@ def unit_command_rest(request):
     message = None
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
-    if selectedTurn.deadline > timezone.now():
+    if selectedTurn.deadline is None or selectedTurn.deadline > timezone.now():
         selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
         selectedUnit = Unit.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
         selectedCommand = Command.objects.get(unit=selectedUnit)
@@ -153,7 +153,7 @@ def city_command_rest(request):
     message = None
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
-    if selectedTurn.deadline > timezone.now():
+    if selectedTurn.deadline is None or selectedTurn.deadline > timezone.now():
         selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
         selectedCity = City.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
         selectedCommand = CityCommand.objects.get(city=selectedCity)
