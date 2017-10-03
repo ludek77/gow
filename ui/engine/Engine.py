@@ -27,8 +27,8 @@ class Engine:
         self.turn.save()
         
     def log(self, text):
-        now = '{:%x %X}'.format(timezone.now())
-        print('['+now+'] game=['+str(self.game.pk)+'.'+self.game.name+'], turn=['+str(self.turn.pk)+'.'+self.turn.name+'] '+text);
+        #now = '{:%x %X}'.format(timezone.now())
+        #print('['+now+'] game=['+str(self.game.pk)+'.'+self.game.name+'], turn=['+str(self.turn.pk)+'.'+self.turn.name+'] '+text);
         return None
         
     def isAttack(self, ct):
@@ -477,22 +477,22 @@ class Engine:
     def removeUnits(self, country, unitPoints):
         self.log('Removing units for ['+str(country.pk)+'.'+country.name+']: '+str(unitPoints)+'pts')
         while unitPoints > 0:
-            minField = None
+            remField = None
             # find command with lowest priority
             for field in self.nextMap:
                 cmd = self.nextMap[field]
                 if cmd is not None and cmd.unit.country == country:
-                    if minField is None or cmd.removePriority < self.nextMap[minField].removePriority:
-                        minField = field
-            if minField is not None:
-                cmd = self.nextMap[minField]
+                    if remField is None or cmd.removePriority > self.nextMap[remField].removePriority:
+                        remField = field
+            if remField is not None:
+                cmd = self.nextMap[remField]
                 if cmd.result is None:
                     cmd.result = 'removed'
                 else:
                     cmd.result += ',removed'
                 unitPoints -= cmd.unit.unitType.unitPoints
                 cmd.save()
-                self.nextMap[minField] = None
+                self.nextMap[remField] = None
     
     def synchronizeUnits(self, newTurn):
         self.log('Synchronizing units')
