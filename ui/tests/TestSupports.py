@@ -60,7 +60,7 @@ class TestSupports(TestBase):
         self.assertUnit(turn, 'France', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Germany', 'ok')
         self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'France', 'escaped')
+        self.assertResult(turn.previous, 'France', 'fail.canceled-by-attack,escaped')
         self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
         
         # set commands
@@ -127,7 +127,7 @@ class TestSupports(TestBase):
         self.assertUnit(turn, 'North Sea', 'Ship', 'Ukraine')
         self.assertResult(turn.previous, 'Spain', 'ok')
         self.assertUnit(turn, 'France', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Germany', 'escaped')
+        self.assertResult(turn.previous, 'Germany', 'fail.not-stronger-than-opposite,escaped')
         self.assertUnit(turn, 'Poland', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Austria', 'fail.not-stronger-than-opposite')
         self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
@@ -144,7 +144,7 @@ class TestSupports(TestBase):
         # verify units
         self.assertResult(turn.previous, 'London', 'fail.defence-stronger')
         self.assertUnit(turn, 'London', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Germany', 'escaped')
+        self.assertResult(turn.previous, 'Germany', 'fail.not-stronger-than-opposite,escaped')
         self.assertUnit(turn, 'Denmark', 'Ship', 'Spain')
         self.assertResult(turn.previous, 'North Sea', 'ok')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Ukraine')
@@ -221,6 +221,6 @@ class TestSupports(TestBase):
         self.assertUnit(turn, 'France', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Poland', 'ok')
         self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Germany', 'escaped')
+        self.assertResult(turn.previous, 'Germany', 'fail.defence-stronger,escaped')
         self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
         

@@ -71,7 +71,8 @@ class TurnProcessor:
         newTurn.game = lastTurn.game
         newTurn.newUnits = not lastTurn.newUnits
         newTurn.open = True
-        newTurn.deadline = lastTurn.deadline + timezone.timedelta(minutes=lastTurn.game.turnMinutes)
+        if lastTurn.deadline is not None:
+            newTurn.deadline = lastTurn.deadline + timezone.timedelta(minutes=lastTurn.game.turnMinutes)
         newTurn.previous = lastTurn
         newTurn.save()
         # setup new cities

@@ -34,16 +34,16 @@ class TestBase(TestCase):
         self.assertEqual(unit.unitType.name, unitTypeName)
         self.assertEqual(unit.country.name, unitCountryName)
         # assert command
-        command = Command.objects.get(turn=turn, unit=unit)
+        command = Command.objects.get(unit=unit)
         self.assertEqual(command.commandType.name, commandTypeName)
         return unit
 
     def assertResult(self, turn, fieldName, expectedResult):
-        command = Command.objects.get(turn=turn, unit__field__name=fieldName)
+        command = Command.objects.get(unit__turn=turn, unit__field__name=fieldName)
         self.assertEqual(command.result, expectedResult)
     
     def setAssertCommand(self, turn, fieldName, commandTypeName, targetName=None, expectedResult=None):
-        command = Command.objects.get(turn=turn, unit__field__name=fieldName)
+        command = Command.objects.get(unit__turn=turn, unit__field__name=fieldName)
         ct = CommandType.objects.get(name=commandTypeName)
         args = ''
         if isinstance(targetName, list):
@@ -76,7 +76,7 @@ class TestBase(TestCase):
         return nextTurn
     
     def assertEscapes(self, turn, fieldName, expectedEscapes):
-        command = Command.objects.get(turn=turn, unit__field__name=fieldName)
+        command = Command.objects.get(unit__turn=turn, unit__field__name=fieldName)
         expectedResult = ''
         separator = ''
         for escapeName in expectedEscapes:

@@ -59,7 +59,7 @@ class Engine:
         self.maxAttackers = {}
         self.moves = {}
         # copy commands
-        cmds = Command.objects.filter(turn=turn)
+        cmds = Command.objects.filter(unit__turn=turn)
         for cmd in cmds:
             self.thisMap[cmd.unit.field] = cmd
         
@@ -305,7 +305,10 @@ class Engine:
                         if attackPower > defencePower:
                             self.dropUnit(cmd, targetField)
                             cmd.result = 'ok'
-                            targetCmd.result = 'to-escape'
+                            if targetCmd.result is None:
+                                targetCmd.result = 'to-escape'
+                            else:
+                                targetCmd.result += ',to-escape'
                             changed = True
                         else:
                             cmd.result = 'fail.defence-stronger'
@@ -393,23 +396,23 @@ class Engine:
         # count escapes
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            if cmd.result == 'to-escape':
+            if cmd.result is not None and 'to-escape' in cmd.result:
                 changed = True
                 eList = cmd.escape.split(',')
-                if index <= len(eList):
+                if index < len(eList):
                     escape = eList[index]
                     if escape in self.escapes:
                         self.escapes[escape] = self.escapes[escape] + 1
                     else:
                         self.escapes[escape] = 1
                 else:
-                    cmd.result = 'destroyed'
+                    cmd.result = cmd.result.replace('to-escape', 'destroyed')
         # try to escape
         for field in self.thisMap:
             cmd = self.thisMap[field]
-            if cmd.result == 'to-escape':
+            if cmd.result is not None and 'to-escape' in cmd.result:
                 eList = cmd.escape.split(',')
-                if index <= len(eList):
+                if index < len(eList):
                     escape = eList[index]
                     if self.escapes[escape] == 1:
                         field = self.getField(escape)
@@ -418,7 +421,7 @@ class Engine:
                         attackCmd = self.nextMap.get(cmd.unit.field)
                         if targetCmd is None and attackers is None and field != attackCmd.unit.field:
                             self.dropUnit(cmd, field)
-                            cmd.result = 'escaped'
+                            cmd.result = cmd.result.replace('to-escape', 'escaped')
         self.log('   next round changed:'+str(changed))
         return changed
                     

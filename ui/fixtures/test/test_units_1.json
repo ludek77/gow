@@ -22,11 +22,11 @@
 	{"model": "ui.unit", "pk": 5, "fields": {"turn": 1, "country": 2, "unitType": 1, "field": 13}}, 
 	{"model": "ui.unit", "pk": 6, "fields": {"turn": 1, "country": 3, "unitType": 1, "field": 6}}, 
 	
-	{"model": "ui.command", "pk": 1, "fields": {"turn": 1, "unit": 1, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
-	{"model": "ui.command", "pk": 2, "fields": {"turn": 1, "unit": 2, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
-	{"model": "ui.command", "pk": 3, "fields": {"turn": 1, "unit": 3, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
-	{"model": "ui.command", "pk": 4, "fields": {"turn": 1, "unit": 4, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
-	{"model": "ui.command", "pk": 5, "fields": {"turn": 1, "unit": 5, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
-	{"model": "ui.command", "pk": 6, "fields": {"turn": 1, "unit": 6, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}
+	{"model": "ui.command", "pk": 1, "fields": {"unit": 1, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
+	{"model": "ui.command", "pk": 2, "fields": {"unit": 2, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
+	{"model": "ui.command", "pk": 3, "fields": {"unit": 3, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
+	{"model": "ui.command", "pk": 4, "fields": {"unit": 4, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
+	{"model": "ui.command", "pk": 5, "fields": {"unit": 5, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
+	{"model": "ui.command", "pk": 6, "fields": {"unit": 6, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}
 	
 ]
