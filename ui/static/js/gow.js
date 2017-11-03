@@ -178,12 +178,8 @@ function setupGame() {
 		    }
 		}
 		for(var i in json.units) {
-			var pk = json.units[i][0];
-			var fpk = json.units[i][1];
-			var latlng = json.units[i][2];
-			var clr = json.units[i][3];
-			var type = json.units[i][4];
-			renderUnit(latlng[0],latlng[1], pk, fpk, clr, type);
+			var unit = json.units[i];
+			renderUnit(unit.latlng[0],unit.latlng[1], unit.id, unit.fid, unit.clr, unit.type);
 		}
 		
 		renderCountryDialog();

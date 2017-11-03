@@ -85,7 +85,7 @@ function renderUnit(lat, lng, upk, fpk, clr, uType) {
 	var markerIcon = L.icon({
 	    iconUrl: unitTypes[uType][1],
 	    iconAnchor: [unitTypes[uType][2]/2, unitTypes[uType][3]/2],
-	    className: 'u-id-'+uType
+	    className: 'u-fpk-'+fpk
 	});
 	renderUnitElement(lat, lng, upk, fpk, clr, markerIcon);
 	if(lng > 180) renderUnitElement(lat, lng-360, upk, fpk, clr, markerIcon);

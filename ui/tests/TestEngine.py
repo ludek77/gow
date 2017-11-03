@@ -4,17 +4,21 @@ from ui.models import Turn, Game
 class TestEngine(TestBase):
         
     def test_Engine(self):
+        # start game from template
         gameTemplate = Game.objects.get(pk=1) 
-        
         testGame = self.processor.startGame(gameTemplate, 'TestGame', '1999')
+   
+        # verify first turn     
         turn = Turn.objects.get(game=testGame)
         self.assertNotEqual(turn, None)
         self.assertEqual(turn.newUnits, True)
         self.assertEqual(turn.game, testGame)
         self.assertCity(turn, 'Spain', 'Spain')
-        self.assertCity(turn, 'France', 'Ukraine')
-        self.assertCity(turn, 'London', 'Spain')
+        self.assertCity(turn, 'France', 'Spain')
+        self.assertCity(turn, 'Latvia', 'Russia')
+        self.assertCity(turn, 'Moscow', 'Russia')
         self.assertCity(turn, 'Ukraine', 'Ukraine')
+        self.assertCity(turn, 'UkraineBuff', 'Ukraine')
         self.assertNoUnit(turn, 'Spain')
         self.assertNoUnit(turn, 'France')
         self.assertNoUnit(turn, 'London')
@@ -22,15 +26,13 @@ class TestEngine(TestBase):
         turn = self.assertNextTurn(turn, '2000', 'Engine: Start game')
         # verify units
         self.assertUnit(turn, 'Spain', 'Ship', 'Spain')
-        self.assertUnit(turn, 'France', 'Soldier', 'Ukraine')
-        self.assertUnit(turn, 'London', 'Ship', 'Spain')
+        self.assertUnit(turn, 'France', 'Soldier', 'Spain')
         self.assertUnit(turn, 'Latvia', 'Ship', 'Russia')
         self.assertUnit(turn, 'Moscow', 'Soldier', 'Russia')
         self.assertUnit(turn, 'Ukraine', 'Soldier', 'Ukraine')
         # verify flees
         self.assertEscapes(turn, 'Spain', ['France','Azores'])
-        self.assertEscapes(turn, 'France', ['Germany', 'Austria','Spain','London'])
-        self.assertEscapes(turn, 'London', ['France','Atlantic Ocean', 'North Sea'])
+        self.assertEscapes(turn, 'France', ['Spain','London','Germany', 'Austria'])
         self.assertEscapes(turn, 'Ukraine', ['Poland','Croatia','Latvia','Moscow'])
         self.assertEscapes(turn, 'Latvia', ['Poland','Baltic Sea'])
         self.assertEscapes(turn, 'Moscow', ['Latvia','Ukraine'])
@@ -52,8 +54,8 @@ class TestEngine(TestBase):
         self.setAssertCommand(turn, 'Spain', 'support_attack',  'France', 'invalid.empty:par_1')
         self.setAssertCommand(turn, 'Spain', 'support_attack',  ['Austria', 'London'], 'invalid.not_next:par_0')
         self.setAssertCommand(turn, 'Spain', 'support_attack',  ['France', 'Austria'], 'invalid.missing_unit:par_1')
-        self.setAssertCommand(turn, 'Spain', 'support_attack',  ['France', 'London'], None)
-        self.setAssertCommand(turn, 'Spain', 'support_attack',  ['France', 'London', 'London'], 'invalid.too-many-parameters')
+        self.setAssertCommand(turn, 'Spain', 'support_attack',  ['France', 'Spain'], None)
+        self.setAssertCommand(turn, 'Spain', 'support_attack',  ['France', 'Spain', 'London'], 'invalid.too-many-parameters')
         self.setAssertCommand(turn, 'Spain', 'transport', None, 'invalid.empty:par_0')
         self.setAssertCommand(turn, 'France', 'transport', None, 'invalid.not-command-for-unit')
         self.setAssertCommand(turn, 'Spain', 'transport', 'France', None)
@@ -62,7 +64,7 @@ class TestEngine(TestBase):
         self.setAssertCommand(turn, 'Spain', 'attack', 'Spain', 'invalid.not_next:par_0')
         self.setAssertCommand(turn, 'Spain', 'attack', 'Azores', None)
         self.setAssertCommand(turn, 'France', 'attack', 'Azores', 'invalid.not_reachable:par_0')
-        self.setAssertCommand(turn, 'London', 'attack', 'Atlantic Ocean', None)
+        self.setAssertCommand(turn, 'Latvia', 'attack', 'Baltic Sea', None)
         self.setAssertCommand(turn, 'Latvia', 'move', 'Baltic Sea', None)
         self.setAssertCommand(turn, 'Moscow', 'move', 'Latvia', None)
         self.setAssertCommand(turn, 'Ukraine', 'move', 'Germany', 'invalid.not_next:par_0')
@@ -72,9 +74,7 @@ class TestEngine(TestBase):
         self.assertResult(turn.previous, 'Spain', 'ok')
         self.assertUnit(turn, 'Azores', 'Ship', 'Spain')
         self.assertResult(turn.previous, 'France', 'invalid.not_reachable:par_0')
-        self.assertUnit(turn, 'France', 'Soldier', 'Ukraine')
-        self.assertResult(turn.previous, 'London', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
+        self.assertUnit(turn, 'France', 'Soldier', 'Spain')
         self.assertResult(turn.previous, 'Latvia', 'ok')
         self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
         self.assertResult(turn.previous, 'Moscow', 'ok')
@@ -88,10 +88,8 @@ class TestEngine(TestBase):
         self.setAssertCommand(turn, 'France', 'invade', 'Germany', 'invalid.not_field:Sea.par_0')
         self.setAssertCommand(turn, 'France', 'invade', 'Azores', 'invalid.empty:par_2')
         self.setAssertCommand(turn, 'France', 'invade', ['Azores','Spain'], 'invalid.not_field:Sea.par_1')
-        self.setAssertCommand(turn, 'France', 'invade', ['Azores','Atlantic Ocean'], 'invalid.empty:par_2')
+        self.setAssertCommand(turn, 'France', 'invade', ['Azores','Atlantic Ocean'], 'invalid.not_unit:Ship.par_1')
         self.setAssertCommand(turn, 'France', 'invade', ['Azores',None,'Spain'], None)
         self.setAssertCommand(turn, 'France', 'invade', ['Azores',None,None], 'invalid.empty:par_2')
-        self.setAssertCommand(turn, 'France', 'invade', ['Azores','Atlantic Ocean','London'], None)
-        self.setAssertCommand(turn, 'France', 'invade', ['Azores','Atlantic Ocean','Germany'], 'invalid.not_next:par_2')
         
         

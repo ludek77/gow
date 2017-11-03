@@ -48,6 +48,31 @@ class Engine:
     
     def isInvasion(self, ct):
         return ct.attackPower > 0 and ct.transport and ct.move
+    
+    getFieldBuffer = {}
+    def getField(self, pk):
+        # get data from buffer
+        if pk in self.getFieldBuffer:
+            return self.getFieldBuffer[pk]
+        # calculate result
+        fields = Field.objects.filter(game=self.game, pk=pk)
+        if len(fields) == 1:
+            result = fields.first()
+        # store and return result
+        self.getFieldBuffer[pk] = result
+        return result
+                        
+    def getTargetField(self, cmd, index=99):
+        args = cmd.args.split(',')
+        if index == 99:
+            index = len(args) - 1
+        if index <= len(args) - 1:
+            target = args[index]
+            if target != '' and target != '0':
+                targetField = self.getField(target)
+                if targetField is not None:
+                    return targetField    
+        return None
         
     def initialize(self, turn):
         self.turn = turn
@@ -441,30 +466,14 @@ class Engine:
             # try to escape
             changed = self.tryEscapes(index)
             index += 1
-            
-    def getField(self, pk):
-        fields = Field.objects.filter(game=self.game, pk=pk)
-        if len(fields) == 1:
-            result = fields.first()
-        return result
-                        
-    def getTargetField(self, cmd, index=99):
-        args = cmd.args.split(',')
-        if index == 99:
-            index = len(args) - 1
-        if index <= len(args) - 1:
-            target = args[index]
-            if target != '' and target != '0':
-                targetField = self.getField(target)
-                if targetField is not None:
-                    return targetField    
-        return None
     
     def addUnits(self, country, unitPoints):
         self.log('Adding units for ['+str(country.pk)+'.'+country.name+']: '+str(unitPoints)+'pts')
         cmds = CityCommand.objects.filter(city__turn=self.turn, city__country=country).order_by('priority')
         for cmd in cmds:
+            self.log('   add priority: '+str(cmd))
             if unitPoints >= cmd.newUnitType.unitPoints:
+                self.log('   added unit:'+str(cmd.city.field))
                 newUnit = Unit()
                 newUnit.country = country
                 newUnit.unitType = cmd.newUnitType
@@ -507,7 +516,7 @@ class Engine:
             unitUnitPoints = 0
             for field in self.nextMap:
                 cmd = self.nextMap[field]
-                if cmd.unit.country == country:
+                if cmd is not None and cmd.unit.country == country:
                     unitUnitPoints += cmd.unit.unitType.unitPoints
             # if unit points differ, remove or add units
             if cityUnitPoints > unitUnitPoints:

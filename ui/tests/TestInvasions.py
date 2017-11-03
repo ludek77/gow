@@ -7,7 +7,7 @@ class TestInvasions(TestBase):
         TestBase.setUp(self)
         self.importJson('test/test_units_1')
 
-    def test(self):
+    def test1(self):
         turn = Turn.objects.get(pk=1)
         # verify units
         self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
@@ -222,7 +222,7 @@ class TestInvasions(TestBase):
         self.assertResult(turn.previous, 'Denmark', 'ok')
         self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Germany', 'escaped')
-        self.assertUnit(turn, 'France', 'Soldier', 'Ukraine')
+        self.assertUnit(turn, 'Poland', 'Soldier', 'Ukraine')
         
         # set commands
         self.setAssertCommand(turn, 'Atlantic Ocean', 'defend')
@@ -230,7 +230,7 @@ class TestInvasions(TestBase):
         self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
         self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'London'])
         self.setAssertCommand(turn, 'Denmark', 'defend')
-        self.setAssertCommand(turn, 'France', 'defend')
+        self.setAssertCommand(turn, 'Poland', 'defend')
         # calculate turn
         turn = self.assertNextTurn(turn, '2009', 'Invasion Fail: Transporter missing for shorter invasion')
         # verify units
@@ -244,8 +244,8 @@ class TestInvasions(TestBase):
         self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Denmark', 'ok')
         self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'France', 'ok')
-        self.assertUnit(turn, 'France', 'Soldier', 'Ukraine')
+        self.assertResult(turn.previous, 'Poland', 'ok')
+        self.assertUnit(turn, 'Poland', 'Soldier', 'Ukraine')
         
         # set commands
         self.setAssertCommand(turn, 'Atlantic Ocean', 'attack', 'North Sea')
@@ -253,7 +253,7 @@ class TestInvasions(TestBase):
         self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
         self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'London'])
         self.setAssertCommand(turn, 'Denmark', 'defend')
-        self.setAssertCommand(turn, 'France', 'defend')
+        self.setAssertCommand(turn, 'Poland', 'move', ['Austria', 'France'])
         # calculate turn
         turn = self.assertNextTurn(turn, '2010', 'Invasion Fail: Transporter attacked for shorter invasion')
         # verify units
@@ -267,7 +267,7 @@ class TestInvasions(TestBase):
         self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Denmark', 'ok')
         self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'France', 'ok')
+        self.assertResult(turn.previous, 'Poland', 'ok')
         self.assertUnit(turn, 'France', 'Soldier', 'Ukraine')
         
         # set commands

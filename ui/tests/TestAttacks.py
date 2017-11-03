@@ -16,6 +16,8 @@ class TestAttacks(TestBase):
         self.assertUnit(turn, 'London', 'Soldier', 'Russia')
         self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
         self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
+        self.assertNoUnit(turn, 'SpainBuff')
+        self.assertNoUnit(turn, 'UkraineBuff')
         
         # set commands
         self.setAssertCommand(turn, 'Atlantic Ocean', 'attack', 'Azores')

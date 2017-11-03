@@ -98,13 +98,14 @@ def game_setup_rest(request):
         for command in commands:
             unit = command.unit
             field = unit.field
-            output += separator+'['
-            output += str(unit.pk)
-            output += ','+str(field.pk)
-            output += ',['+str(field.lat)+','+str(field.lng)+']'
-            output += ',"'+unit.country.color+'"'
-            output += ','+str(unit.unitType.pk)
-            output +=']'
+            output += separator+'{'
+            output += '"id":'+str(unit.pk)
+            output += ',"fid":'+str(field.pk)
+            output += ',"latlng":['+str(field.lat)+','+str(field.lng)+']'
+            output += ',"clr":"'+unit.country.color+'"'
+            output += ',"type":'+str(unit.unitType.pk)
+            output += ',"cmd":"'+command.commandType.name+'"'
+            output +='}'
             separator = ','
         output += ']'
     
