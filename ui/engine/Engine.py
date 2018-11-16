@@ -155,7 +155,7 @@ class Engine:
             validator.validateCommand(cmd)
             
     def dropUnit(self, cmd, targetField):
-        for field, command in self.nextMap.iteritems():
+        for field, command in self.nextMap.items():
             if command == cmd:
                 self.nextMap.pop(field, None)
                 break
