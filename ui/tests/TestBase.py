@@ -14,7 +14,8 @@ class TestBase(TestCase):
     def setUp(self):
         self.importJson('user')
         self.importJson('init')
-        self.importJson('test/testworld')
+        self.importJson('test/testWorld')
+        self.importJson('test/testUnits')
         
     def importJson(self, fileName):
         call_command('loaddata', fileName, verbosity=0)
@@ -69,7 +70,7 @@ class TestBase(TestCase):
         
     def assertNextTurn(self, turn, turnName, message=None):
         if message is not None:
-            newUnits = ' '
+            newUnits = '_'
             if turn.newUnits:
                 newUnits = 'R'
             print(turnName + newUnits + ' : ' + message)

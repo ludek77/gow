@@ -3,6 +3,7 @@ from ui.engine.CommandValidator import CommandValidator
 from ui.engine.TurnProcessor import TurnProcessor
 from django.utils import timezone
 import cmd
+from pytz import _CountryTimezoneDict
 
 class Engine:
     
@@ -27,8 +28,8 @@ class Engine:
         self.turn.save()
         
     def log(self, text):
-        #now = '{:%x %X}'.format(timezone.now())
-        #print('['+now+'] game=['+str(self.game.pk)+'.'+self.game.name+'], turn=['+str(self.turn.pk)+'.'+self.turn.name+'] '+text);
+#         now = '{:%x %X}'.format(timezone.now())
+#         print('['+now+'] game=['+str(self.game.pk)+'.'+self.game.name+'], turn=['+str(self.turn.pk)+'.'+self.turn.name+'] '+text);
         return None
         
     def isAttack(self, ct):
@@ -146,6 +147,10 @@ class Engine:
             
         self.log('Recalculation done')
         return newTurn
+
+    def setResult(self, cmd, result):
+        self.log('      '+str(cmd.unit)+':'+result)
+        cmd.result = result
     
     def cancelInvalid(self):
         self.log('Validating moves')
@@ -210,9 +215,9 @@ class Engine:
                             transportMissing = True 
                     index += 1
                 if transportMissing:
-                    cmd.result = 'fail.transport-missing'
+                    self.setResult(cmd, 'fail.transport-missing')
                 elif transportCanceled:
-                    cmd.result = 'fail.transport-canceled'
+                    self.setResult(cmd, 'fail.transport-canceled')
                     
     def cancelInvaded(self):
         self.log('Canceling successfully invaded')
@@ -270,9 +275,9 @@ class Engine:
                     if sField == self.getTargetField(cmd, 0):
                         self.addAttackPower(supportedCmd, ct.attackPower)
                     else:
-                        cmd.result = 'fail.unit-attacking-elsewhere'
+                        self.setResult(cmd, 'fail.unit-attacking-elsewhere')
                 else:
-                    cmd.result = 'fail.unit-not-attacking'
+                    self.setResult(cmd, 'fail.unit-not-attacking')
         # store max attack powers and numbers
         for field in self.thisMap:
             cmd = self.thisMap[field]
@@ -304,7 +309,7 @@ class Engine:
                             rev_power = self.attackPower.get(targetCmd)
                             power = self.attackPower.get(cmd)
                             if rev_power is not None and rev_power >= power:
-                                cmd.result = 'fail.not-stronger-than-opposite'
+                                self.setResult(cmd, 'fail.not-stronger-than-opposite')
     
     def cancelWeakAttacksAndInvasions(self):
         self.log('Canceling weak attacks and invasions')
@@ -313,7 +318,7 @@ class Engine:
             if (self.isAttack(cmd.commandType) or self.isInvasion(cmd.commandType)) and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 if self.attackPower[cmd] < self.maxAttackPower[targetField] or self.maxAttackers[targetField] > 1:
-                    cmd.result = 'fail.not-strongest'
+                    self.setResult(cmd, 'fail.not-strongest')
         
     def tryAttacks(self):
         changed = False
@@ -326,7 +331,7 @@ class Engine:
                 # if target field is empty, drop unit to that field
                 if targetCmd is None:
                     self.dropUnit(cmd, targetField)
-                    cmd.result = 'ok'
+                    self.setResult(cmd, 'ok')
                     changed = True
                 # if target field is not empty
                 else:
@@ -337,14 +342,14 @@ class Engine:
                         # if attack is stronger than defence, attacker succeeds
                         if attackPower > defencePower:
                             self.dropUnit(cmd, targetField)
-                            cmd.result = 'ok'
+                            self.setResult(cmd, 'ok')
                             if targetCmd.result is None:
                                 targetCmd.result = 'to-escape'
                             else:
                                 targetCmd.result += ',to-escape'
                             changed = True
                         else:
-                            cmd.result = 'fail.defence-stronger'
+                            self.setResult(cmd, 'fail.defence-stronger')
                             changed = True
                         
         self.log('   next round changed:'+str(changed))
@@ -363,7 +368,7 @@ class Engine:
             if (self.isAttack(cmd.commandType) or self.isInvasion(cmd.commandType)) and cmd.result is None:
                 targetField = self.getTargetField(cmd)
                 self.dropUnit(cmd, targetField)
-                cmd.result = 'ok'
+                self.setResult(cmd, 'ok')
     
     def cancelWeakMoves(self, index):
         self.log('Canceling weak moves '+str(index))
@@ -385,9 +390,9 @@ class Engine:
                 targetField = self.getTargetField(cmd, index)
                 if targetField is not None:
                     if self.maxAttackers.get(targetField) is not None:
-                        cmd.result = 'fail.target-attacked:par_'+str(index)
+                        self.setResult(cmd, 'fail.target-attacked:par_'+str(index))
                     elif moveCounter[targetField] > 1:
-                        cmd.result = 'fail.more-moves-to-target:par_'+str(index)
+                        self.setResult(cmd, 'fail.more-moves-to-target:par_'+str(index))
     
     def tryMoves(self, index):
         changed = False
@@ -399,7 +404,13 @@ class Engine:
                     targetCmd = self.nextMap.get(targetField)
                     # target not empty and will not move
                     if targetCmd is not None and targetCmd.result is not None:
-                        cmd.result = 'fail.target-not-empty:par_'+str(index)
+                        self.setResult(cmd, 'fail.target-not-empty:par_'+str(index))
+                        changed = True
+                    elif targetCmd is not None and not targetCmd.commandType.move:
+                        self.setResult(cmd, 'fail.target-not-moving:par_'+str(index))
+                        changed = True
+                    elif targetCmd is not None and targetCmd.commandType.move and self.getTargetField(targetCmd, index) is None:
+                        self.setResult(cmd, 'fail.target-not-moving:par_'+str(index))
                         changed = True
                     elif targetCmd is None:
                         self.dropUnit(cmd, targetField)
@@ -439,7 +450,7 @@ class Engine:
                     else:
                         self.escapes[escape] = 1
                 else:
-                    cmd.result = cmd.result.replace('to-escape', 'destroyed')
+                    self.setResult(cmd, cmd.result.replace('to-escape', 'destroyed'))
         # try to escape
         for field in self.thisMap:
             cmd = self.thisMap[field]
@@ -454,10 +465,10 @@ class Engine:
                         attackCmd = self.nextMap.get(cmd.unit.field)
                         if targetCmd is None and attackers is None and field != attackCmd.unit.field:
                             self.dropUnit(cmd, field)
-                            cmd.result = cmd.result.replace('to-escape', 'escaped')
+                            self.setResult(cmd, cmd.result.replace('to-escape', 'escaped'))
         self.log('   next round changed:'+str(changed))
         return changed
-                    
+
     def doEscapes(self):
         self.log('Escaping units')
         changed = True
@@ -496,7 +507,7 @@ class Engine:
             if remField is not None:
                 cmd = self.nextMap[remField]
                 if cmd.result is None:
-                    cmd.result = 'removed'
+                    self.setResult(cmd, 'removed')
                 else:
                     cmd.result += ',removed'
                 unitPoints -= cmd.unit.unitType.unitPoints
@@ -530,6 +541,6 @@ class Engine:
         for field in self.thisMap:
             cmd = self.thisMap[field]
             if cmd.result is None:
-                cmd.result = 'ok'
+                self.setResult(cmd, 'ok')
             cmd.save()
         

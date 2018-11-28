@@ -3,7 +3,7 @@
     {"model": "ui.fieldtype", "pk": 2, "fields": {"name": "Ground"}}, 
     {"model": "ui.fieldtype", "pk": 3, "fields": {"name": "Beach"}}, 
 
-	{"model": "ui.unittype", "pk": 1, "fields": {"name": "Soldier", "icon": "/static/icon/soldier.png", "width": 24, "height": 64, "fieldTypes": [2, 3]}},
+	{"model": "ui.unittype", "pk": 1, "fields": {"name": "Army", "icon": "/static/icon/army.png", "width": 24, "height": 64, "fieldTypes": [2, 3]}},
     {"model": "ui.unittype", "pk": 2, "fields": {"name": "Ship", "icon": "/static/icon/ship.png", "width": 48, "height": 48, "fieldTypes": [1, 3]}}, 
     
  	{"model": "ui.commandtype", "pk": 1, "fields": {"name": "defend", "template": "[]", "attackPower": 0, "defencePower": 1, "cancelByAttack": false, "support": false, "move": false, "unitType": [1, 2]}}, 
