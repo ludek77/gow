@@ -6,7 +6,7 @@ class TestUi(TestCase):
     def setUp(self):
         call_command('loaddata', 'user', verbosity=0)
         call_command('loaddata', 'init', verbosity=0)
-        call_command('loaddata', 'test/testworld', verbosity=0)
+        call_command('loaddata', 'test/testWorld', verbosity=0)
         
     def test_ui(self):
         response = self.client.post('/ui/login/', {'username': 'admin', 'password': 'administrator'})

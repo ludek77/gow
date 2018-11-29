@@ -26,6 +26,14 @@ class TestEscapes(TestBase):
         self.setAssertCommand(turn, 'Austria', 'defend')
         # calculate turn
         turn = self.assertNextTurn(turn, '2000', 'Escapes: No escape needed')
+
+        # verify escapes
+        self.assertEscapes(turn, 'Spain', ['France','Azores'])
+        self.assertEscapes(turn, 'France', ['Spain','London','Germany', 'Austria'])
+        self.assertEscapes(turn, 'Ukraine', ['Poland','Croatia','Latvia','Moscow'])
+        self.assertEscapes(turn, 'Latvia', ['Poland','Baltic Sea'])
+        self.assertEscapes(turn, 'Moscow', ['Latvia','Ukraine'])
+        
         # verify units
         self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
         self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')

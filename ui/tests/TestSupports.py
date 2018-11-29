@@ -2,10 +2,6 @@ from ui.tests.TestBase import TestBase
 from ui.models import Turn
 
 class TestSupports(TestBase):
-    
-    def setUp(self):
-        TestBase.setUp(self)
-        self.importJson('test/test_units_1')
 
     def test(self):
         turn = Turn.objects.get(pk=1)
@@ -223,4 +219,8 @@ class TestSupports(TestBase):
         self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
         self.assertResult(turn.previous, 'Germany', 'fail.defence-stronger,escaped')
         self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
+        
+        
+        #support attack of myself - correct, but i'm not attacking then
+        
         
