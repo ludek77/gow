@@ -3,6 +3,7 @@ from django.core.management import call_command
 from ui.models import Game, Turn, Unit, City, Command, CommandType, Field
 from ui.engine.Engine import Engine
 from ui.engine.TurnProcessor import TurnProcessor
+from ui.engine.MapProcessor import MapProcessor
 from ui.engine.CommandValidator import CommandValidator
 
 class TestBase(TestCase):
@@ -19,6 +20,14 @@ class TestBase(TestCase):
         
     def importJson(self, fileName):
         call_command('loaddata', fileName, verbosity=0)
+        
+    def setDefaultEscapes(self, turn):
+        mapProcessor = MapProcessor(turn)
+        cmds = Command.objects.filter(unit__turn=turn)
+        for cmd in cmds:
+            cmd.escape = mapProcessor.getEscapeFieldPks(cmd.unit)
+            cmd.save()
+            #print(str(cmd.unit)+':'+cmd.escape)
         
     def assertCity(self, turn, fieldName, countryName):
         city = City.objects.get(turn=turn, field__name=fieldName)

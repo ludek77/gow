@@ -362,3 +362,4 @@ class TestInvasions(TestBase):
         self.assertResult(turn.previous, 'Spain', 'ok')
         self.assertUnit(turn, 'London', 'Soldier', 'Ukraine')
         
+        # support invasion

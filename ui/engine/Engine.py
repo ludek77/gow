@@ -319,6 +319,7 @@ class Engine:
                 targetField = self.getTargetField(cmd)
                 if self.attackPower[cmd] < self.maxAttackPower[targetField] or self.maxAttackers[targetField] > 1:
                     self.setResult(cmd, 'fail.not-strongest')
+                    #self.log('         '+str(self.attackPower[cmd])+'<='+str(self.maxAttackPower[targetField])+'['+str(self.maxAttackers[targetField])+']')
         
     def tryAttacks(self):
         changed = False
