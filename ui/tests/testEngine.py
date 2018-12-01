@@ -35,6 +35,7 @@ class TestEngine(TestBase):
         self.assertUnit(turn, 'Moscow', 'Army', 'Russia')
         self.assertUnit(turn, 'Ukraine', 'Army', 'Russia')
         self.assertUnit(turn, 'Latuvia', 'Army', 'Russia')
+        self.assertUnit(turn, 'Sweden', 'Ship', 'Russia')
         
         # verify wrong parameters
         self.setAssertCommand(turn, 'Spain', 'defend', None, None)
@@ -86,7 +87,6 @@ class TestEngine(TestBase):
         self.assertResult(turn.previous, 'Ireland', 'ok')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
         self.assertNoUnit(turn, 'Ireland')
-        
         # verify invasions
         self.setAssertCommand(turn, 'North Sea', 'invade', None, 'invalid.not-command-for-unit')
         self.setAssertCommand(turn, 'Germany', 'invade', None, 'invalid.empty:par_0')
@@ -95,10 +95,18 @@ class TestEngine(TestBase):
         self.setAssertCommand(turn, 'Germany', 'invade', ['Austria','Poland'], 'invalid.not_field:Sea.par_0')
         self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea','Poland'], 'invalid.not_next:par_1')
         self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Denmark'], None)
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea','Norwegian Sea','Norway'], None)
+        self.setAssertCommand(turn, 'Germany', 'invade', ['Norwegian Sea','North Sea','Norway'], 'invalid.not_next:par_0')
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Norwegian Sea'], 'invalid.not_field:Beach.par_2')
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea','Norwegian Sea','Atlantic Ocean'], 'invalid.not_field:Beach.par_2')
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea','North Sea','Denmark'], 'invalid.not_next:par_1')
         self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,None], 'invalid.empty:par_2')
         self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany', None)
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Spain', None)
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'France', 'invalid.not_unit:Army.par_0')
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Norwegian Sea', 'invalid.not_unit:Army.par_0')
         self.setAssertCommand(turn, 'North Sea', 'transport', None, 'invalid.empty:par_0')
         self.setAssertCommand(turn, 'North Sea', 'transport', ['Germany', 'Germany'], 'invalid.too-many-parameters')
         self.setAssertCommand(turn, 'Spain', 'transport', None, 'invalid.not-command-for-unit')
-        
+        self.setAssertCommand(turn, 'Sweden', 'transport', 'Spain', None)
         

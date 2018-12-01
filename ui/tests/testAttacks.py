@@ -34,19 +34,19 @@ class TestAttacks(TestBase):
         turn = Turn.objects.get(pk=1)
         # verify units
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
-        self.assertUnit(turn, 'Latvia', 'Army', 'Russia')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
         self.assertNoUnit(turn, 'Poland')
         # set commands
         self.setAssertCommand(turn, 'Germany', 'attack', 'Poland')
-        self.setAssertCommand(turn, 'Latvia', 'attack', 'Poland')
+        self.setAssertCommand(turn, 'Baltic Sea', 'attack', 'Poland')
         # calculate turn
         turn = self.assertNextTurn(turn, '2000', 'Attacks: Two Attacks')
         # verify units
         self.assertResult(turn.previous, 'Germany', 'fail.not-strongest')
-        self.assertResult(turn.previous, 'Latvia', 'fail.not-strongest')
+        self.assertResult(turn.previous, 'Baltic Sea', 'fail.not-strongest')
         self.assertNoUnit(turn, 'Poland')
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
-        self.assertUnit(turn, 'Latvia', 'Army', 'Russia')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
 
     def testTwoWayAttack(self):
         turn = Turn.objects.get(pk=1)
@@ -70,20 +70,23 @@ class TestAttacks(TestBase):
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
         self.assertUnit(turn, 'Austria', 'Army', 'Spain')
         self.assertUnit(turn, 'France', 'Army', 'Spain')
-        self.assertUnit(turn, 'Denmark', 'Ship', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
         # set commands
         self.setAssertCommand(turn, 'France', 'attack', 'Austria')
         self.setAssertCommand(turn, 'Austria', 'attack', 'Germany')
         self.setAssertCommand(turn, 'Germany', 'attack', 'Denmark')
+        self.setAssertCommand(turn, 'North Sea', 'attack', 'Denmark')
         # calculate turn
         turn = self.assertNextTurn(turn, '2000', 'Attacks: Failed Train')
         # verify units
         self.assertResult(turn.previous, 'France', 'fail.defence-stronger')
         self.assertResult(turn.previous, 'Austria', 'fail.defence-stronger')
-        self.assertResult(turn.previous, 'Germany', 'fail.defence-stronger')
+        self.assertResult(turn.previous, 'North Sea', 'fail.not-strongest')
+        self.assertResult(turn.previous, 'Germany', 'fail.not-strongest')
         self.assertUnit(turn, 'France', 'Army', 'Spain')
         self.assertUnit(turn, 'Austria', 'Army', 'Spain')
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
 
     def testSuccessfulTrain(self):
         turn = Turn.objects.get(pk=1)

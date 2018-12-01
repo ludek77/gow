@@ -113,11 +113,11 @@ class TestSupports(TestBase):
         self.assertUnit(turn, 'Austria', 'Army', 'Spain')
         self.assertUnit(turn, 'France', 'Army', 'Spain')
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
-        self.assertUnit(turn, 'Denmark', 'Ship', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
         self.assertUnit(turn, 'Croatia', 'Army', 'Russia')
         # set commands
         self.setAssertCommand(turn, 'Germany', 'support_defence', 'Austria')
-        self.setAssertCommand(turn, 'Denmark', 'attack', 'Germany')
+        self.setAssertCommand(turn, 'North Sea', 'attack', 'Germany')
         self.setAssertCommand(turn, 'Croatia', 'attack', 'Austria')
         self.setAssertCommand(turn, 'France', 'support_attack', ['Austria','Croatia'])
         # calculate turn
@@ -161,12 +161,12 @@ class TestSupports(TestBase):
         # verify units
         self.assertUnit(turn, 'Austria', 'Army', 'Spain')
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
-        self.assertUnit(turn, 'Denmark', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
         self.assertUnit(turn, 'Croatia', 'Army', 'Russia')
         self.assertUnit(turn, 'Ukraine', 'Army', 'Russia')
         # set commands
         self.setAssertCommand(turn, 'Austria', 'attack', 'Poland')
-        self.setAssertCommand(turn, 'Denmark', 'support_attack', ['Poland','Austria'])
+        self.setAssertCommand(turn, 'Baltic Sea', 'support_attack', ['Poland','Austria'])
         self.setAssertCommand(turn, 'Germany', 'support_attack', ['Poland','Austria'])
         self.setAssertCommand(turn, 'Croatia', 'attack', 'Poland')
         self.setAssertCommand(turn, 'Ukraine', 'support_attack', ['Poland','Croatia'])
@@ -178,6 +178,8 @@ class TestSupports(TestBase):
         self.assertResult(turn.previous, 'Austria', 'ok')
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
         self.assertResult(turn.previous, 'Germany', 'ok')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
+        self.assertResult(turn.previous, 'Baltic Sea', 'ok')
         self.assertUnit(turn, 'Poland', 'Army', 'Spain')
         self.assertUnit(turn, 'Croatia', 'Army', 'Russia')
         self.assertResult(turn.previous, 'Croatia', 'fail.not-strongest')

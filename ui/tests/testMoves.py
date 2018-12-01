@@ -66,19 +66,19 @@ class TestMoves(TestBase):
         turn = Turn.objects.get(pk=1)
         # verify units
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
-        self.assertUnit(turn, 'Latvia', 'Army', 'Russia')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
         self.assertNoUnit(turn, 'Poland')
         # set commands
         self.setAssertCommand(turn, 'Germany', 'move', 'Poland')
-        self.setAssertCommand(turn, 'Latvia', 'move', 'Poland')
+        self.setAssertCommand(turn, 'Baltic Sea', 'move', 'Poland')
         # calculate turn
         turn = self.assertNextTurn(turn, '2000', 'Moves: Two Moves')
         # verify units
         self.assertResult(turn.previous, 'Germany', 'fail.more-moves-to-target:par_0')
-        self.assertResult(turn.previous, 'Latvia', 'fail.more-moves-to-target:par_0')
+        self.assertResult(turn.previous, 'Baltic Sea', 'fail.more-moves-to-target:par_0')
         self.assertNoUnit(turn, 'Poland')
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
-        self.assertUnit(turn, 'Latvia', 'Army', 'Russia')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
   
     def testSwitch(self):
         turn = Turn.objects.get(pk=1)
@@ -138,21 +138,23 @@ class TestMoves(TestBase):
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
         self.assertUnit(turn, 'Austria', 'Army', 'Spain')
         self.assertUnit(turn, 'France', 'Army', 'Spain')
-        self.assertUnit(turn, 'Denmark', 'Ship', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
         # set commands
         self.setAssertCommand(turn, 'France', 'move', 'Austria')
         self.setAssertCommand(turn, 'Austria', 'move', 'Germany')
         self.setAssertCommand(turn, 'Germany', 'move', 'Denmark')
+        self.setAssertCommand(turn, 'North Sea', 'move', 'Denmark')
         # calculate turn
         turn = self.assertNextTurn(turn, '2000', 'Moves: Failed Train')
         # verify units
         self.assertResult(turn.previous, 'France', 'fail.target-not-empty:par_0')
         self.assertResult(turn.previous, 'Austria', 'fail.target-not-empty:par_0')
-        self.assertResult(turn.previous, 'Germany', 'fail.target-not-moving:par_0')
+        self.assertResult(turn.previous, 'Germany', 'fail.more-moves-to-target:par_0')
+        self.assertResult(turn.previous, 'North Sea', 'fail.more-moves-to-target:par_0')
         self.assertUnit(turn, 'France', 'Army', 'Spain')
         self.assertUnit(turn, 'Austria', 'Army', 'Spain')
         self.assertUnit(turn, 'Germany', 'Army', 'Spain')
-        self.assertUnit(turn, 'Denmark', 'Ship', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
   
     def testSuccessfulTrain(self):
         turn = Turn.objects.get(pk=1)

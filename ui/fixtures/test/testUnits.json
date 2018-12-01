@@ -9,6 +9,7 @@
 	{"model": "ui.city", "pk": 6, "fields": {"turn": 1, "field": 8, "country": 2}},
 	{"model": "ui.city", "pk": 7, "fields": {"turn": 1, "field": 11, "country": 2}},
 	{"model": "ui.city", "pk": 8, "fields": {"turn": 1, "field": 21, "country": 2}},
+	{"model": "ui.city", "pk": 9, "fields": {"turn": 1, "field": 14, "country": 2}},
 	
 	{"model": "ui.citycommand", "pk": 1, "fields": {"city": 1, "priority": 11, "newUnitType": 2, "result": null}}, 
 	{"model": "ui.citycommand", "pk": 2, "fields": {"city": 2, "priority": 12, "newUnitType": 2, "result": null}}, 
@@ -17,16 +18,18 @@
 	{"model": "ui.citycommand", "pk": 5, "fields": {"city": 5, "priority": 11, "newUnitType": 2, "result": null}}, 
 	{"model": "ui.citycommand", "pk": 6, "fields": {"city": 6, "priority": 12, "newUnitType": 2, "result": null}}, 
 	{"model": "ui.citycommand", "pk": 7, "fields": {"city": 7, "priority": 1, "newUnitType": 2, "result": null}}, 
-	{"model": "ui.citycommand", "pk": 8, "fields": {"city": 8, "priority": 1, "newUnitType": 2, "result": null}},  
+	{"model": "ui.citycommand", "pk": 8, "fields": {"city": 8, "priority": 1, "newUnitType": 2, "result": null}}, 
+	{"model": "ui.citycommand", "pk": 9, "fields": {"city": 9, "priority": 2, "newUnitType": 2, "result": null}},  
 	 
 	{"model": "ui.unit", "pk": 1, "fields": {"turn": 1, "country": 1, "unitType": 1, "field": 4}}, 
 	{"model": "ui.unit", "pk": 2, "fields": {"turn": 1, "country": 1, "unitType": 1, "field": 6}}, 
 	{"model": "ui.unit", "pk": 3, "fields": {"turn": 1, "country": 1, "unitType": 1, "field": 29}}, 
-	{"model": "ui.unit", "pk": 4, "fields": {"turn": 1, "country": 1, "unitType": 2, "field": 13}}, 
+	{"model": "ui.unit", "pk": 4, "fields": {"turn": 1, "country": 1, "unitType": 2, "field": 10}}, 
 	{"model": "ui.unit", "pk": 5, "fields": {"turn": 1, "country": 2, "unitType": 1, "field": 7}}, 
-	{"model": "ui.unit", "pk": 6, "fields": {"turn": 1, "country": 2, "unitType": 1, "field": 8}}, 
-	{"model": "ui.unit", "pk": 7, "fields": {"turn": 1, "country": 2, "unitType": 2, "field": 9}},
+	{"model": "ui.unit", "pk": 6, "fields": {"turn": 1, "country": 2, "unitType": 2, "field": 9}}, 
+	{"model": "ui.unit", "pk": 7, "fields": {"turn": 1, "country": 2, "unitType": 2, "field": 15}},
 	{"model": "ui.unit", "pk": 8, "fields": {"turn": 1, "country": 2, "unitType": 1, "field": 12}},
+	{"model": "ui.unit", "pk": 9, "fields": {"turn": 1, "country": 2, "unitType": 1, "field": 14}},
 	
 	{"model": "ui.command", "pk": 1, "fields": {"unit": 1, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
 	{"model": "ui.command", "pk": 2, "fields": {"unit": 2, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
@@ -35,5 +38,6 @@
 	{"model": "ui.command", "pk": 5, "fields": {"unit": 5, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}, 
 	{"model": "ui.command", "pk": 6, "fields": {"unit": 6, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}},
 	{"model": "ui.command", "pk": 7, "fields": {"unit": 7, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}},
-	{"model": "ui.command", "pk": 8, "fields": {"unit": 8, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}
+	{"model": "ui.command", "pk": 8, "fields": {"unit": 8, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}},
+	{"model": "ui.command", "pk": 9, "fields": {"unit": 9, "commandType": 1, "args": "", "escape": "", "removePriority": 0, "result": null}}
 ]

@@ -3,363 +3,352 @@ from ui.models import Turn
 
 class TestInvasions(TestBase):
     
-    def setUp(self):
-        TestBase.setUp(self)
-        self.importJson('test/test_units_1')
-
-    def test1(self):
+    def testInvasion(self):
         turn = Turn.objects.get(pk=1)
         # verify units
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertUnit(turn, 'London', 'Soldier', 'Russia')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
-        
+        self.assertNoUnit(turn, 'Norway')
         # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'London')
-        self.setAssertCommand(turn, 'North Sea', 'transport', 'London')
-        self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
-        self.setAssertCommand(turn, 'London', 'invade', ['Atlantic Ocean', 'North Sea', 'Germany'])
-        self.setAssertCommand(turn, 'Denmark', 'defend')
-        self.setAssertCommand(turn, 'Austria', 'defend')
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Norway'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
         # calculate turn
-        turn = self.assertNextTurn(turn, '2000', 'Invasion Success: Invasion')
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Single invasion')
         # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertResult(turn.previous, 'Germany', 'ok')
+        self.assertNoUnit(turn, 'Germany')
+        self.assertUnit(turn, 'Norway', 'Army', 'Spain')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'London', 'ok')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Austria', 'ok')
-        self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
-        
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+
+    def testInvasion2(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertNoUnit(turn, 'Norway')
         # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'Germany')
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea','Norwegian Sea','Norway'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
+        self.setAssertCommand(turn, 'Norwegian Sea', 'transport', 'Germany')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Double invasion')
+        # verify units
+        self.assertResult(turn.previous, 'Germany', 'ok')
+        self.assertNoUnit(turn, 'Germany')
+        self.assertUnit(turn, 'Norway', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
+
+    def testSelfInvasion(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Germany'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Self invasion')
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertResult(turn.previous, 'Germany', 'ok')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        
+    def testNotStrongestSelfInvasion(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Germany'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
+        self.setAssertCommand(turn, 'Baltic Sea', 'attack', 'Germany')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Not Strongest Self invasion')
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertResult(turn.previous, 'Germany', 'fail.not-strongest')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
+        self.assertResult(turn.previous, 'Baltic Sea', 'fail.not-strongest')
+    
+    def testInvasionFromAttack(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertNoUnit(turn, 'Norway')
+        self.assertUnit(turn, 'France', 'Army', 'Spain')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Norway'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
+        self.setAssertCommand(turn, 'France', 'attack', 'Germany')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Invasion from attack')
+        # verify units
+        self.assertResult(turn.previous, 'Germany', 'ok')
+        self.assertResult(turn.previous, 'France', 'ok')
+        self.assertNoUnit(turn, 'France')
+        self.assertUnit(turn, 'Norway', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+    
+    def testNoTransport(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertNoUnit(turn, 'Norway')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea','Norwegian Sea','Norway'])
+        self.setAssertCommand(turn, 'North Sea', 'defend')
+        self.setAssertCommand(turn, 'Norwegian Sea', 'transport', 'Germany')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: No Transport')
+        # verify units
+        self.assertResult(turn.previous, 'Germany', 'fail.transport-missing')
+        self.assertNoUnit(turn, 'Norway')
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
+        
+    def testNoTransport2(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertNoUnit(turn, 'Norway')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea','Norwegian Sea','Norway'])
         self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
         self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
-        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea', 'Atlantic Ocean', 'London'])
-        self.setAssertCommand(turn, 'Denmark', 'attack', 'Germany')
-        self.setAssertCommand(turn, 'Austria', 'attack', 'Germany')
         # calculate turn
-        turn = self.assertNextTurn(turn, '2001', 'Invasion Success: Invasion from attack')
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: No second Transport')
         # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertResult(turn.previous, 'Germany', 'fail.transport-missing')
+        self.assertNoUnit(turn, 'Norway')
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
         self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'Germany', 'ok')
-        self.assertUnit(turn, 'London', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Denmark', 'fail.not-strongest')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Austria', 'fail.not-strongest')
-        self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
         
+    def testAttackedTransport(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertNoUnit(turn, 'Norway')
         # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'London')
-        self.setAssertCommand(turn, 'North Sea', 'transport', 'London')
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Norway'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
         self.setAssertCommand(turn, 'Norwegian Sea', 'attack', 'North Sea')
-        self.setAssertCommand(turn, 'London', 'invade', ['Atlantic Ocean', 'North Sea', 'Germany'])
-        self.setAssertCommand(turn, 'Denmark', 'defend')
-        self.setAssertCommand(turn, 'Austria', 'defend')
         # calculate turn
-        turn = self.assertNextTurn(turn, '2002', 'Invasion Fail: Transport under attack')
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: No second Transport')
         # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'fail.canceled-by-attack')
-        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'fail.defence-stronger')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'London', 'fail.transport-canceled')
-        self.assertUnit(turn, 'London', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Austria', 'ok')
-        self.assertUnit(turn, 'Austria', 'Soldier', 'Ukraine')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'London')
-        self.setAssertCommand(turn, 'North Sea', 'transport', 'London')
-        self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
-        self.setAssertCommand(turn, 'London', 'invade', ['Atlantic Ocean', 'North Sea', 'Germany'])
-        self.setAssertCommand(turn, 'Denmark', 'support_attack', ['Germany', 'Austria'])
-        self.setAssertCommand(turn, 'Austria', 'attack', 'Germany')
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2003', 'Invasion Fail: Invasion not stronger than attack')
-        # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
-        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'London', 'fail.not-strongest')
-        self.assertUnit(turn, 'London', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Austria', 'ok')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Ukraine')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'London')
-        self.setAssertCommand(turn, 'North Sea', 'transport', 'London')
-        self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
-        self.setAssertCommand(turn, 'London', 'invade', ['Atlantic Ocean', 'North Sea', 'Germany'])
-        self.setAssertCommand(turn, 'Denmark', 'defend')
-        self.setAssertCommand(turn, 'Germany', 'defend')
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2004', 'Invasion Fail: Target not empty')
-        # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
-        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'London', 'fail.defence-stronger')
-        self.assertUnit(turn, 'London', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Germany', 'ok')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Ukraine')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'London')
-        self.setAssertCommand(turn, 'North Sea', 'defend')
-        self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
-        self.setAssertCommand(turn, 'London', 'invade', ['Atlantic Ocean', 'North Sea', 'Germany'])
-        self.setAssertCommand(turn, 'Denmark', 'defend')
-        self.setAssertCommand(turn, 'Germany', 'defend')
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2005', 'Invasion Fail: Transporter not transporting')
-        # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
-        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'London', 'fail.transport-missing')
-        self.assertUnit(turn, 'London', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Germany', 'ok')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Ukraine')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'London')
-        self.setAssertCommand(turn, 'North Sea', 'defend')
-        self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
-        self.setAssertCommand(turn, 'London', 'invade', ['North Sea', 'Atlantic Ocean', 'Germany'], 'invalid.not_next:par_2')
-        self.setAssertCommand(turn, 'Denmark', 'defend')
-        self.setAssertCommand(turn, 'Germany', 'defend')
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2006', 'Invasion Fail: Misconfigured invasion: wrong transport sequence')
-        # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
-        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'London', 'invalid.not_next:par_2')
-        self.assertUnit(turn, 'London', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Germany', 'ok')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Ukraine')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'London')
-        self.setAssertCommand(turn, 'North Sea', 'defend')
-        self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
-        self.setAssertCommand(turn, 'London', 'invade', ['Atlantic Ocean', 'Azores', 'Spain'], 'invalid.not_unit:Ship.par_1')
-        self.setAssertCommand(turn, 'Denmark', 'defend')
-        self.setAssertCommand(turn, 'Germany', 'defend')
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2007', 'Invasion Fail: Misconfigured invasion: missing transporter')
-        # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
-        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'London', 'invalid.not_unit:Ship.par_1')
-        self.assertUnit(turn, 'London', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Germany', 'ok')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Ukraine')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'London')
-        self.setAssertCommand(turn, 'North Sea', 'transport', 'London')
-        self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
-        self.setAssertCommand(turn, 'London', 'invade', ['Atlantic Ocean', 'North Sea', 'Germany'])
-        self.setAssertCommand(turn, 'Denmark', 'support_attack', ['Germany', 'London'])
-        self.setAssertCommand(turn, 'Germany', 'defend')
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2008', 'Invasion Success: Supported invasion - escaping defender')
-        # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
-        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'London', 'ok')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Germany', 'escaped')
-        self.assertUnit(turn, 'Poland', 'Soldier', 'Ukraine')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'defend')
-        self.setAssertCommand(turn, 'North Sea', 'defend')
-        self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
-        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'London'])
-        self.setAssertCommand(turn, 'Denmark', 'defend')
-        self.setAssertCommand(turn, 'Poland', 'defend')
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2009', 'Invasion Fail: Transporter missing for shorter invasion')
-        # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
-        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'Germany', 'fail.transport-missing')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Poland', 'ok')
-        self.assertUnit(turn, 'Poland', 'Soldier', 'Ukraine')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'attack', 'North Sea')
-        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
-        self.setAssertCommand(turn, 'Norwegian Sea', 'defend')
-        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'London'])
-        self.setAssertCommand(turn, 'Denmark', 'defend')
-        self.setAssertCommand(turn, 'Poland', 'move', ['Austria', 'France'])
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2010', 'Invasion Fail: Transporter attacked for shorter invasion')
-        # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'fail.defence-stronger')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'fail.canceled-by-attack')
-        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Ukraine')
         self.assertResult(turn.previous, 'Germany', 'fail.transport-canceled')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'Denmark', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Poland', 'ok')
-        self.assertUnit(turn, 'France', 'Soldier', 'Ukraine')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'move', 'Azores')
-        self.setAssertCommand(turn, 'North Sea', 'transport', 'Denmark')
-        self.setAssertCommand(turn, 'Norwegian Sea', 'move', 'Atlantic Ocean')
-        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'London'])
-        self.setAssertCommand(turn, 'Denmark', 'invade', ['North Sea',None,'London'])
-        self.setAssertCommand(turn, 'France', 'move', 'Spain')
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2011', 'Invasion Fail: Transporter transporting someone else')
-        # verify units
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Azores', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertNoUnit(turn, 'Norway')
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Norwegian Sea', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'Germany', 'fail.transport-missing')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Denmark', 'ok')
-        self.assertUnit(turn, 'London', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'France', 'ok')
-        self.assertUnit(turn, 'Spain', 'Soldier', 'Ukraine')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Azores', 'transport', 'Spain')
-        self.setAssertCommand(turn, 'North Sea', 'transport', 'London')
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'defend')
-        self.setAssertCommand(turn, 'Germany', 'attack', 'France')
-        self.setAssertCommand(turn, 'London', 'invade', ['North Sea',None,'Germany'])
-        self.setAssertCommand(turn, 'Spain', 'invade', ['Azores',None,'Spain'])
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2012', 'Invasion Success: Invade self')
+        self.assertResult(turn.previous, 'North Sea', 'fail.canceled-by-attack')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertResult(turn.previous, 'Norwegian Sea', 'fail.defence-stronger')
+
+    def testAttackedTransport(self):
+        turn = Turn.objects.get(pk=1)
         # verify units
-        self.assertResult(turn.previous, 'Azores', 'ok')
-        self.assertUnit(turn, 'Azores', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Ukraine')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Russia')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Norway'])
+        self.setAssertCommand(turn, 'Sweden', 'invade', ['North Sea',None,'Norway'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: No second Transport')
+        # verify units
         self.assertResult(turn.previous, 'Germany', 'ok')
-        self.assertUnit(turn, 'France', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'London', 'ok')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Spain', 'ok')
-        self.assertUnit(turn, 'Spain', 'Soldier', 'Ukraine')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Azores', 'transport', 'Spain')
-        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'Spain')
-        self.setAssertCommand(turn, 'France', 'defend')
-        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'London'])
-        self.setAssertCommand(turn, 'Spain', 'invade', ['Azores','Atlantic Ocean','London'])
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2013', 'Invasion Frail: Two invasions to one field')
-        # verify units
-        self.assertResult(turn.previous, 'Azores', 'ok')
-        self.assertUnit(turn, 'Azores', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertNoUnit(turn, 'Germany')
+        self.assertUnit(turn, 'Norway', 'Army', 'Spain')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'France', 'ok')
-        self.assertUnit(turn, 'France', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Germany', 'fail.not-strongest')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Spain', 'fail.not-strongest')
-        self.assertUnit(turn, 'Spain', 'Soldier', 'Ukraine')
-        
-        # set commands
-        self.setAssertCommand(turn, 'Azores', 'transport', 'Spain')
-        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
-        self.setAssertCommand(turn, 'Atlantic Ocean', 'transport', 'Spain')
-        self.setAssertCommand(turn, 'France', 'support_attack', ['London','Spain'])
-        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'London'])
-        self.setAssertCommand(turn, 'Spain', 'invade', ['Azores','Atlantic Ocean','London'])
-        # calculate turn
-        turn = self.assertNextTurn(turn, '2014', 'Invasion Success: Two invasions to one field, one supported')
-        # verify units
-        self.assertResult(turn.previous, 'Azores', 'ok')
-        self.assertUnit(turn, 'Azores', 'Ship', 'Spain')
         self.assertResult(turn.previous, 'North Sea', 'ok')
-        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
-        self.assertResult(turn.previous, 'Atlantic Ocean', 'ok')
-        self.assertUnit(turn, 'Atlantic Ocean', 'Ship', 'Ukraine')
-        self.assertResult(turn.previous, 'France', 'ok')
-        self.assertUnit(turn, 'France', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Germany', 'fail.not-strongest')
-        self.assertUnit(turn, 'Germany', 'Soldier', 'Russia')
-        self.assertResult(turn.previous, 'Spain', 'ok')
-        self.assertUnit(turn, 'London', 'Soldier', 'Ukraine')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Russia')
+        self.assertResult(turn.previous, 'Sweden', 'fail.transport-missing')
         
-        # support invasion
+    def testMoveNotCancelingTransport(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertNoUnit(turn, 'Norway')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Norway'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
+        self.setAssertCommand(turn, 'Norwegian Sea', 'move', 'North Sea')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Move not canceling Transport')
+        # verify units
+        self.assertResult(turn.previous, 'Germany', 'ok')
+        self.assertNoUnit(turn, 'Germany')
+        self.assertUnit(turn, 'Norway', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertResult(turn.previous, 'Norwegian Sea', 'fail.target-not-moving:par_0')
+    
+    def testNotStrongestInvasion(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertNoUnit(turn, 'Norway')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Norway'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
+        self.setAssertCommand(turn, 'Norwegian Sea', 'attack', 'Norway')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Not strongest Invasion')
+        # verify units
+        self.assertResult(turn.previous, 'Germany', 'fail.not-strongest')
+        self.assertNoUnit(turn, 'Norway')
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertResult(turn.previous, 'Norwegian Sea', 'fail.not-strongest')
+        
+    def testSupportedInvasion(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Russia')
+        self.assertNoUnit(turn, 'Norway')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Norway'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
+        self.setAssertCommand(turn, 'Norwegian Sea', 'attack', 'Norway')
+        self.setAssertCommand(turn, 'Sweden', 'support_attack', ['Norway','Germany'])
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Supported invasion')
+        # verify units
+        self.assertResult(turn.previous, 'Germany', 'ok')
+        self.assertNoUnit(turn, 'Germany')
+        self.assertUnit(turn, 'Norway', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
+        self.assertResult(turn.previous, 'Norwegian Sea', 'fail.not-strongest')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Russia')
+        self.assertResult(turn.previous, 'Sweden', 'ok')     
+
+    def testDefenceStronger(self):
+        turn = Turn.objects.get(pk=1)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Russia')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['North Sea',None,'Sweden'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Germany')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Defence Stronger')
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertResult(turn.previous, 'Germany', 'fail.defence-stronger')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Russia')
+        self.assertResult(turn.previous, 'Sweden', 'ok')
+
+    def testSupportedInvasionRetreat(self):
+        turn = Turn.objects.get(pk=1)
+        self.setDefaultEscapes(turn)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Russia')
+        self.assertUnit(turn, 'France', 'Army', 'Spain')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'defend')
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Sweden')
+        self.setAssertCommand(turn, 'Sweden', 'invade', ['North Sea',None,'Germany'])
+        self.setAssertCommand(turn, 'France', 'support_attack', ['Germany','Sweden'])
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Supported invasion, retreating defender')
+        # verify units
+        self.assertResult(turn.previous, 'Germany', 'escaped')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertResult(turn.previous, 'Sweden', 'ok')
+        self.assertResult(turn.previous, 'France', 'ok')
+        self.assertNoUnit(turn, 'Sweden')
+        self.assertUnit(turn, 'Germany', 'Army', 'Russia')
+        self.assertUnit(turn, 'Denmark', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'France', 'Army', 'Spain')
+
+    def testInvasionSwitch(self):
+        turn = Turn.objects.get(pk=1)
+        self.setDefaultEscapes(turn)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Russia')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['Baltic Sea',None,'Sweden'])
+        self.setAssertCommand(turn, 'Baltic Sea', 'transport', 'Germany')
+        self.setAssertCommand(turn, 'Sweden', 'invade', ['North Sea',None,'Germany'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Sweden')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Invasion switch')
+        # verify units
+        self.assertResult(turn.previous, 'Germany', 'ok')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertResult(turn.previous, 'Sweden', 'ok')
+        self.assertResult(turn.previous, 'Baltic Sea', 'ok')
+        self.assertUnit(turn, 'Germany', 'Army', 'Russia')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
+
+    def testTwoInvasionsToOne(self):
+        turn = Turn.objects.get(pk=1)
+        self.setDefaultEscapes(turn)
+        # verify units
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Russia')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
+        # set commands
+        self.setAssertCommand(turn, 'Germany', 'invade', ['Baltic Sea',None,'Denmark'])
+        self.setAssertCommand(turn, 'Baltic Sea', 'transport', 'Germany')
+        self.setAssertCommand(turn, 'Sweden', 'invade', ['North Sea',None,'Denmark'])
+        self.setAssertCommand(turn, 'North Sea', 'transport', 'Sweden')
+        # calculate turn
+        turn = self.assertNextTurn(turn, '2000', 'Invasions: Two Invasions to one')
+        # verify units
+        self.assertResult(turn.previous, 'Germany', 'fail.not-strongest')
+        self.assertResult(turn.previous, 'North Sea', 'ok')
+        self.assertResult(turn.previous, 'Sweden', 'fail.not-strongest')
+        self.assertResult(turn.previous, 'Baltic Sea', 'ok')
+        self.assertUnit(turn, 'Germany', 'Army', 'Spain')
+        self.assertUnit(turn, 'Sweden', 'Army', 'Russia')
+        self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
+        self.assertUnit(turn, 'Baltic Sea', 'Ship', 'Russia')
+
