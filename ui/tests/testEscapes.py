@@ -98,5 +98,5 @@ class TestEscapes(TestBase):
         self.assertNoUnit(turn, 'Poland')
 
 
-# to  test:
+# to test:
 #   - setting escapes (validation)
