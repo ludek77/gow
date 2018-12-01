@@ -100,4 +100,3 @@ class TestEscapes(TestBase):
 
 # to test:
 #   - setting escapes (validation)
-#   - two colliding escapes
