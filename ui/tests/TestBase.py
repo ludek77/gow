@@ -90,10 +90,9 @@ class TestBase(TestCase):
     
     def assertEscapes(self, turn, fieldName, expectedEscapes):
         command = Command.objects.get(unit__turn=turn, unit__field__name=fieldName)
-        expectedResult = ''
-        separator = ''
-        for escapeName in expectedEscapes:
-            escape = Field.objects.get(game=turn.game, name=escapeName)
-            expectedResult += separator+str(escape.pk)
-            separator = ','
-        self.assertEqual(command.escape, expectedResult)
+        keys = command.escape.split(',')
+        result = []
+        for key in keys:
+            field = Field.objects.get(game=turn.game, pk=key)
+            result.append(field.name)
+        self.assertEqual(expectedEscapes,result)

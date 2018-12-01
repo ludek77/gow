@@ -298,7 +298,7 @@ class TestInvasions(TestBase):
         self.assertResult(turn.previous, 'France', 'ok')
         self.assertNoUnit(turn, 'Sweden')
         self.assertUnit(turn, 'Germany', 'Army', 'Russia')
-        self.assertUnit(turn, 'Denmark', 'Army', 'Spain')
+        self.assertUnit(turn, 'Poland', 'Army', 'Spain')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
         self.assertUnit(turn, 'France', 'Army', 'Spain')
 

@@ -464,9 +464,19 @@ class Engine:
                         targetCmd = self.nextMap.get(field)
                         attackers = self.maxAttackers.get(field)
                         attackCmd = self.nextMap.get(cmd.unit.field)
-                        if targetCmd is None and attackers is None and field != attackCmd.unit.field:
-                            self.dropUnit(cmd, field)
-                            self.setResult(cmd, cmd.result.replace('to-escape', 'escaped'))
+                        if targetCmd is None:
+                            if attackers is None:
+                                if field != attackCmd.unit.field:
+                                    self.dropUnit(cmd, field)
+                                    self.setResult(cmd, cmd.result.replace('to-escape', 'escaped'))
+                                else:
+                                    self.log('      '+str(cmd.unit)+' attacked from:'+str(field))
+                            else:
+                                self.log('      '+str(cmd.unit)+' under attack:'+str(field))
+                        else:
+                            self.log('      '+str(cmd.unit)+' not empty:'+str(field))
+                    else:
+                        self.log('      '+str(cmd.unit)+' multiple escapes:'+str(field))
         self.log('   next round changed:'+str(changed))
         return changed
 

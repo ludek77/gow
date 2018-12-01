@@ -77,7 +77,8 @@ class Field(models.Model):
     next = models.ManyToManyField('self', blank=True)
     
     def __str__(self):
-        return self.game.name + '.' + self.name + '.' + str(self.pk)
+        #return self.game.name + '.' + self.name + '.' + str(self.pk)
+        return self.name + '.' + str(self.pk)
 
 class Turn(models.Model):
     name = models.CharField(max_length=100)
