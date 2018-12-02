@@ -33,6 +33,7 @@ def country_setup_rest(request):
 def renderCountry(country, turn):
     output = '{'
     output += '"name":"'+country.name+'"'
+    output += ',"clr":"'+country.color+'"'
     output += ',"pk":'+str(country.pk)+''
     
     output += ',"units":['

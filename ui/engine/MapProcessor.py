@@ -66,6 +66,31 @@ class MapProcessor:
         # store and return result
         self.getFieldsByHomeDistanceBuffer[unit] = result
         return result
+
+    def setPriorityEscape(self, command, prioEscape):
+        result = ''
+        separator = ''
+        message = None
+        # get neighbours
+        neighbours = self.getNeighbours(command.unit.field)
+        reachable = self.filterReachable(command.unit.unitType, neighbours)
+        # if defined priority in reachable neighbours
+        if prioEscape in reachable:
+            result += str(prioEscape.pk)
+            separator = ','
+        else:
+            message = 'Not reachable for escape'
+        # get default list of escapes and add them
+        escapes = self.getEscapeFieldPks(command.unit)
+        eList = escapes.split(',')
+        for e in eList:
+            if e != str(prioEscape.pk):
+                result += separator + e
+                separator = ','
+        # set result
+        command.escape = result
+        command.save()
+        return message
     
     def orderCommand(self, command, priority, commands):
         # iterate commands

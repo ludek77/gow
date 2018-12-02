@@ -21,7 +21,7 @@
 
 <div id="field-dialog">
 	<div class="country country-color">
-		<span class="country-name"></span>
+		City of <span class="country-name"></span>
 	</div>
 	<div class="home country-color">
 		<span class="home-color">Home city of</span>
@@ -38,6 +38,11 @@
 	<div class="unit-owner-only unit-color">
 		Unit command <select id="unit-command"></select>
 		<div id='unit-command-targets'></div>
+
+		<div class="escape">
+			<span class="label">Escape</span><span id="escape-0" class="escape-field clickable" onclick="selectEscape()"></span>
+		</div>
+
 		<div id="unit-command-result"/>
 	</div>
 </div>

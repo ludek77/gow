@@ -41,7 +41,6 @@ function defaultClickField(e,pk) {
 function renderFieldDialog(json) {
 	openDialog('/ui/field_dialog', 'Field', function() {
 		setDialogTitle(json.field + ': ' + json.type);
-		//alert(JSON.stringify(json));
 		if(json.country) {
 			$('#field-dialog .country').show();
 			$('#field-dialog .country-name').text(json.country);
@@ -80,6 +79,16 @@ function renderFieldDialog(json) {
 		} else {
 			$('#field-dialog .unit-owner-only').hide();
 			$('#unit-command').html('');
+		}
+		if(json.esc) {
+			$('#field-dialog .escape').show();
+			$('#field-dialog .escape-field').text(json.esc[1]);
+		} else {
+			$('#field-dialog .escape').hide();
+			$('#field-dialog .escape-field').html('');
+		}
+		if(json.message) {
+			$('#unit-command-result').html(json.message);
 		}
 		if(json.fcmd) {
 			$('#field-dialog .field-owner-only').show();
@@ -126,10 +135,19 @@ function appendTarget(index,text,param,arg,enabled) {
 }
 
 var selectedTarget = null;
-function selectTarget(param) {
-	$('#target-'+param).text('Pick target field');
+function selectTargetFunction(tid, param, clickFunction) {
+	$(tid).text('Select Target');
+	$(tid).addClass('active');
 	selectedTarget = param;
-	fieldClickHandler = clickTarget;
+	fieldClickHandler = clickFunction;
+}
+
+function selectTarget(param) {
+	selectTargetFunction('#target-'+param, param, clickTarget);	
+}
+
+function selectEscape() {
+	selectTargetFunction('#escape-0', null, clickEscape);
 }
 
 function clickTarget(e,pk) {
@@ -139,6 +157,15 @@ function clickTarget(e,pk) {
 	}
 	var ct = $('#unit-command').val();
 	$.get('unit_command/?f='+selectedField+'&ct='+ct+'&args='+commandArgs, function(data) {
+		var json = $.parseJSON(data);
+		renderFieldDialog(json);
+		renderCountryDialog();
+	});
+	fieldClickHandler = defaultClickField;
+}
+
+function clickEscape(e,pk) {
+	$.get('unit_command/?f='+selectedField+'&ct=esc&args='+pk, function(data) {
 		var json = $.parseJSON(data);
 		renderFieldDialog(json);
 		renderCountryDialog();
@@ -186,22 +213,22 @@ function setupGame() {
 			renderUnit(unit.latlng[0],unit.latlng[1], unit.id, unit.fid, unit.clr, unit.type);
 		}
 		
-		renderCountryDialog(unit.clr);
+		renderCountryDialog();
 	});
 }
 
-function renderCountryDialog(clr) {
+function renderCountryDialog() {
 	$.get('country_setup/',function(data){
 		$('#commands-content').html('');
 		var json= $.parseJSON(data);
 		for(var c in json.countries) {
 			country = json.countries[c];
-			$('#commands-content').append('<div class="country" style="background-color:'+clr+'"">'+country.name+'</div>');
+			$('#commands-content').append('<div class="country" style="background-color:'+country.clr+'"">'+country.name+'</div>');
 			for(var i in country.units) {
-				appendUnitCommand(country.units[i],json.open, clr);
+				appendUnitCommand(country.units[i],json.open, country.clr);
 			}
 			for(var i in country.cities) {
-				appendCityCommand(country.cities[i],json.open, clr);
+				appendCityCommand(country.cities[i],json.open, country.clr);
 			}
 		}
 		

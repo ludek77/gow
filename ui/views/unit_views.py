@@ -58,7 +58,9 @@ def unitResponse(request, fieldId,message=None):
             cmd = Command.objects.filter(unit__turn=selectedTurn, unit=selectedUnit)
             if len(cmd) == 1:
                 cmd = cmd.first()
+                # append command
                 output += ',"cmd":['+str(cmd.commandType.pk)+',['+cmd.commandType.template+'],['
+                # append arguments
                 if cmd.args != '':
                     flds = cmd.args.split(',')
                     separator = ''
@@ -78,6 +80,12 @@ def unitResponse(request, fieldId,message=None):
                     result = commandValidator.getResult(cmd)
                 output += ',"'+result+'"'
                 output += ']'
+                # append escape
+                if cmd.escape is not None:
+                    escapes = cmd.escape.split(',')
+                    f = Field.objects.get(pk=escapes[0])
+                    if f is not None:
+                        output += ',"esc":['+str(f.pk)+',"'+f.name+'"]'
             
             cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
             output += ',"cmds":['
@@ -131,6 +139,11 @@ def unit_command_rest(request):
             commands = Command.objects.filter(unit__turn=selectedTurn,unit__country=selectedCountry).order_by('removePriority')
             processor = MapProcessor(selectedTurn)
             processor.orderCommand(selectedCommand, int(args), commands)
+        # chaing escape priority
+        elif ctid == 'esc':
+            escape = Field.objects.get(pk=int(args))
+            processor = MapProcessor(selectedTurn)
+            message = processor.setPriorityEscape(selectedCommand, escape)
         # setting command and arguments
         else:
             commandType = CommandType.objects.get(pk=ctid)

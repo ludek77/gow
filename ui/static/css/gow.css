@@ -20,7 +20,7 @@ body {
 }
 
 #commands-content {
-	widgth: 200px;
+	width: 200px;
 	height: 500px;
 }
 
@@ -30,7 +30,7 @@ body {
 }
 
 .add-unit-command {
-	margin-bottom: 10px;
+	margin: 10px;
 }
 
 .command {
@@ -43,6 +43,8 @@ body {
 
 #unit-command-result {
 	color: red;
+	font-weight: bold;
+	margin-top: 15px;
 }
 
 #city-command-result {
@@ -93,6 +95,30 @@ body {
 	text-decoration: underline;
 	cursor: pointer;
 	margin: 5px;
+}
+
+.clickable {
+	color: blue;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+#unit-command-targets .label {
+	width: 150px;
+	display: inline-block;
+	color: gray;
+}
+
+.escape .label {
+	width: 150px;
+	display: inline-block;
+	color: gray;
+}
+
+#unit-command-targets .active {
+	color: black;
+	font-weight: bold;
+	text-decoration: none;
 }
 
 .unit-prio {
