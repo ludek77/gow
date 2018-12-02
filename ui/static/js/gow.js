@@ -41,22 +41,26 @@ function defaultClickField(e,pk) {
 function renderFieldDialog(json) {
 	openDialog('/ui/field_dialog', 'Field', function() {
 		setDialogTitle(json.field + ': ' + json.type);
+		//alert(JSON.stringify(json));
 		if(json.country) {
 			$('#field-dialog .country').show();
-			$('#field-dialog .countryName').text(json.country);
+			$('#field-dialog .country-name').text(json.country);
+			$('#field-dialog .country-color').css('background-color',json.fieldColor);
 		} else {
 			$('#field-dialog .country').hide();
 		}
 		if(json.home) {
 			$('#field-dialog .home').show();
-			$('#field-dialog .homeName').text(json.home);
+			$('#field-dialog .home-name').text(json.home);
+			$('#field-dialog .home-color').css('background-color',json.homeColor);
 		} else {
 			$('#field-dialog .home').hide();
 		}
 		if(json.unitType) {
 			$('#field-dialog .unit').show();
-			$('#field-dialog .unitCountry').text(json.unitCountry);
-			$('#field-dialog .unitType').text(json.unitType);
+			$('#field-dialog .unit-country').text(json.unitCountry);
+			$('#field-dialog .unit-type').text(json.unitType);
+		    $('#field-dialog .unit-color').css('background-color',json.unitColor);
 		} else {
 			$('#field-dialog .unit').hide();
 		}
@@ -182,22 +186,22 @@ function setupGame() {
 			renderUnit(unit.latlng[0],unit.latlng[1], unit.id, unit.fid, unit.clr, unit.type);
 		}
 		
-		renderCountryDialog();
+		renderCountryDialog(unit.clr);
 	});
 }
 
-function renderCountryDialog() {
+function renderCountryDialog(clr) {
 	$.get('country_setup/',function(data){
 		$('#commands-content').html('');
 		var json= $.parseJSON(data);
 		for(var c in json.countries) {
 			country = json.countries[c];
-			$('#commands-content').append('<div class="country">'+country.name+'</div>');
+			$('#commands-content').append('<div class="country" style="background-color:'+clr+'"">'+country.name+'</div>');
 			for(var i in country.units) {
-				appendUnitCommand(country.units[i],json.open);
+				appendUnitCommand(country.units[i],json.open, clr);
 			}
 			for(var i in country.cities) {
-				appendCityCommand(country.cities[i],json.open);
+				appendCityCommand(country.cities[i],json.open, clr);
 			}
 		}
 		
@@ -222,18 +226,18 @@ function renderCountryDialog() {
 	});
 }
 
-function appendUnitCommand(unit,open) {
+function appendUnitCommand(unit,open,clr) {
 	var unitType = unitTypes[unit.type][4];
-	content  = '<div>';
+	content  = '<div class="units" style="background-color:'+clr+'">';
 	if(open) {
-		content += '<input class="unit-prio first" type="button" value="A" id="'+unit.fieldId+'_-9"/>'
-		content += '<input class="unit-prio prev" type="button"  value="^"  id="'+unit.fieldId+'_-1"/>'
-		content += '<input class="unit-prio next" type="button"  value="v"  id="'+unit.fieldId+'_+1"/>'
-		content += '<input class="unit-prio last" type="button"  value="V" id="'+unit.fieldId+'_+9"/>'
+		content += '<input class="unit-prio first" type="button" id="'+unit.fieldId+'_-9"/>'
+		content += '<input class="unit-prio prev" type="button"  id="'+unit.fieldId+'_-1"/>'
+		content += '<input class="unit-prio next" type="button"  id="'+unit.fieldId+'_+1"/>'
+		content += '<input class="unit-prio last" type="button"  id="'+unit.fieldId+'_+9"/>'
 	}
-	content += '<span class="clickable" onclick="focusLatLng('+unit.latlng[0]+','+unit.latlng[1]+');onClickField('+unit.id+','+unit.fieldId+')">'+unit.field+'</span>';
-	content += '<span>'+unitType+'</span>';
-	content += '<span>'+unit.command+'</span>';
+	content += '<span class="command-target" onclick="focusLatLng('+unit.latlng[0]+','+unit.latlng[1]+');onClickField('+unit.id+','+unit.fieldId+')">'+unit.field+'</span>';
+	//content += '<span class="unit-type">'+unitType+'</span>';
+	content += '<span class="command">'+unit.command+'</span>';
 	for(var i in unit.args) {
 		content += '<span>'+unit.args[i]+'</span>'
 	}
@@ -241,16 +245,16 @@ function appendUnitCommand(unit,open) {
 	$('#commands-content').append(content);
 }
 
-function appendCityCommand(city,open) {
-	content =  '<div>';
+function appendCityCommand(city,open,clr) {
+	content =  '<div class="cities">';
 	if(open) {
-		content += '<input class="city-prio first" type="button" value="A" id="'+city.fieldId+'_-9"/>'
-		content += '<input class="city-prio prev" type="button"  value="^"  id="'+city.fieldId+'_-1"/>'
-		content += '<input class="city-prio next" type="button"  value="v"  id="'+city.fieldId+'_+1"/>'
-		content += '<input class="city-prio last" type="button"  value="V" id="'+city.fieldId+'_+9"/>'
+		content += '<input class="city-prio first" type="button" id="'+city.fieldId+'_-9"/>'
+		content += '<input class="city-prio prev" type="button"  id="'+city.fieldId+'_-1"/>'
+		content += '<input class="city-prio next" type="button"  id="'+city.fieldId+'_+1"/>'
+		content += '<input class="city-prio last" type="button"  id="'+city.fieldId+'_+9"/>'
 	}
-	content += '<span class="clickable" onclick="focusLatLng('+city.latlng[0]+','+city.latlng[0]+');onClickField('+city.id+','+city.fieldId+')">'+city.field+'</span>';
-	content += '<span>add '+city.newUnit+'</span>';
+	content += '<span class="command-target" onclick="focusLatLng('+city.latlng[0]+','+city.latlng[0]+');onClickField('+city.id+','+city.fieldId+')">'+city.field+'</span>';
+	content += '<span class="add-unit add-'+city.newUnit+'"></span>';
 	content += '</div>';
 	$('#commands-content').append(content);
 }

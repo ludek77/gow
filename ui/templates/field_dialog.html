@@ -20,21 +20,22 @@
 </script>
 
 <div id="field-dialog">
-	<div class="home">
-		Home city of <span class="homeName"></span>
+	<div class="country country-color">
+		<span class="country-name"></span>
 	</div>
-	<div class="country">
-		Country <span class="countryName"></span>
+	<div class="home country-color">
+		<span class="home-color">Home city of</span>
+		<span class="home-name home-color"></span>
 	</div>
-	<div class="field-owner-only">
+
+	<div class="field-owner-only add-unit-command">
 		Add unit <select id="field-command"></select>
 		<div id="field-command-result"/>
 	</div>
-	<div class="unit">
-		<div>Unit country<span class="unitCountry"></span></div>
-		<div>Unit type<span class="unitType"></span></div>
+	<div class="unit unit-color">
+		<div><span class="unit-type"></span> of <span class="unit-country"></span></div>
 	</div>
-	<div class="unit-owner-only">
+	<div class="unit-owner-only unit-color">
 		Unit command <select id="unit-command"></select>
 		<div id='unit-command-targets'></div>
 		<div id="unit-command-result"/>

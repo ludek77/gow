@@ -28,14 +28,17 @@ def unitResponse(request, fieldId,message=None):
         city = City.objects.filter(turn=selectedTurn, field=selectedField)
         if len(city) == 1:
             output += ',"country":"'+city[0].country.name+'"'
+            output += ',"fieldColor":"'+city[0].country.color+'"'
         if selectedField.home is not None:
             output += ',"home":"'+selectedField.home.name+'"'
+            output += ',"homeColor":"'+selectedField.home.color+'"'
     if selectedTurn is not None and selectedTurn.open:
         output += ',"open":true'
     else:
         output += ',"open":false'
     if selectedUnit is not None:
         output += ',"unitCountry":"'+selectedUnit.country.name+'"'
+        output += ',"unitColor":"'+selectedUnit.country.color+'"'
         output += ',"unitType":"'+selectedUnit.unitType.name+'"'
         
     if message is not None:

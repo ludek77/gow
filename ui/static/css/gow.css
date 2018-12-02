@@ -24,6 +24,19 @@ body {
 	height: 500px;
 }
 
+.country {
+	font-weight: bold;
+	text-align: center;
+}
+
+.add-unit-command {
+	margin-bottom: 10px;
+}
+
+.command {
+	margin: 5px;
+}
+
 #dialog {
 	z-index: 9999;
 }
@@ -40,8 +53,74 @@ body {
 	font-weight: bold;
 }
 
-span.clickable {
+.add-unit {
+	background-size: 16px;
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+}
+
+.add-Ship {
+	background: url('../icon/ship.png');
+	background-size: 16px;
+}
+
+.add-Army {
+	background: url('../icon/army.png') no-repeat;
+	background-size: 6px;
+}
+
+.home {
+	text-align:center;
+}
+
+.unit {
+	text-align:center;
+	margin-top: 10px;
+}
+
+.unit-country {
+	font-weight: bold;
+	margin: 5px;
+}
+
+.cities {
+	font-style: italic;
+}
+
+.command-target {
 	color: blue;
 	text-decoration: underline;
 	cursor: pointer;
+	margin: 5px;
+}
+
+.unit-prio {
+	cursor: pointer;
+	border: none;
+	width:  16px;
+	height: 16px;
+}
+
+.city-prio {
+	cursor: pointer;
+	border: none;
+	width:  16px;
+	height: 16px;
+}
+
+.first {
+	background: url('../icon/order/first.jpeg') no-repeat;
+}
+
+.last {
+	background: url('../icon/order/last.jpeg') no-repeat;
+}
+
+.prev {
+	background: url('../icon/order/up.jpeg') no-repeat;
+}
+
+.next {
+	background: url('../icon/order/down.jpeg') no-repeat;
 }
