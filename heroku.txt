@@ -1,0 +1,11 @@
+sudo snap install heroku --classic
+
+heroku login
+
+
+------
+
+heroku create gow-ui --region eu
+
+git push heroku master
+
