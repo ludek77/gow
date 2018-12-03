@@ -1,0 +1,22 @@
+
+show previous/next move
+  add functionality
+  test that closed commands can not be changed
+  test that you see all commands
+  test that you don't see current commands
+
+displaying commands
+  add visuals for commands
+  test setting current turn
+  test displaying previous commands
+
+security
+  test security of setting commands
+
+removing/adding units
+  test removing and adding units
+
+victory
+  check implementation
+  test victory
+
