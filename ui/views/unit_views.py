@@ -83,9 +83,10 @@ def unitResponse(request, fieldId,message=None):
                 # append escape
                 if cmd.escape is not None:
                     escapes = cmd.escape.split(',')
-                    f = Field.objects.get(pk=escapes[0])
-                    if f is not None:
-                        output += ',"esc":['+str(f.pk)+',"'+f.name+'"]'
+                    if escapes[0] is not None and escapes[0] != '':
+                        f = Field.objects.get(pk=escapes[0])
+                        if f is not None:
+                            output += ',"esc":['+str(f.pk)+',"'+f.name+'"]'
             
             cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
             output += ',"cmds":['

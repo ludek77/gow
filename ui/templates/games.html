@@ -31,15 +31,6 @@
 </script>
 
 <select id="select-game"></select>
-{% if turn %}
-	{% if turn.previous is not None %}
-	<input id="previous-turn" type="button" value="Back"/>
-	{% endif %}
-	{{turn.name}}
-	{% if nextTurn %}
-		<input id="next-turn" type="button" value="Next"/>
-	{% endif %}
-{% endif %}
 
 {% if perms.ui.change_game and not turn %}
 	<input id="configure-game" type="button" value="Configure"/>

@@ -34,7 +34,15 @@ body {
 }
 
 .command {
-	margin: 5px;
+	padding-left: 20px;
+}
+
+.res_ok {
+	background: url('../icon/result/ok.jpeg') no-repeat;
+}
+
+.res_removed {
+	background: url('../icon/result/removed.jpeg') no-repeat;
 }
 
 #dialog {
@@ -121,14 +129,7 @@ body {
 	text-decoration: none;
 }
 
-.unit-prio {
-	cursor: pointer;
-	border: none;
-	width:  16px;
-	height: 16px;
-}
-
-.city-prio {
+.button-icon {
 	cursor: pointer;
 	border: none;
 	width:  16px;

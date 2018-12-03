@@ -59,6 +59,8 @@ def renderCountry(country, turn):
                     args += aseparator+'"'+fld.name+'"'
                     aseparator = ','
                 output += ',"args":['+args+']'
+            if command.result is not None:
+                output += ',"res":"'+command.result+'"'
             output += '}'
             separator = ','
     output += ']'

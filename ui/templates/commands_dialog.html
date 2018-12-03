@@ -6,18 +6,32 @@
 </script>
 {% endif %}
 
-{% if turn.open %}
-	<div id="commands" title="Open turn {{turn.name}}" style="display:none">
-{% else %}
-	<div id="commands" title="Closed Turn {{turn.name}}" style="display:none">
+{% if turn %}
+	{% if turn.open %}
+		<div id="commands" title="Open turn {{turn.name}}" style="display:none">
+	{% else %}
+		<div id="commands" title="Closed Turn {{turn.name}}" style="display:none">
+	{% endif %}
+	
+	{% if turn.newUnits %}
+		<div>Units synced after this move</div>
+	{% endif %}
+		<div>
+		
+	{% if turn.previous is not None %}
+		<input id="previous-turn" class="button-icon prev" type="button" />
+	{% endif %}
+	{% if turn.deadline and turn.open %}
+		Deadline: {{turn.deadline}}
+	{% else %}
+		History
+	{% endif %}
+	{% if nextTurn %}
+		<input id="next-turn" class="button-icon next" type="button" />
+	{% endif %}
+
 {% endif %}
-{% if turn.newUnits %}
-	<div>Units synced after this move</div>
-{% endif %}
-	<div>
-{% if turn.deadline and turn.open %}
-	Deadline: {{turn.deadline}}
-{% endif %}
+
 	</div>
 
 	<div id="commands-content"></div>

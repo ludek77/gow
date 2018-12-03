@@ -257,14 +257,14 @@ function appendUnitCommand(unit,open,clr) {
 	var unitType = unitTypes[unit.type][4];
 	content  = '<div class="units" style="background-color:'+clr+'">';
 	if(open) {
-		content += '<input class="unit-prio first" type="button" id="'+unit.fieldId+'_-9"/>'
-		content += '<input class="unit-prio prev" type="button"  id="'+unit.fieldId+'_-1"/>'
-		content += '<input class="unit-prio next" type="button"  id="'+unit.fieldId+'_+1"/>'
-		content += '<input class="unit-prio last" type="button"  id="'+unit.fieldId+'_+9"/>'
+		content += '<input class="unit-prio button-icon first" type="button" id="'+unit.fieldId+'_-9"/>'
+		content += '<input class="unit-prio button-icon prev" type="button"  id="'+unit.fieldId+'_-1"/>'
+		content += '<input class="unit-prio button-icon next" type="button"  id="'+unit.fieldId+'_+1"/>'
+		content += '<input class="unit-prio button-icon last" type="button"  id="'+unit.fieldId+'_+9"/>'
 	}
 	content += '<span class="command-target" onclick="focusLatLng('+unit.latlng[0]+','+unit.latlng[1]+');onClickField('+unit.id+','+unit.fieldId+')">'+unit.field+'</span>';
 	//content += '<span class="unit-type">'+unitType+'</span>';
-	content += '<span class="command">'+unit.command+'</span>';
+	content += '<span class="command res_'+unit.res+'">'+unit.command+'</span>';
 	for(var i in unit.args) {
 		content += '<span>'+unit.args[i]+'</span>'
 	}
@@ -275,10 +275,10 @@ function appendUnitCommand(unit,open,clr) {
 function appendCityCommand(city,open,clr) {
 	content =  '<div class="cities">';
 	if(open) {
-		content += '<input class="city-prio first" type="button" id="'+city.fieldId+'_-9"/>'
-		content += '<input class="city-prio prev" type="button"  id="'+city.fieldId+'_-1"/>'
-		content += '<input class="city-prio next" type="button"  id="'+city.fieldId+'_+1"/>'
-		content += '<input class="city-prio last" type="button"  id="'+city.fieldId+'_+9"/>'
+		content += '<input class="city-prio button-icon first" type="button" id="'+city.fieldId+'_-9"/>'
+		content += '<input class="city-prio button-icon prev" type="button"  id="'+city.fieldId+'_-1"/>'
+		content += '<input class="city-prio button-icon next" type="button"  id="'+city.fieldId+'_+1"/>'
+		content += '<input class="city-prio button-icon last" type="button"  id="'+city.fieldId+'_+9"/>'
 	}
 	content += '<span class="command-target" onclick="focusLatLng('+city.latlng[0]+','+city.latlng[0]+');onClickField('+city.id+','+city.fieldId+')">'+city.field+'</span>';
 	content += '<span class="add-unit add-'+city.newUnit+'"></span>';
