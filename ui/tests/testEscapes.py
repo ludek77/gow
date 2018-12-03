@@ -97,6 +97,15 @@ class TestEscapes(TestBase):
         self.assertNoUnit(turn, 'Baltic Sea')
         self.assertNoUnit(turn, 'Poland')
 
-
-#  to test:
-#   - setting escapes (validation)
+    def testSettingEscapes(self):
+        turn = Turn.objects.get(pk=1)
+        self.setDefaultEscapes(turn)
+        # verify default escapes
+        self.assertEscapes(turn,'Austria',['France','Germany','Poland','Croatia'])
+        # verify setting escapes
+        self.setAssertEscape(turn, 'Austria', 'Germany', ['Germany','France','Poland','Croatia'])
+        self.setAssertEscape(turn, 'Austria', 'France', ['France','Germany','Poland','Croatia'])
+        self.setAssertEscape(turn, 'Austria', 'Poland', ['Poland','France','Germany','Croatia'])
+        self.setAssertEscape(turn, 'Austria', 'Croatia', ['Croatia','France','Germany','Poland'])
+        self.setAssertEscape(turn, 'Austria', 'Spain', ['France','Germany','Poland','Croatia'],'fail.not-reachable-for-escape')
+        self.setAssertEscape(turn, 'Austria', 'Austria', ['France','Germany','Poland','Croatia'],'fail.not-reachable-for-escape')

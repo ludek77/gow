@@ -21,6 +21,8 @@ class CommandValidator:
             'fail.canceled-by-invasion': 'Canceled by invasion',
             'fail.unit-attacking-elsewhere': 'Supported unit attacks different target',
             'fail.unit-not-attacking': 'Supported unit does not attack',
+            'fail.not-reachable-for-escape': 'Not reachable for escape',
+            'fail.turn-closed': 'Turn closed, please refresh',
             'invalid.empty': 'No {0} defined',
             'invalid.not_next': 'Unreachable {0}',
             'invalid.not_reachable': 'Unit cannot go to {0}',

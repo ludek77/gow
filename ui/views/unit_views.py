@@ -127,7 +127,8 @@ def unit_command_rest(request):
     fieldId = request.GET.get("f")
     ctid = request.GET.get("ct")
     args = request.GET.get("args")
-    message = None
+    validator = CommandValidator()
+    messageKey = None
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
     if selectedTurn.deadline is None or selectedTurn.deadline > timezone.now():
@@ -143,7 +144,7 @@ def unit_command_rest(request):
         elif ctid == 'esc':
             escape = Field.objects.get(pk=int(args))
             processor = MapProcessor(selectedTurn)
-            message = processor.setPriorityEscape(selectedCommand, escape)
+            messageKey = processor.setPriorityEscape(selectedCommand, escape)
         # setting command and arguments
         else:
             commandType = CommandType.objects.get(pk=ctid)
@@ -152,13 +153,13 @@ def unit_command_rest(request):
                 args = '';
             selectedCommand.args = args;
             # validate command
-            validator = CommandValidator()
             validator.validateCommand(selectedCommand)
             #save command
             selectedCommand.save()
     else:
-        message = 'Turn closed, please refresh' 
+        messageKey = 'fail.turn-closed' 
 
+    message = validator.getError(messageKey)
     return unitResponse(request, fieldId, message)
 
 @login_required

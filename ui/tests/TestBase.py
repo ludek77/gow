@@ -5,6 +5,7 @@ from ui.engine.Engine import Engine
 from ui.engine.TurnProcessor import TurnProcessor
 from ui.engine.MapProcessor import MapProcessor
 from ui.engine.CommandValidator import CommandValidator
+from encodings import unicode_escape
 
 class TestBase(TestCase):
     
@@ -96,3 +97,16 @@ class TestBase(TestCase):
             field = Field.objects.get(game=turn.game, pk=key)
             result.append(field.name)
         self.assertEqual(expectedEscapes,result)
+        
+    def setAssertEscape(self, turn, fieldName, escapeName, escapes, message=None):
+        mapProcessor = MapProcessor(turn)
+        command = Command.objects.get(unit__turn=turn, unit__field__name=fieldName)
+        field = Field.objects.get(game=turn.game, name=escapeName)
+        self.assertEqual(mapProcessor.setPriorityEscape(command, field), message)
+        result = []
+        keys = command.escape.split(',')
+        for key in keys:
+            field = Field.objects.get(game=turn.game, pk=key)
+            result.append(field.name)
+        self.assertEqual(escapes, result)
+        
