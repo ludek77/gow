@@ -85,7 +85,7 @@ function renderUnit(lat, lng, upk, fpk, clr, uType) {
 	var markerIcon = L.icon({
 	    iconUrl: unitTypes[uType][1],
 	    iconAnchor: [unitTypes[uType][2]/2, unitTypes[uType][3]/2],
-	    className: 'u-fpk-'+fpk
+	    className: 'u-fpk-'+fpk+' u-tp-'+uType
 	});
 	renderUnitElement(lat, lng, upk, fpk, clr, markerIcon);
 	if(lng > 180) renderUnitElement(lat, lng-360, upk, fpk, clr, markerIcon);
@@ -116,7 +116,7 @@ function resizeIcons() {
 		var height = 0;
 		var classList = item.className.split(/\s+/);
 		for(var i = 0; i < classList.length; i++) {
-			if(classList[i].startsWith('u-id-')) {
+			if(classList[i].startsWith('u-tp-')) {
 				var id = classList[i].substring(5);
 				width = unitTypes[id][2];
 				height = unitTypes[id][3];

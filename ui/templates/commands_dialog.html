@@ -1,7 +1,11 @@
 {% if country and turn %}
 <script>
 	$(document).ready(function() {
-		$('#commands').dialog({dialogClass:commands-dialog, position:{my:"right top",at:"right-20 top+70", of:"body"}});
+		$('#commands').dialog({dialogClass:commands-dialog,
+			minWidth: 300,
+			maxWidth: 500,
+			width: 500,
+			position:{my:"right top",at:"right-20 top+70", of:"body"}});
 	});
 </script>
 {% endif %}
