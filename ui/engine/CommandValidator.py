@@ -4,6 +4,8 @@ import json
 class CommandValidator:
     
     def getError(self, key):
+        if key is None:
+            return None
         return {
             'ok': 'Success',
             'escaped': 'Under attack, escaping',

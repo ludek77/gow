@@ -156,7 +156,7 @@ function clickTarget(e,pk) {
 		if(commandArgs[i] == null) commandArgs[i] = 0;
 	}
 	var ct = $('#unit-command').val();
-	$.get('unit_command/?f='+selectedField+'&ct='+ct+'&args='+commandArgs, function(data) {
+	$.get('/ui/unit_command/?f='+selectedField+'&ct='+ct+'&args='+commandArgs, function(data) {
 		var json = $.parseJSON(data);
 		renderFieldDialog(json);
 		renderCountryDialog();
@@ -174,7 +174,7 @@ function clickEscape(e,pk) {
 }
 
 function setupGameList(selectedGame) {
-	$.get('game_list',function(data){
+	$.get('/ui/game_list',function(data){
 		var json = $.parseJSON(data);
 		for(var i in json) {
 		     var id = json[i].id;
@@ -186,7 +186,7 @@ function setupGameList(selectedGame) {
 }
 
 function setupGame() {
-	$.get('game_setup',function(data){
+	$.get('/ui/game_setup',function(data){
 		var json = $.parseJSON(data);
 		unitTypes = {};
 		for(var i in json.unitTypes) {
