@@ -55,6 +55,7 @@ class Country(models.Model):
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     color = models.CharField(max_length=10)
+    fgcolor = models.CharField(max_length=10)
     lat = models.DecimalField(max_digits=5, decimal_places=2)
     lng = models.DecimalField(max_digits=5, decimal_places=2)
     owner = models.ForeignKey(User, null=True, default=None, blank=True, on_delete=models.CASCADE)

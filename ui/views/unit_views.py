@@ -29,9 +29,11 @@ def unitResponse(request, fieldId,message=None):
         if len(city) == 1:
             output += ',"country":"'+city[0].country.name+'"'
             output += ',"fieldColor":"'+city[0].country.color+'"'
+            output += ',"fieldTextColor":"'+city[0].country.fgcolor+'"'
         if selectedField.home is not None:
             output += ',"home":"'+selectedField.home.name+'"'
             output += ',"homeColor":"'+selectedField.home.color+'"'
+            output += ',"homeTextColor":"'+selectedField.home.fgcolor+'"'
     if selectedTurn is not None and selectedTurn.open:
         output += ',"open":true'
     else:
@@ -39,6 +41,7 @@ def unitResponse(request, fieldId,message=None):
     if selectedUnit is not None:
         output += ',"unitCountry":"'+selectedUnit.country.name+'"'
         output += ',"unitColor":"'+selectedUnit.country.color+'"'
+        output += ',"unitTextColor":"'+selectedUnit.country.fgcolor+'"'
         output += ',"unitType":"'+selectedUnit.unitType.name+'"'
         
     if message is not None:

@@ -20,13 +20,16 @@ body {
 }
 
 #commands-content {
-	width: 400px;
+	width: 470px;
 	height: 500px;
 }
 
 .country {
 	font-weight: bold;
 	text-align: center;
+	border-radius: 10px;
+	padding: 5px;
+	margin-bottom: 10px;
 }
 
 .add-unit-command {
@@ -59,6 +62,10 @@ body {
 	margin-top: 15px;
 }
 
+.unit-target {
+	padding: 5px;
+}
+
 #city-command-result {
 	color: red;
 }
@@ -79,11 +86,24 @@ body {
 
 .home {
 	text-align:center;
+	font-weight: normal;
+	border-radius: 5px;
+}
+
+.units {
+	text-align: left;
+}
+
+.cities {
+	text-align: left;
+	background-color: white;
+	border-radius: 5px;
 }
 
 .unit {
 	text-align:center;
 	margin-top: 10px;
+	border-radius: 10px;
 }
 
 .unit-country {
@@ -93,6 +113,7 @@ body {
 
 .cities {
 	font-style: italic;
+	font-weight: normal;
 }
 
 .command-target {

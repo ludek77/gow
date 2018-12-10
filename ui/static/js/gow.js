@@ -44,14 +44,14 @@ function renderFieldDialog(json) {
 		if(json.country) {
 			$('#field-dialog .country').show();
 			$('#field-dialog .country-name').text(json.country);
-			$('#field-dialog .country-color').css('background-color',json.fieldColor);
+			$('#field-dialog .country-color').css('background-color',json.fieldColor).css('color',json.fieldTextColor);
 		} else {
 			$('#field-dialog .country').hide();
 		}
 		if(json.home) {
 			$('#field-dialog .home').show();
 			$('#field-dialog .home-name').text(json.home);
-			$('#field-dialog .home-color').css('background-color',json.homeColor);
+			$('#field-dialog .home-color').css('background-color',json.homeColor).css('color',json.homeTextColor);
 		} else {
 			$('#field-dialog .home').hide();
 		}
@@ -59,7 +59,7 @@ function renderFieldDialog(json) {
 			$('#field-dialog .unit').show();
 			$('#field-dialog .unit-country').text(json.unitCountry);
 			$('#field-dialog .unit-type').text(json.unitType);
-		    $('#field-dialog .unit-color').css('background-color',json.unitColor);
+		    $('#field-dialog .unit-color').css('background-color',json.unitColor).css('color',json.unitTextColor);
 		} else {
 			$('#field-dialog .unit').hide();
 		}
@@ -223,13 +223,17 @@ function renderCountryDialog() {
 		var json= $.parseJSON(data);
 		for(var c in json.countries) {
 			country = json.countries[c];
-			$('#commands-content').append('<div class="country" style="background-color:'+country.clr+'"">'+country.name+'</div>');
+			content = '<div class="country" style="background-color:'+country.clr+'""><span>'+country.name+'</span>';
+			content += '<div class="units">';
 			for(var i in country.units) {
-				appendUnitCommand(country.units[i],json.open, country.clr);
+				content += appendUnitCommand(country.units[i],json.open, country.clr);
 			}
+			content += '</div><div class="cities">';
 			for(var i in country.cities) {
-				appendCityCommand(country.cities[i],json.open, country.clr);
+				content += appendCityCommand(country.cities[i],json.open, country.clr);
 			}
+			content += '</div></div>';
+			$('#commands-content').append(content);
 		}
 		
 		$('#commands .unit-prio').click(function() {
@@ -266,10 +270,10 @@ function appendUnitCommand(unit,open,clr) {
 	//content += '<span class="unit-type">'+unitType+'</span>';
 	content += '<span class="command res_'+unit.res+'">'+unit.command+'</span>';
 	for(var i in unit.args) {
-		content += '<span>'+unit.args[i]+'</span>'
+		content += '<span class="unit-target">'+unit.args[i]+'</span>'
 	}
 	content += '</div>';
-	$('#commands-content').append(content);
+	return content;
 }
 
 function appendCityCommand(city,open,clr) {
@@ -283,5 +287,5 @@ function appendCityCommand(city,open,clr) {
 	content += '<span class="command-target" onclick="focusLatLng('+city.latlng[0]+','+city.latlng[0]+');onClickField('+city.id+','+city.fieldId+')">'+city.field+'</span>';
 	content += '<span class="command res_'+city.res+'">Add '+city.newUnit+'</span>';
 	content += '</div>';
-	$('#commands-content').append(content);
+	return content;
 }
