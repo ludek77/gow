@@ -69,13 +69,15 @@ def renderCountry(country, turn):
     if turn is not None:
         cmds = CityCommand.objects.filter(city__country=country, city__turn=turn).order_by('priority')
         separator = ''
-        for row in cmds:
+        for cmd in cmds:
             output += separator+'{'
-            output += '"id":'+str(row.city.pk)
-            output += ',"newUnit":"'+str(row.newUnitType.name)+'"'
-            output += ',"fieldId":'+str(row.city.field.pk)
-            output += ',"field":"'+row.city.field.name+'"'
-            output += ',"latlng":['+str(row.city.field.lat)+','+str(row.city.field.lng)+']'
+            output += '"id":'+str(cmd.city.pk)
+            output += ',"newUnit":"'+str(cmd.newUnitType.name)+'"'
+            output += ',"fieldId":'+str(cmd.city.field.pk)
+            output += ',"field":"'+cmd.city.field.name+'"'
+            output += ',"latlng":['+str(cmd.city.field.lat)+','+str(cmd.city.field.lng)+']'
+            if cmd.result is not None:
+                output += ',"res":"'+cmd.result+'"'
             output += '}'
             separator = ','
     output += ']'

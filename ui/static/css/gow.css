@@ -38,7 +38,11 @@ body {
 }
 
 .res_ok {
-	background: url('../icon/result/ok.jpeg') no-repeat;
+	background: url('../icon/result/ok.png') no-repeat;
+}
+
+.res_not-used {
+	background: url('../icon/result/not-used.png') no-repeat;
 }
 
 .res_removed {
@@ -63,15 +67,8 @@ body {
 	font-weight: bold;
 }
 
-.add-unit {
-	background-size: 16px;
-	display: inline-block;
-	width: 16px;
-	height: 16px;
-}
-
 .add-Ship {
-	background: url('../icon/ship.png');
+	background: url('../icon/ship.png') no-repeat;
 	background-size: 16px;
 }
 

@@ -281,7 +281,7 @@ function appendCityCommand(city,open,clr) {
 		content += '<input class="city-prio button-icon last" type="button"  id="'+city.fieldId+'_+9"/>'
 	}
 	content += '<span class="command-target" onclick="focusLatLng('+city.latlng[0]+','+city.latlng[0]+');onClickField('+city.id+','+city.fieldId+')">'+city.field+'</span>';
-	content += '<span class="add-unit add-'+city.newUnit+'"></span>';
+	content += '<span class="command res_'+city.res+'">Add '+city.newUnit+'</span>';
 	content += '</div>';
 	$('#commands-content').append(content);
 }

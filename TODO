@@ -1,6 +1,5 @@
 
 show previous/next move
-  add functionality
   test that closed commands can not be changed
   test that you see all commands
   test that you don't see current commands

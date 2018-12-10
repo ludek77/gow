@@ -503,6 +503,7 @@ class Engine:
                 newCommand.unit = newUnit
                 self.dropUnit(newCommand, cmd.city.field)
                 cmd.result = 'ok'
+                cmd.save()
                 unitPoints -= cmd.newUnitType.unitPoints
    
     def removeUnits(self, country, unitPoints):
@@ -549,9 +550,15 @@ class Engine:
     
     def saveResults(self):
         self.log('Saving results')
+        # save empty unit commands
         for field in self.thisMap:
             cmd = self.thisMap[field]
             if cmd.result is None:
                 self.setResult(cmd, 'ok')
             cmd.save()
-        
+        # save not processed city commands
+        cmds = CityCommand.objects.filter(city__turn=self.turn)
+        for cmd in cmds:
+            if cmd.result is None:
+                cmd.result = 'not-used'
+                cmd.save()
