@@ -1,13 +1,18 @@
+*** INSTALL AND CONNECT HEROKU ***
+
 sudo snap install heroku --classic
 
 heroku login
 
 
-------
+*** CREATE HEROKU APP ***
 
 heroku create gow-ui --region eu
-
 git push heroku master
 
-heroku ps:scale web=1
+# not needed
+# heroku ps:scale web=1
 
+
+*** migrate database ***
+sh initdb.sh
