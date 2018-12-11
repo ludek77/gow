@@ -171,6 +171,7 @@ def city_command_rest(request):
     fieldId = request.GET.get("f")
     ctid = request.GET.get("ct")
     args = request.GET.get("args")
+    validator = CommandValidator()
     message = None
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
@@ -185,8 +186,11 @@ def city_command_rest(request):
         else:
             newUnitType = UnitType.objects.get(pk=ctid)
             selectedCommand.newUnitType = newUnitType
+            #validate command
+            validator.validateCityCommand(selectedCommand)
+            #save command
             selectedCommand.save()
     else:
-        message = 'Turn closed, please refresh'
+        message = 'fail.turn-closed'
         
     return unitResponse(request, fieldId, message)

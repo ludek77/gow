@@ -1,7 +1,5 @@
 
 show previous/next move
-  test possibility to add ship to ground
-  test add/remove unit results
   test that closed commands can not be changed
   test that you see all commands
   test that you don't see current commands

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.core.management import call_command
-from ui.models import Game, Turn, Unit, City, Command, CommandType, Field
+from ui.models import Game, Turn, Unit, City, Command, CommandType, Field, CityCommand, UnitType
 from ui.engine.Engine import Engine
 from ui.engine.TurnProcessor import TurnProcessor
 from ui.engine.MapProcessor import MapProcessor
@@ -76,6 +76,14 @@ class TestBase(TestCase):
         command.args = args
         command.save()
         result = self.validator.validateCommand(command)
+        self.assertEqual(result, expectedResult)
+        
+    def setAssertCityCommand(self, turn, fieldName, unitTypeName, expectedResult=None):
+        command = CityCommand.objects.get(city__turn=turn, city__field__name=fieldName)
+        ut = UnitType.objects.get(name=unitTypeName)
+        command.newUnitType = ut
+        command.save()
+        result = self.validator.validateCityCommand(command)
         self.assertEqual(result, expectedResult)
         
     def assertNextTurn(self, turn, turnName, message=None):

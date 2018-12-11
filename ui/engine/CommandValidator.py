@@ -12,6 +12,7 @@ class CommandValidator:
             'destroyed': 'Unable to escape, destroyed',
             'removed': 'Not enough cities, removed',
             'not-used': 'Not used',
+            'fail.cannot-place': 'Unit can not be placed here',
             'fail.not-strongest': 'Not strongest attack to target',
             'fail.not-stronger-than-opposite': 'Not stronger than counter attack',
             'fail.defence-stronger': 'Attack not stronger than defence',
@@ -171,3 +172,8 @@ class CommandValidator:
         command.result = result
         return result
 
+    def validateCityCommand(self, command):
+        result = None
+        if not self.isReachable(command.newUnitType, command.city.field):
+            result = 'fail.cannot-place'
+        return result

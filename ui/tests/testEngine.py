@@ -24,6 +24,11 @@ class TestEngine(TestBase):
         self.assertNoUnit(turn, 'Spain')
         self.assertNoUnit(turn, 'France')
         self.assertNoUnit(turn, 'London')
+        # verify setting units
+        self.setAssertCityCommand(turn,'London','Army', None)
+        self.setAssertCityCommand(turn,'London','Ship', None)
+        self.setAssertCityCommand(turn,'Ukraine','Ship', 'fail.cannot-place')
+        self.setAssertCityCommand(turn,'Ukraine','Army', None)
         # calculate first turn
         turn = self.assertNextTurn(turn, '2000', 'Engine: Start game')
         # verify units
