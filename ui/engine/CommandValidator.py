@@ -1,4 +1,4 @@
-from ui.models import Field, Unit, UnitType
+from ui.models import Field, Unit, UnitType, Command
 import json
 
 class CommandValidator:
@@ -11,6 +11,7 @@ class CommandValidator:
             'escaped': 'Under attack, escaping',
             'destroyed': 'Unable to escape, destroyed',
             'removed': 'Not enough cities, removed',
+            'not-used': 'Not used',
             'fail.not-strongest': 'Not strongest attack to target',
             'fail.not-stronger-than-opposite': 'Not stronger than counter attack',
             'fail.defence-stronger': 'Attack not stronger than defence',
@@ -38,7 +39,10 @@ class CommandValidator:
         result = ''
         separator = ''
         for key in keys:
-            result += separator+self.getResultFromKey(key, command.commandType.template)
+            if type(command) is Command:
+                result += separator+self.getResultFromKey(key, command.commandType.template)
+            #else:
+            #    result += separator+self.getError(key)
             separator = '<br/>'
         return result
              

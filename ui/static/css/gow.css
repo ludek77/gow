@@ -155,17 +155,17 @@ body {
 }
 
 .first {
-	background: url('../icon/order/first.jpeg') no-repeat;
+	background: url('../icon/order/first.png') no-repeat;
 }
 
 .last {
-	background: url('../icon/order/last.jpeg') no-repeat;
+	background: url('../icon/order/last.png') no-repeat;
 }
 
 .prev {
-	background: url('../icon/order/up.jpeg') no-repeat;
+	background: url('../icon/order/up.png') no-repeat;
 }
 
 .next {
-	background: url('../icon/order/down.jpeg') no-repeat;
+	background: url('../icon/order/down.png') no-repeat;
 }
