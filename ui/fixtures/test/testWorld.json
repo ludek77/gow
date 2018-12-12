@@ -1,5 +1,5 @@
 [
-	{"model": "ui.game", "pk": 1, "fields": {"name": "TestWorld", "tileServer": "http://tileserver.maptiler.com/nasa/{z}/{x}/{y}.jpg", "winPoints": 5, "defaultCommandType": 1, "turnMinutes": 5, "user": [1]}}, 
+	{"model": "ui.game", "pk": 1, "fields": {"name": "TestWorld", "tileServer": "http://tileserver.maptiler.com/nasa/{z}/{x}/{y}.jpg", "winPoints": 5, "defaultCommandType": 1, "turnMinutes": 1440, "user": [1]}}, 
 	
 	{"model": "ui.country", "pk": 1, "fields": {"name": "Spain", "game": 1, "color": "yellow", "fgcolor": "black", "lat": "50.00", "lng": "10.00", "owner": 1}}, 
 	{"model": "ui.country", "pk": 2, "fields": {"name": "Russia", "game": 1, "color": "red", "fgcolor": "white", "lat": "50.00", "lng": "10.00", "owner": null}}, 

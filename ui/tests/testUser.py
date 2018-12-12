@@ -13,6 +13,9 @@ class TestUser(TestCase):
         
         response = self.client.get('/ui/')
         self.assertEqual(response.status_code, 200)
+        
+        response = self.client.get('/')
+        self.assertEqual(response.status_code, 200)
 
     def test_login(self):
         response = self.client.post('/ui/login/', {'username': 'unknown', 'password': 'unknown'})

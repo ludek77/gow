@@ -9,15 +9,15 @@ function login() {
 }
 
 function logout() {
-	$.get("logout", function(data) {location.reload()});
+	$.get("logout/", function(data) {location.reload()});
 }
 
 function previousTurn() {
-	$.get('turn_previous', function(data) {location.reload()});
+	$.get('/ui/turn_previous/', function(data) {location.reload()});
 }
 
 function nextTurn() {
-	$.get('turn_next', function(data) {location.reload()});
+	$.get('/ui/turn_next/', function(data) {location.reload()});
 }
 
 var mapClickHandler = null;
@@ -174,7 +174,7 @@ function clickEscape(e,pk) {
 }
 
 function setupGameList(selectedGame) {
-	$.get('/ui/game_list',function(data){
+	$.get('/ui/game_list/',function(data){
 		var json = $.parseJSON(data);
 		for(var i in json) {
 		     var id = json[i].id;
@@ -186,7 +186,7 @@ function setupGameList(selectedGame) {
 }
 
 function setupGame() {
-	$.get('/ui/game_setup',function(data){
+	$.get('/ui/game_setup/',function(data){
 		var json = $.parseJSON(data);
 		unitTypes = {};
 		for(var i in json.unitTypes) {
@@ -218,12 +218,12 @@ function setupGame() {
 }
 
 function renderCountryDialog() {
-	$.get('country_setup/',function(data){
+	$.get('/ui/country_setup/',function(data){
 		$('#commands-content').html('');
 		var json= $.parseJSON(data);
 		for(var c in json.countries) {
 			country = json.countries[c];
-			content = '<div class="country" style="background-color:'+country.clr+'""><span>'+country.name+'</span>';
+			content = '<div id="country-'+country.pk+'" class="country" style="background-color:'+country.clr+';color:'+country.fgclr+'"><span>'+country.name+'</span>';
 			content += '<div class="units">';
 			for(var i in country.units) {
 				content += appendUnitCommand(country.units[i],json.open, country.clr);
@@ -259,7 +259,7 @@ function renderCountryDialog() {
 
 function appendUnitCommand(unit,open,clr) {
 	var unitType = unitTypes[unit.type][4];
-	content  = '<div class="units" style="background-color:'+clr+'">';
+	content  = '<div class="units" style="background-color:'+clr+'" title="'+unit.txt+'">';
 	if(open) {
 		content += '<input class="unit-prio button-icon first" type="button" id="'+unit.fieldId+'_-9"/>'
 		content += '<input class="unit-prio button-icon prev" type="button"  id="'+unit.fieldId+'_-1"/>'

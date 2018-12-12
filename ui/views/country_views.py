@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from ui.models import Game, Turn, Field, UnitType, City, Unit, Country, CityCommand, Command
+from ui.engine.CommandValidator import CommandValidator
 
 @login_required
 def country_setup_rest(request):
@@ -34,8 +35,10 @@ def renderCountry(country, turn):
     output = '{'
     output += '"name":"'+country.name+'"'
     output += ',"clr":"'+country.color+'"'
+    output += ',"fgclr":"'+country.fgcolor+'"'
     output += ',"pk":'+str(country.pk)+''
     
+    validator = CommandValidator()
     output += ',"units":['
     if turn is not None:
         commands = Command.objects.filter(unit__turn=turn,unit__country=country).order_by('removePriority')
@@ -60,7 +63,12 @@ def renderCountry(country, turn):
                     aseparator = ','
                 output += ',"args":['+args+']'
             if command.result is not None:
-                output += ',"res":"'+command.result+'"'
+                result = command.result
+                idx = result.find('.')
+                if idx > 0:
+                    result = result[:idx]
+                output += ',"res":"'+result+'"'
+                output += ',"txt":"'+validator.getResult(command)+'"'
             output += '}'
             separator = ','
     output += ']'
