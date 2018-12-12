@@ -68,7 +68,9 @@ def renderCountry(country, turn):
                 if idx > 0:
                     result = result[:idx]
                 output += ',"res":"'+result+'"'
-                output += ',"txt":"'+validator.getResult(command)+'"'
+                text = validator.getResult(command)
+                if text is not None and text != '':
+                    output += ',"txt":"'+text+'"'
             output += '}'
             separator = ','
     output += ']'

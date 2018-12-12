@@ -259,7 +259,11 @@ function renderCountryDialog() {
 
 function appendUnitCommand(unit,open,clr) {
 	var unitType = unitTypes[unit.type][4];
-	content  = '<div class="units" style="background-color:'+clr+'" title="'+unit.txt+'">';
+	var cmdResult = '';
+	if(unit.txt) {
+		cmdResult = unit.txt;
+	}
+	content  = '<div class="units" style="background-color:'+clr+'" title="'+cmdResult+'">';
 	if(open) {
 		content += '<input class="unit-prio button-icon first" type="button" id="'+unit.fieldId+'_-9"/>'
 		content += '<input class="unit-prio button-icon prev" type="button"  id="'+unit.fieldId+'_-1"/>'
