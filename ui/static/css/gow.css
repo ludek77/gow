@@ -14,14 +14,55 @@ body {
 	flex: 0 1 auto;
 }
 
+.noTitle .ui-dialog-titlebar {
+	display: none;
+}
+
 #map {
 	flex: 1 1 auto;
 	z-index: 0;
 }
 
+#welcome-logo {
+	position: absolute;
+	left: 40%;
+	top: 30%;
+	font-size: 100px;
+	z-index: 999;
+	color: white;
+}
+
 #commands-content {
 	width: 470px;
 	height: 500px;
+}
+
+.username {
+	width: 110px;
+}
+
+.password {
+	width: 110px;
+}
+
+.login-button {
+	cursor: pointer;
+	border: none;
+	width:  16px;
+	height: 16px;
+	background: url('../icon/result/ok.png') no-repeat;
+}
+
+.logout-button {
+	cursor: pointer;
+	border: none;
+	width:  16px;
+	height: 16px;
+	background: url('../icon/result/fail.png') no-repeat;
+}
+
+#select-game {
+	width: 220px;
 }
 
 .country {

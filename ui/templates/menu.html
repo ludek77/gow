@@ -2,19 +2,20 @@
 	$(document).ready(function() {
 		$('#login-user').click(function(e) {login()});
 		$('#logout-btn').click(function(e) {logout()});
+		$('#menu').dialog({dialogClass:'noTitle', height:70, width:300, position:{my:"left top",at:"left+60 top+10", of:"body"}});
 	});
 </script>
 
 {% if request.user.is_authenticated %}
 	{% include "games.html" %}
-	<button id="logout-btn">Logout {{ request.user.username }} </button>
+	<input id="logout-btn" class="logout-button" type="button" />
 	{% include "commands_dialog.html" %}
 {% else %}
 	<form id="login-form">
 		{% csrf_token %}
-		<input type="text" name="username"/>
-		<input type="password" name="password"/>
-		<input id="login-user" type="button" value="Login"/>
+		<input type="text" class="username" name="username"/>
+		<input type="password" class="password" name="password"/>
+		<input id="login-user" class="login-button" type="button" />
 		<span id="login-error"></span>
 	</form>
 {% endif %}

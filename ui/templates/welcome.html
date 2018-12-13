@@ -1,1 +1,12 @@
-Welcome to GoW
+<script>
+	map = L.map('map').setView([40,0], 4);
+	L.tileLayer('http://tileserver.maptiler.com/nasa/{z}/{x}/{y}.jpg', {minZoom:3, maxZoom: 4}).addTo(map);
+	map.on('zoomend', function() {resizeIcons()});
+	map.on('click', function(e) {onMapClick(e)});
+	map.on('moveend', function(e) {centerMap()});
+	
+	$(document).ready(function() {setupGame()});
+</script>
+<div id="welcome-logo">
+Diplomacie
+</div>
