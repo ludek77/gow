@@ -21,28 +21,39 @@ def unitResponse(request, fieldId,message=None):
     
     output = '{'
 
-    # public data
-    output += '"field":"'+selectedField.name+'"'
+    # field public data
+    output += '"field":{'
+    output += '"name":"'+selectedField.name+'"'
+    output += ',"ll":['+str(selectedField.lat)+','+str(selectedField.lng)+']'
     output += ',"type":"'+selectedField.type.name+'"'
     if selectedField.isCity:
         city = City.objects.filter(turn=selectedTurn, field=selectedField)
         if len(city) == 1:
-            output += ',"country":"'+city[0].country.name+'"'
-            output += ',"fieldColor":"'+city[0].country.color+'"'
-            output += ',"fieldTextColor":"'+city[0].country.fgcolor+'"'
+            output += ',"owner":{'
+            output += '"country":"'+city[0].country.name+'"'
+            output += ',"color":"'+city[0].country.color+'"'
+            output += ',"textColor":"'+city[0].country.fgcolor+'"'
+            output += '}'
         if selectedField.home is not None:
-            output += ',"home":"'+selectedField.home.name+'"'
-            output += ',"homeColor":"'+selectedField.home.color+'"'
-            output += ',"homeTextColor":"'+selectedField.home.fgcolor+'"'
+            output += ',"home":{'
+            output += '"name":"'+selectedField.home.name+'"'
+            output += ',"color":"'+selectedField.home.color+'"'
+            output += ',"textColor":"'+selectedField.home.fgcolor+'"'
+            output += '}'
+    output += '}'
+    
     if selectedTurn is not None and selectedTurn.open:
         output += ',"open":true'
     else:
         output += ',"open":false'
+        
     if selectedUnit is not None:
-        output += ',"unitCountry":"'+selectedUnit.country.name+'"'
-        output += ',"unitColor":"'+selectedUnit.country.color+'"'
-        output += ',"unitTextColor":"'+selectedUnit.country.fgcolor+'"'
-        output += ',"unitType":"'+selectedUnit.unitType.name+'"'
+        output += ',"unit":{'
+        output += '"country":"'+selectedUnit.country.name+'"'
+        output += ',"color":"'+selectedUnit.country.color+'"'
+        output += ',"textColor":"'+selectedUnit.country.fgcolor+'"'
+        output += ',"type":"'+selectedUnit.unitType.name+'"'
+        output += '}'
         
     if message is not None:
         output += ',"message":"'+message+'"'
@@ -62,34 +73,41 @@ def unitResponse(request, fieldId,message=None):
             if len(cmd) == 1:
                 cmd = cmd.first()
                 # append command
-                output += ',"cmd":['+str(cmd.commandType.pk)+',['+cmd.commandType.template+'],['
+                output += ',"command":{'
+                output += '"pk":'+str(cmd.commandType.pk)
+                output += ',"name":"'+cmd.commandType.name+'"'
+                output += ',"template":['+cmd.commandType.template+']'
+                if cmd.result is not None:
+                    result = commandValidator.getResult(cmd)
+                    output += ',"result":"'+result+'"'
                 # append arguments
                 if cmd.args != '':
+                    output += ',"args":['
                     flds = cmd.args.split(',')
                     separator = ''
                     for fld in flds:
                         if fld != '0' and fld != '':
                             f = Field.objects.get(pk=fld)
-                            fpk = f.pk
-                            fname = f.name
+                            output += separator+'{'
+                            output += '"pk":'+str(f.pk)
+                            output += ',"name":"'+f.name+'"'
+                            output += ',"ll":['+str(f.lat)+','+str(f.lng)+']'
+                            output += '}'
                         else:
-                            fpk = 0
-                            fname = ''
-                        output += separator+'['+str(fpk)+',"'+fname+'"]'
+                            output += separator+'{0,"",[0,0]}'
                         separator = ','
-                output += ']'
-                result = ''
-                if cmd.result is not None:
-                    result = commandValidator.getResult(cmd)
-                output += ',"'+result+'"'
-                output += ']'
-                # append escape
+                    output += ']'
+                #append escape
                 if cmd.escape is not None:
                     escapes = cmd.escape.split(',')
                     if escapes[0] is not None and escapes[0] != '':
                         f = Field.objects.get(pk=escapes[0])
                         if f is not None:
-                            output += ',"esc":['+str(f.pk)+',"'+f.name+'"]'
+                            output += ',"escape":{'
+                            output += '"pk":'+str(f.pk)
+                            output += ',"name":"'+f.name+'"'
+                            output += '}'
+                output += "}"
             
             cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
             output += ',"cmds":['
@@ -108,17 +126,19 @@ def unitResponse(request, fieldId,message=None):
                 cityCommand = CityCommand.objects.filter(city=selectedCity)
                 if len(cityCommand) == 1:
                     cityCommand = cityCommand.first()
-                    output += ',"fcmd":"'+str(cityCommand.newUnitType.pk)+'"'
+                    output += ',"citycommand":{'
+                    output += '"pk":"'+str(cityCommand.newUnitType.pk)+'"'
                     if cityCommand.result is not None:
-                        output += ',"fresult":"'+commandValidator.getResult(cityCommand)+'"'
+                        output += ',"result":"'+commandValidator.getResult(cityCommand)+'"'
                     newTypes = UnitType.objects.filter(fieldTypes=selectedField.type)
                     output += ',"fcmds":['
                     separator = ''
                     for type in newTypes:
                         output += separator+'['+str(type.pk)+',"'+type.name+'"]'
                         separator = ','
-                    output += ']'    
+                    output += '}'    
     output += '}'
+#     print(output)
     return HttpResponse(output)
 
 @login_required

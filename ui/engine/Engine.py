@@ -57,6 +57,7 @@ class Engine:
             return self.getFieldBuffer[pk]
         # calculate result
         fields = Field.objects.filter(game=self.game, pk=pk)
+        result = None
         if len(fields) == 1:
             result = fields.first()
         # store and return result

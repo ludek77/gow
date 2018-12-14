@@ -39,40 +39,42 @@ function defaultClickField(e,pk) {
 }
 
 function renderFieldDialog(json) {
-	openDialog('/ui/field_dialog', 'Field', function() {
-		setDialogTitle(json.field + ': ' + json.type);
-		if(json.country) {
+	openDialog('/ui/field_dialog/', 'Field', function() {
+		setDialogTitle(json.field.name + ': ' + json.field.type);
+		if(json.field.owner) {
 			$('#field-dialog .country').show();
-			$('#field-dialog .country-name').text(json.country);
-			$('#field-dialog .country-color').css('background-color',json.fieldColor).css('color',json.fieldTextColor);
+			$('#field-dialog .country-name').text(json.field.owner.country);
+			$('#field-dialog .country-color').css('background-color',json.field.owner.color).css('color',json.field.owner.textColor);
 		} else {
 			$('#field-dialog .country').hide();
 		}
-		if(json.home) {
+		if(json.field.home) {
 			$('#field-dialog .home').show();
-			$('#field-dialog .home-name').text(json.home);
-			$('#field-dialog .home-color').css('background-color',json.homeColor).css('color',json.homeTextColor);
+			$('#field-dialog .home-name').text(json.field.home.name);
+			$('#field-dialog .home-color').css('background-color',json.field.home.color).css('color',json.field.home.textColor);
 		} else {
 			$('#field-dialog .home').hide();
 		}
-		if(json.unitType) {
+		if(json.unit) {
 			$('#field-dialog .unit').show();
-			$('#field-dialog .unit-country').text(json.unitCountry);
-			$('#field-dialog .unit-type').text(json.unitType);
-		    $('#field-dialog .unit-color').css('background-color',json.unitColor).css('color',json.unitTextColor);
+			$('#field-dialog .unit-country').text(json.unit.country);
+			$('#field-dialog .unit-type').text(json.unit.type);
+		    $('#field-dialog .unit-color').css('background-color',json.unit.color).css('color',json.unit.textColor);
 		} else {
 			$('#field-dialog .unit').hide();
 		}
 		commandArgs = [];
-		if(json.cmds && json.cmd) {
-			for(var i = 0; i < json.cmd[2].length; i++) {
-				commandArgs[i] = json.cmd[2][i][0];
+		if(json.cmds && json.command) {
+			if(json.command.args) {
+				for(var i = 0; i < json.command.args.length; i++) {
+					commandArgs[i] = json.command.args[i].pk;
+				}
 			}
 			$('#field-dialog .unit-owner-only').show();
 			setOptions($('#unit-command'), json.cmds);
-			$('#unit-command').val(json.cmd[0]).prop('disabled',!json.open);
-			$('#unit-command-result').html(json.cmd[3]);
-			firstEmpty = setupArguments(json.cmd[1],json.cmd[2],json.open);
+			$('#unit-command').val(json.command.pk).prop('disabled',!json.open);
+			$('#unit-command-result').html(json.command.result);
+			firstEmpty = setupArguments(json.command.template,json.command.args,json.open);
 			if(firstEmpty != null) {
 				selectTarget(firstEmpty);
 			}
@@ -80,9 +82,9 @@ function renderFieldDialog(json) {
 			$('#field-dialog .unit-owner-only').hide();
 			$('#unit-command').html('');
 		}
-		if(json.esc) {
+		if(json.command.escape) {
 			$('#field-dialog .escape').show();
-			$('#field-dialog .escape-field').text(json.esc[1]);
+			$('#field-dialog .escape-field').text(json.command.escape.name);
 		} else {
 			$('#field-dialog .escape').hide();
 			$('#field-dialog .escape-field').html('');
@@ -90,11 +92,11 @@ function renderFieldDialog(json) {
 		if(json.message) {
 			$('#unit-command-result').html(json.message);
 		}
-		if(json.fcmd) {
+		if(json.citycommand) {
 			$('#field-dialog .field-owner-only').show();
-			setOptions($('#field-command'), json.fcmds);
-			$('#field-command').val(json.fcmd).prop('disabled',!json.open);
-			$('#field-command-result').html(json.fresult);
+			setOptions($('#field-command'), json.citycommand.fcmds);
+			$('#field-command').val(json.citycommand.pk).prop('disabled',!json.open);
+			$('#field-command-result').html(json.citycommand.result);
 		} else {
 			$('#field-dialog .field-owner-only').hide();
 		}
@@ -107,7 +109,7 @@ function setupArguments(template,args,enabled) {
 	for(var i = 0; i < template.length; i++) {
 		if(template[i] != '') {
 			var arg = null;
-			if(args.length >= i) arg = args[i];
+			if(args && args.length >= i) arg = args[i];
 			empty = appendTarget(i,template[i][0],template[i][1],arg,enabled);
 			if(empty && firstEmpty == null) {
 				firstEmpty = i;
@@ -124,8 +126,8 @@ function appendTarget(index,text,param,arg,enabled) {
 	} else {
 		empty = false;
 	}
-	var target = '<span id="target-'+index+'">'+arg[1]+'</span>';;
-	if(enabled) target = '<span id="target-'+index+'" class="clickable" onclick="selectTarget('+index+')">'+arg[1]+'</span>';    
+	var target = '<span id="target-'+index+'">'+arg.name+'</span>';;
+	if(enabled) target = '<span id="target-'+index+'" class="clickable" onclick="selectTarget('+index+')">'+arg.name+'</span>';    
 	$('#unit-command-targets')
 		.append('<div class="unit-param">')
 		.append('<span class="label">'+text+'</span>')
@@ -160,12 +162,16 @@ function clickTarget(e,pk) {
 		var json = $.parseJSON(data);
 		renderFieldDialog(json);
 		renderCountryDialog();
+		hideCommand(selectedField);
+		if(json.field && json.command.args && json.command.args[0]) {
+			renderCommand(json.field.ll[0],json.field.ll[1],json.command.args[0].ll[0],json.command.args[0].ll[1],json.unit.color,json.command.name,selectedField);
+		}
 	});
 	fieldClickHandler = defaultClickField;
 }
 
 function clickEscape(e,pk) {
-	$.get('unit_command/?f='+selectedField+'&ct=esc&args='+pk, function(data) {
+	$.get('/ui/unit_command/?f='+selectedField+'&ct=esc&args='+pk, function(data) {
 		var json = $.parseJSON(data);
 		renderFieldDialog(json);
 		renderCountryDialog();
@@ -192,6 +198,13 @@ function setupGame() {
 		for(var i in json.unitTypes) {
 			unitTypes[json.unitTypes[i][0]] = json.unitTypes[i];
 		}
+		for(var i in json.units) {
+			var unit = json.units[i];
+			renderUnit(unit.latlng[0],unit.latlng[1], unit.id, unit.fid, unit.clr, unit.type);
+			if(unit.tgt) {
+				renderCommand(unit.latlng[0],unit.latlng[1],unit.tgt[0],unit.tgt[1],unit.clr,unit.cmd,unit.fid);
+			}
+		}
 		for(var i in json.paths) {
 			var ll1 = json.paths[i][0];
 			var ll2 = json.paths[i][1];
@@ -207,10 +220,6 @@ function setupGame() {
 			} else {
 		    	renderField(field.latlng[0],field.latlng[1], field.id);
 		    }
-		}
-		for(var i in json.units) {
-			var unit = json.units[i];
-			renderUnit(unit.latlng[0],unit.latlng[1], unit.id, unit.fid, unit.clr, unit.type);
 		}
 		
 		renderCountryDialog();

@@ -6,6 +6,7 @@
 				if(json.message) displayMessage(json.message);
 				renderFieldDialog(json);
 				renderCountryDialog();
+				hideCommand(selectedField);
 			});
 		});
 		$("#field-command").change(function() {

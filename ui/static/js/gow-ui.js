@@ -42,6 +42,41 @@ function renderPath(lat1, lng1, lat2, lng2, pk1, pk2) {
 	if(lng1 < 180) renderPathElements(lat1, lng1+360, lat2, lng2+360, pk1, pk2);
 }
 
+function renderCommandElement(lat1,lng1,lat2,lng2, clr, cmd, pk) {
+	L.polyline([[lat1,lng1],[lat2,lng2]], {color: clr, opacity:0.5, weight: 25, className: 'c-id-'+pk}).addTo(map);
+	var markerIcon = L.icon({
+	    iconUrl: '/static/icon/command/'+cmd+'.png',
+	    iconAnchor: [8, 8],
+	    className: 'c-fpk-'+pk
+	});
+	lat = lat1+(lat2-lat1)/2;
+	lng = lng1+(lng2-lng1)/2;
+	L.marker([lat,lng], {icon: markerIcon}).bindTooltip(cmd).on('click', function(e){
+		onClickField(e,pk);
+	}).addTo(map);
+}
+
+function renderCommandElements(lat1, lng1, lat2, lng2, clr, cmd, pk) {
+	if(lng2 - lng1 > 180) renderCommandElement(lat1, lng1, lat2, lng2-360, clr, cmd, pk);
+	else renderCommandElement(lat1, lng1, lat2, lng2, clr, cmd, pk);
+}
+
+function renderCommand(lat1, lng1, lat2, lng2, clr, cmd, pk) {
+	var tmp = null;
+	if(lng2 < lng1) {
+		tmp = lat1; lat1 = lat2; lat2 = tmp;
+		tmp = lng1; lng1 = lng2; lng2 = tmp;
+	}
+	renderCommandElements(lat1, lng1, lat2, lng2, clr, cmd, pk);
+	if(lng2 > 180) renderCommandElements(lat1, lng1-360, lat2, lng2-360, clr, cmd, pk);
+	if(lng1 < 180) renderCommandElements(lat1, lng1+360, lat2, lng2+360, clr, cmd, pk);
+}
+
+function hideCommand(fpk) {
+	$('.c-id-'+fpk).remove();
+	$('.c-fpk-'+fpk).remove();
+}
+
 function renderFieldElement(lat ,lng ,pk) {
 	L.circle([lat,lng], 50000, {color: emptyColor, className: 'f-id-'+pk}).on('click', function(e){
 		onClickField(e,pk);
