@@ -13,13 +13,13 @@ class TestRest(TestCase):
         
     def testAuthorizedRusRest(self):
         print('---- test Rus ----')
-        response = self.client.post('/ui/login/', {'username': 'rus', 'password': 'rus'})
+        response = self.client.post('/ui/login/', {'username': 'russia', 'password': 'russia456'})
         self.assertEqual(response.status_code, 200)
         self.doTestRest('ui/tests/rest/rus-auth')
         
     def testAuthorizedSpainRest(self):
         print('---- test Spain ----')
-        response = self.client.post('/ui/login/', {'username': 'spain', 'password': 'spain'})
+        response = self.client.post('/ui/login/', {'username': 'spain', 'password': 'spain258'})
         self.assertEqual(response.status_code, 200)
         self.doTestRest('ui/tests/rest/spain-auth')
         
