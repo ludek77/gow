@@ -118,3 +118,30 @@ class TestBase(TestCase):
             result.append(field.name)
         self.assertEqual(escapes, result)
         
+    def assertOrderCommand(self, turn, countryName, fieldName, priority): #priority: -9,-1,1,9
+        commands = CityCommand.objects.filter(city__turn=turn,city__country__name=countryName).order_by('priority')
+        processor = MapProcessor(turn)
+        cmd = CityCommand.objects.get(city__turn=turn,city__country__name=countryName,city__field__name=fieldName)
+        processor.orderCommand(cmd, priority, commands)
+
+    def assertOrderUnitCommand(self, turn, countryName, fieldName, priority): #priority: -9,-1,1,9
+        commands = Command.objects.filter(unit__turn=turn,unit__country__name=countryName).order_by('removePriority')
+        processor = MapProcessor(turn)
+        cmd = Command.objects.get(unit__turn=turn,unit__country__name=countryName,unit__field__name=fieldName)
+        processor.orderCommand(cmd, priority, commands)
+        
+    def assertAddCommands(self, turn, countryName, expectedResult):
+        cmds = CityCommand.objects.filter(city__turn=turn, city__country__name=countryName, city__field__home__name=countryName).order_by('priority')
+        i = 0
+        for er in expectedResult:
+            cmd = cmds[i]
+            self.assertEquals(er, cmd.city.field.name)
+            i += 1
+        
+    def assertRemoveCommands(self, turn, countryName, expectedResult):
+        cmds = Command.objects.filter(unit__turn=turn, unit__country__name=countryName).order_by('removePriority')
+        i = 0
+        for er in expectedResult:
+            cmd = cmds[i]
+            self.assertEquals(er, cmd.unit.field.name)
+            i += 1

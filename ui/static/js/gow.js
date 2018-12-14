@@ -82,7 +82,7 @@ function renderFieldDialog(json) {
 			$('#field-dialog .unit-owner-only').hide();
 			$('#unit-command').html('');
 		}
-		if(json.command.escape) {
+		if(json.command && json.command.escape) {
 			$('#field-dialog .escape').show();
 			$('#field-dialog .escape-field').text(json.command.escape.name);
 		} else {

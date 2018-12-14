@@ -12,6 +12,7 @@ class TurnProcessor:
         newGame.tileServer = game.tileServer
         newGame.winPoints = game.winPoints
         newGame.defaultCommandType = game.defaultCommandType
+        newGame.status = 1
         newGame.save()
         for u in game.user.all():
             newGame.user.add(u)
@@ -117,4 +118,5 @@ class TurnProcessor:
                 newCommand.commandType = newTurn.game.defaultCommandType
                 newCommand.escape = mapProcessor.getEscapeFieldPks(newUnit)
                 newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)
+                #print(str(newCommand)+': '+str(newCommand.removePriority))
                 newCommand.save()

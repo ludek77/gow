@@ -21,14 +21,14 @@ class TestUser(TestCase):
         response = self.client.post('/ui/login/', {'username': 'unknown', 'password': 'unknown'})
         self.assertEqual(response.status_code, 401)
         
-        response = self.client.post('/ui/login/', {'username': 'admin', 'password': 'administrator'})
+        response = self.client.post('/ui/login/', {'username': 'admin', 'password': 'admin1379'})
         self.assertEqual(response.status_code, 200)
 
     def test_logout(self):
         response = self.client.get('/ui/logout/')
         self.assertEqual(response.status_code, 302)
         
-        response = self.client.post('/ui/login/', {'username': 'admin', 'password': 'administrator'})
+        response = self.client.post('/ui/login/', {'username': 'admin', 'password': 'admin1379'})
         self.assertEqual(response.status_code, 200)
         
         response = self.client.get('/ui/logout/')

@@ -45,26 +45,31 @@ class MapProcessor:
         return result
     
     getFieldsByHomeDistanceBuffer = {}
-    def getFieldsByHomeDistance(self, unit):
-        if unit in self.getFieldsByHomeDistanceBuffer:
-            return self.getFieldsByHomeDistanceBuffer[unit]
+    def getFieldsByHomeDistance(self, country, unitType):
+        key = str(country.pk)+'.'
+        if unitType is not None:
+            key += str(unitType.pk)
+        if key in self.getFieldsByHomeDistanceBuffer:
+            return self.getFieldsByHomeDistanceBuffer[key]
         # get home fields
-        homes = self.getHomeFields(unit.country)
+        result = self.getHomeFields(country)
         #build result
-        result = self.filterReachable(unit.unitType, homes)
+        if unitType is not None:
+            result = self.filterReachable(unitType, result)
         index = 0
         while index < len(result):
             field = result[index]
             # get neighbours of processed field
             newFields = self.getNeighbours(field)
-            reachable = self.filterReachable(unit.unitType, newFields)
+            if unitType is not None:
+                newFields = self.filterReachable(unitType, newFields)
             # add those not in list yet
-            for rr in reachable:
+            for rr in newFields:
                 if rr not in result:
                     result.append(rr)
             index+=1
         # store and return result
-        self.getFieldsByHomeDistanceBuffer[unit] = result
+        self.getFieldsByHomeDistanceBuffer[key] = result
         return result
 
     def setPriorityEscape(self, command, escapeField):
@@ -126,7 +131,7 @@ class MapProcessor:
     
     def getEscapeFieldPks(self, unit):
         # ordetr them by home distance
-        fields = self.getFieldsByHomeDistance(unit)
+        fields = self.getFieldsByHomeDistance(unit.country, unit.unitType)
         # get neighbours
         neighbours = self.getNeighbours(unit.field)
         reachable = self.filterReachable(unit.unitType, neighbours)
@@ -139,11 +144,11 @@ class MapProcessor:
         return pks
     
     def getRemoveIndex(self, unit):
-        fields = self.getFieldsByHomeDistance(unit)
-        index = 0
+        fields = self.getFieldsByHomeDistance(unit.country, None)
+        index = 1
         for fld in fields:
             if fld == unit.field:
                 return len(fields) - index
             index += 1
         # if no home field exists, index not found
-        return 1
+        return 0

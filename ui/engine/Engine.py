@@ -492,7 +492,7 @@ class Engine:
     
     def addUnits(self, country, unitPoints):
         self.log('Adding units for ['+str(country.pk)+'.'+country.name+']: '+str(unitPoints)+'pts')
-        cmds = CityCommand.objects.filter(city__turn=self.turn, city__country=country).order_by('priority')
+        cmds = CityCommand.objects.filter(city__turn=self.turn, city__country=country, city__field__home=country).order_by('priority')
         for cmd in cmds:
             self.log('   add priority: '+str(cmd))
             if unitPoints >= cmd.newUnitType.unitPoints:
@@ -515,7 +515,7 @@ class Engine:
             for field in self.nextMap:
                 cmd = self.nextMap[field]
                 if cmd is not None and cmd.unit.country == country:
-                    if remField is None or cmd.removePriority > self.nextMap[remField].removePriority:
+                    if remField is None or cmd.removePriority < self.nextMap[remField].removePriority:
                         remField = field
             if remField is not None:
                 cmd = self.nextMap[remField]

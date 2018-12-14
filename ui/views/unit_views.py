@@ -137,9 +137,9 @@ def unitResponse(request, fieldId,message=None):
                     for type in newTypes:
                         output += separator+'['+str(type.pk)+',"'+type.name+'"]'
                         separator = ','
-                    output += '}'    
+                    output += ']}'    
     output += '}'
-#     print(output)
+    #print(output)
     return HttpResponse(output)
 
 @login_required
