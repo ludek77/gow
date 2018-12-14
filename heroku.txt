@@ -7,11 +7,8 @@ heroku login
 
 *** CREATE HEROKU APP ***
 
-heroku create gow-ui --region eu
+heroku create dip2 --region eu
 git push heroku master
-
-# not needed
-# heroku ps:scale web=1
 
 
 *** migrate database ***
