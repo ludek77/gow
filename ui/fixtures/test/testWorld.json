@@ -1,8 +1,8 @@
 [
 	{"model": "ui.game", "pk": 1, "fields": {"name": "TestWorld", "tileServer": "http://tileserver.maptiler.com/nasa/{z}/{x}/{y}.jpg", "winPoints": 5, "defaultCommandType": 1, "turnMinutes": 1440, "user": [1,2,3]}}, 
 
-	{"model": "auth.user", "pk": 2, "fields": {"password": "pbkdf2_sha256$120000$GRb9lyalAdgK$kZFC0K1XyULKBUHvx4+VS9Kz/5XAtbWDxhFIJPpAwDA=", "last_login": null, "is_superuser": false, "username": "rus", "first_name": "", "last_name": "", "email": "", "is_staff": false, "is_active": true, "date_joined": "2018-12-11T09:29:22.844Z", "groups": [], "user_permissions": []}}, 
-	{"model": "auth.user", "pk": 3, "fields": {"password": "pbkdf2_sha256$120000$PYZGpkMSgr74$IxSP73I5uwIzeg0wStJpsKKs7cOEfxp/jyhMhlB1k1k=", "last_login": null, "is_superuser": false, "username": "spain", "first_name": "", "last_name": "", "email": "", "is_staff": false, "is_active": true, "date_joined": "2018-12-14T12:10:40.204Z", "groups": [], "user_permissions": []}}, 
+	{"model": "auth.user", "pk": 2, "fields": {"password": "pbkdf2_sha256$120000$UqDymoo3XJqz$iUwuoOD6rKEOrLAb4dcYY90/iyGS4uSMKfQnU9NHoxQ=", "last_login": null, "is_superuser": false, "username": "russia", "first_name": "", "last_name": "", "email": "", "is_staff": false, "is_active": true, "date_joined": "2018-12-11T09:29:22Z", "groups": [], "user_permissions": []}}, 
+	{"model": "auth.user", "pk": 3, "fields": {"password": "pbkdf2_sha256$120000$Zpo0cJan6IOM$9KQd9t7M0ZpUdDkwvduBrM+hYKrGRWdLUPiGOLBS47I=", "last_login": null, "is_superuser": false, "username": "spain", "first_name": "", "last_name": "", "email": "", "is_staff": false, "is_active": true, "date_joined": "2018-12-14T12:10:40.204Z", "groups": [], "user_permissions": []}}, 
 
 	{"model": "ui.country", "pk": 1, "fields": {"name": "Spain", "game": 1, "color": "yellow", "fgcolor": "black", "lat": "50.00", "lng": "10.00", "owner": 3}}, 
 	{"model": "ui.country", "pk": 2, "fields": {"name": "Russia", "game": 1, "color": "#8b0000", "fgcolor": "white", "lat": "50.00", "lng": "10.00", "owner": 2}}, 
