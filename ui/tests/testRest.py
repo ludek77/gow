@@ -11,12 +11,20 @@ class TestRest(TestCase):
         call_command('loaddata', 'test/testWorld', verbosity=0)
         call_command('loaddata', 'test/testUnits', verbosity=0)
         
-    def testAuthorizedRest(self):
-        response = self.client.post('/ui/login/', {'username': 'admin', 'password': 'administrator'})
+    def testAuthorizedRusRest(self):
+        print('---- test Rus ----')
+        response = self.client.post('/ui/login/', {'username': 'rus', 'password': 'rus'})
         self.assertEqual(response.status_code, 200)
-        self.doTestRest('ui/tests/rest/auth')
+        self.doTestRest('ui/tests/rest/rus-auth')
+        
+    def testAuthorizedSpainRest(self):
+        print('---- test Spain ----')
+        response = self.client.post('/ui/login/', {'username': 'spain', 'password': 'spain'})
+        self.assertEqual(response.status_code, 200)
+        self.doTestRest('ui/tests/rest/spain-auth')
         
     def testUnauthorizedRest(self):
+        print('---- test NoAuth ----')
         self.doTestRest('ui/tests/rest/no-auth')
         
     def writeResult(self, filename, content):
@@ -26,19 +34,22 @@ class TestRest(TestCase):
         
     def doTestRest(self, rootUrl):
         for filename in os.listdir(rootUrl):
-            #print('Testing '+filename)
+            print('Testing '+filename)
             # get expected result
             file = open(rootUrl+'/'+filename, 'r')
             expectedResult = file.read()
+            file.close()
             # get real result
             url = '/ui/' + filename.replace(':','/?')
             result = self.client.get(url)
             resultContent = result.content.decode('utf-8')
-            #self.writeResult(rootUrl+'/'+filename+'.result', resultContent)
-            if result.status_code == 200:
-                self.assertEqual(expectedResult, resultContent)
+            if expectedResult == 'load':
+                print('writing '+filename)
+                self.writeResult(rootUrl+'/'+filename, resultContent)
             else:
-                self.assertEqual(expectedResult, str(result.status_code))
-            print(url+' ok')
+                if result.status_code == 200:
+                    self.assertEqual(expectedResult, resultContent)
+                else:
+                    self.assertEqual(expectedResult, 'response:'+str(result.status_code))
         
         

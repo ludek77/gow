@@ -9,8 +9,6 @@ removing/adding units
   test removing and adding units
 
 displaying commands
-  test - add more users
-  test - check visibility of commands for users
   test - sending commands to other units
   test - setting current turn
   test - displaying previous commands

@@ -47,6 +47,7 @@ class Game(models.Model):
     winPoints = models.IntegerField(default=50) #win points needed to win the game
     defaultCommandType = models.ForeignKey(CommandType, on_delete=models.CASCADE)
     turnMinutes = models.IntegerField(default=5)
+    status = models.IntegerField(default=0) #0-initialized, 1-playing, 2-ended
     
     def __str__(self):
         return self.name
