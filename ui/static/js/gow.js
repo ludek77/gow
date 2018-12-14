@@ -163,7 +163,7 @@ function clickTarget(e,pk) {
 		renderFieldDialog(json);
 		renderCountryDialog();
 		hideCommand(selectedField);
-		if(json.field && json.command.args && json.command.args[0]) {
+		if(json.field && json.command.args && json.command.args[0] && json.command.res != 'invalid') {
 			renderCommand(json.field.ll[0],json.field.ll[1],json.command.args[0].ll[0],json.command.args[0].ll[1],json.unit.color,json.command.name,selectedField);
 		}
 	});
@@ -201,7 +201,7 @@ function setupGame() {
 		for(var i in json.units) {
 			var unit = json.units[i];
 			renderUnit(unit.latlng[0],unit.latlng[1], unit.id, unit.fid, unit.clr, unit.type);
-			if(unit.tgt) {
+			if(unit.tgt && unit.res != 'invalid') {
 				renderCommand(unit.latlng[0],unit.latlng[1],unit.tgt[0],unit.tgt[1],unit.clr,unit.cmd,unit.fid);
 			}
 		}

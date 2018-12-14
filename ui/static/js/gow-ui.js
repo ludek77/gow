@@ -43,11 +43,11 @@ function renderPath(lat1, lng1, lat2, lng2, pk1, pk2) {
 }
 
 function renderCommandElement(lat1,lng1,lat2,lng2, clr, cmd, pk) {
-	L.polyline([[lat1,lng1],[lat2,lng2]], {color: clr, opacity:0.5, weight: 25, className: 'c-id-'+pk}).addTo(map);
+	L.polyline([[lat1,lng1],[lat2,lng2]], {color: clr, opacity:0.5, weight: 25, className: 'o-id-'+pk}).addTo(map);
 	var markerIcon = L.icon({
 	    iconUrl: '/static/icon/command/'+cmd+'.png',
 	    iconAnchor: [8, 8],
-	    className: 'c-fpk-'+pk
+	    className: 'o-fpk-'+pk
 	});
 	lat = lat1+(lat2-lat1)/2;
 	lng = lng1+(lng2-lng1)/2;
@@ -73,8 +73,8 @@ function renderCommand(lat1, lng1, lat2, lng2, clr, cmd, pk) {
 }
 
 function hideCommand(fpk) {
-	$('.c-id-'+fpk).remove();
-	$('.c-fpk-'+fpk).remove();
+	$('.o-id-'+fpk).remove();
+	$('.o-fpk-'+fpk).remove();
 }
 
 function renderFieldElement(lat ,lng ,pk) {

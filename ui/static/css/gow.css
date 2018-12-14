@@ -85,6 +85,10 @@ body {
 	background: url('../icon/result/ok.png') no-repeat;
 }
 
+.res_invalid {
+	background: url('../icon/result/invalid.png') no-repeat;
+}
+
 .res_fail {
 	background: url('../icon/result/fail.png') no-repeat;
 }

@@ -110,9 +110,11 @@ def game_setup_rest(request):
             output += ',"type":'+str(unit.unitType.pk)
             output += ',"cmd":"'+command.commandType.name+'"'
             if unit.country == selectedCountry or not selectedTurn.open:
-                tgtField = engine.getTargetField(command)
+                tgtField = engine.getTargetField(command,0)
                 if tgtField is not None:
                     output += ',"tgt":['+str(tgtField.lat)+','+str(tgtField.lng)+']'
+                if command.result is not None:
+                    output += ',"res":"'+command.result[:command.result.index('.')]+'"'
             output +='}'
             separator = ','
         output += ']'
