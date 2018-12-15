@@ -45,8 +45,9 @@ class TestBase(TestCase):
         self.assertEqual(unit.unitType.name, unitTypeName)
         self.assertEqual(unit.country.name, unitCountryName)
         # assert command
-        command = Command.objects.get(unit=unit)
-        self.assertEqual(command.commandType.name, commandTypeName)
+        if turn.game.status == 1:
+            command = Command.objects.get(unit=unit)
+            self.assertEqual(command.commandType.name, commandTypeName)
         return unit
 
     def assertResult(self, turn, fieldName, expectedResult):
@@ -93,8 +94,9 @@ class TestBase(TestCase):
                 newUnits = 'R'
             print(turnName + newUnits + ' : ' + message)
         nextTurn = self.engine.calculateNextTurn(turn)
-        self.assertEqual(nextTurn.previous, turn)
-        self.assertEqual(nextTurn.name, turnName)
+        if nextTurn is not None:
+            self.assertEqual(nextTurn.previous, turn)
+            self.assertEqual(nextTurn.name, turnName)
         return nextTurn
     
     def assertEscapes(self, turn, fieldName, expectedEscapes):

@@ -160,6 +160,7 @@ class TestAddRemove(TestBase):
         self.assertCity(turn, 'Sweden', 'Russia')
         self.assertUnit(turn, 'Norwegian Sea', 'Ship', 'Russia')
         self.assertNoUnit(turn, 'Spain')
+        self.setAssertCityCommand(turn, 'Spain', 'Ship')
         # calculate turn
         turn = self.assertNextTurn(turn, '2002', 'AddRemove: Take City')
         self.assertEquals(False,turn.newUnits)
@@ -167,6 +168,6 @@ class TestAddRemove(TestBase):
         self.assertUnit(turn, 'Norway', 'Army', 'Russia')
         self.assertUnit(turn, 'Sweden', 'Ship', 'Spain')
         self.assertCity(turn, 'Sweden', 'Spain')
-        self.assertUnit(turn, 'Spain', 'Army', 'Spain')
+        self.assertUnit(turn, 'Spain', 'Ship', 'Spain')
         self.assertNoUnit(turn, 'Norwegian Sea')
         

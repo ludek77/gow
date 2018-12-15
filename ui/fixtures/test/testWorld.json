@@ -1,5 +1,5 @@
 [
-	{"model": "ui.game", "pk": 1, "fields": {"name": "TestWorld", "tileServer": "http://tileserver.maptiler.com/nasa/{z}/{x}/{y}.jpg", "winPoints": 5, "defaultCommandType": 1, "turnMinutes": 1440, "user": [1,2,3]}}, 
+	{"model": "ui.game", "pk": 1, "fields": {"name": "TestWorld", "tileServer": "http://tileserver.maptiler.com/nasa/{z}/{x}/{y}.jpg", "winPoints": 6, "defaultCommandType": 1, "turnMinutes": 1440, "status":1, "user": [1,2,3]}}, 
 
 	{"model": "auth.user", "pk": 2, "fields": {"password": "pbkdf2_sha256$120000$UqDymoo3XJqz$iUwuoOD6rKEOrLAb4dcYY90/iyGS4uSMKfQnU9NHoxQ=", "last_login": null, "is_superuser": false, "username": "russia", "first_name": "", "last_name": "", "email": "", "is_staff": false, "is_active": true, "date_joined": "2018-12-11T09:29:22Z", "groups": [], "user_permissions": []}}, 
 	{"model": "auth.user", "pk": 3, "fields": {"password": "pbkdf2_sha256$120000$Zpo0cJan6IOM$9KQd9t7M0ZpUdDkwvduBrM+hYKrGRWdLUPiGOLBS47I=", "last_login": null, "is_superuser": false, "username": "spain", "first_name": "", "last_name": "", "email": "", "is_staff": false, "is_active": true, "date_joined": "2018-12-14T12:10:40.204Z", "groups": [], "user_permissions": []}}, 

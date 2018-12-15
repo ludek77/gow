@@ -4,9 +4,6 @@ map
 victory
   check implementation
   test victory
-  
-removing/adding units
-  test removing and adding units
 
 displaying commands
   test - sending commands to other units

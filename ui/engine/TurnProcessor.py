@@ -101,6 +101,7 @@ class TurnProcessor:
                     
     def createUnits(self, newTurn, nextMap):
         mapProcessor = MapProcessor(newTurn)
+        game = Game.objects.get(pk=newTurn.game.pk)
         # setup new units
         for field in nextMap:
             cmd = nextMap[field]
@@ -112,11 +113,12 @@ class TurnProcessor:
                 newUnit.unitType = cmd.unit.unitType
                 newUnit.field = field
                 newUnit.save()
-                # add default command
-                newCommand = Command()
-                newCommand.unit = newUnit
-                newCommand.commandType = newTurn.game.defaultCommandType
-                newCommand.escape = mapProcessor.getEscapeFieldPks(newUnit)
-                newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)
-                #print(str(newCommand)+': '+str(newCommand.removePriority))
-                newCommand.save()
+                if game.status == 1:
+                    # add default command
+                    newCommand = Command()
+                    newCommand.unit = newUnit
+                    newCommand.commandType = newTurn.game.defaultCommandType
+                    newCommand.escape = mapProcessor.getEscapeFieldPks(newUnit)
+                    newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)
+                    #print(str(newCommand)+': '+str(newCommand.removePriority))
+                    newCommand.save()

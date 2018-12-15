@@ -94,6 +94,10 @@ class Engine:
     def calculateNextTurn(self, turn):
         # initialize turn
         self.initialize(turn)
+        # test if game is open
+        if self.game.status != 1:
+            self.log('Game closed')
+            return None
         # log start
         self.log('Recalculating game')
         # close original turn
@@ -494,18 +498,27 @@ class Engine:
         self.log('Adding units for ['+str(country.pk)+'.'+country.name+']: '+str(unitPoints)+'pts')
         cmds = CityCommand.objects.filter(city__turn=self.turn, city__country=country, city__field__home=country).order_by('priority')
         for cmd in cmds:
-            self.log('   add priority: '+str(cmd))
             if unitPoints >= cmd.newUnitType.unitPoints:
-                self.log('   added unit:'+str(cmd.city.field))
-                newUnit = Unit()
-                newUnit.country = country
-                newUnit.unitType = cmd.newUnitType
-                newCommand = Command()
-                newCommand.unit = newUnit
-                self.dropUnit(newCommand, cmd.city.field)
-                cmd.result = 'ok'
-                cmd.save()
-                unitPoints -= cmd.newUnitType.unitPoints
+                field = cmd.city.field
+                targetCmd = self.nextMap.get(field)
+                attackers = self.maxAttackers.get(field)
+                if targetCmd is None:
+                    if attackers is None:
+                        self.log('      '+str(cmd)+' added:'+str(cmd.newUnitType)+':'+str(field))
+                        newUnit = Unit()
+                        newUnit.country = country
+                        newUnit.unitType = cmd.newUnitType
+                        if self.game.status == 1:
+                            newCommand = Command()
+                            newCommand.unit = newUnit
+                        self.dropUnit(newCommand, cmd.city.field)
+                        cmd.result = 'ok'
+                        cmd.save()
+                        unitPoints -= cmd.newUnitType.unitPoints
+                    else:
+                        self.log('      '+str(cmd)+' under attack:'+str(field))
+                else:
+                    self.log('      '+str(cmd)+' not empty:'+str(field))
    
     def removeUnits(self, country, unitPoints):
         self.log('Removing units for ['+str(country.pk)+'.'+country.name+']: '+str(unitPoints)+'pts')
@@ -530,6 +543,8 @@ class Engine:
     def synchronizeUnits(self, newTurn):
         self.log('Synchronizing units')
         countries = Country.objects.filter(game=self.game)
+        maxCityUnitPoints = 0
+        maxCityUnitPointsCount = 0;
         for country in countries:
             # count city points
             cityUnitPoints = 0
@@ -547,7 +562,16 @@ class Engine:
                 self.addUnits(country, cityUnitPoints-unitUnitPoints)
             elif unitUnitPoints > cityUnitPoints:
                 self.removeUnits(country, unitUnitPoints-cityUnitPoints)
-        return None
+            # cound max unit points
+            if maxCityUnitPoints < cityUnitPoints:
+                maxCityUnitPoints = cityUnitPoints
+                maxCityUnitPointsCount = 1
+            elif maxCityUnitPoints == cityUnitPoints:
+                maxCityUnitPointsCount += 1
+        # indicate won game
+        if maxCityUnitPoints >= self.game.winPoints and maxCityUnitPointsCount == 1:
+            self.game.status = 2
+            self.game.save()
     
     def saveResults(self):
         self.log('Saving results')
@@ -563,3 +587,4 @@ class Engine:
             if cmd.result is None:
                 cmd.result = 'not-used'
                 cmd.save()
+        
