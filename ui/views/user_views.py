@@ -15,8 +15,8 @@ def login_rest(request):
     if user is not None:
         #login
         login(request, user)
-        #if one game available, select it
-        games = Game.objects.filter(user__id=request.user.id)
+        #if games available, select first
+        games = Game.objects.filter(user__id=request.user.id).order_by('pk')
         if len(games) > 0:
             request.session['selected_game'] = str(games[0].id)
             

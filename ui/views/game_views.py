@@ -18,9 +18,9 @@ def game_select_rest(request):
     request.session['selected_turn'] = None
     if len(g) == 1: 
         request.session['selected_game'] = str(g[0].id)
-#         turns = Turn.objects.filter(game=g[0], open=True)
-#         if len(turns) == 1:
-#             request.session['selected_turn'] = str(turns[0].id)
+        turns = Turn.objects.filter(game=g[0]).order_by('-deadline')
+        if len(turns) > 0:
+            request.session['selected_turn'] = str(turns[0].id)
     return HttpResponse('OK')
 
 @login_required
