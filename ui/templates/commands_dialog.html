@@ -27,6 +27,10 @@
 		</div>
 	{% endif %}
 	
+	{% if turn.message %}
+		<div class="message">{{turn.message}}</div>
+	{% endif %}
+	
 	{% if turn.newUnits %}
 		<div>Units synced after this move</div>
 	{% endif %}

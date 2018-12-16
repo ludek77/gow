@@ -90,6 +90,7 @@ class Turn(models.Model):
     open = models.BooleanField(default=True)
     deadline = models.DateTimeField(null=True, blank=True)
     previous = models.ForeignKey('self', null=True, default=None, blank=True, on_delete=models.CASCADE)
+    message = models.CharField(null=True, blank=True, max_length=500)
     
     def __str__(self):
         return str(self.pk) + '.' + self.name

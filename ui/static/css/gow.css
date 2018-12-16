@@ -139,6 +139,13 @@ body {
 	border-radius: 5px;
 }
 
+.message {
+	background-color: lightgray;
+	border-radius: 5px;
+	margin: 5px;
+	padding: 10px;
+}
+
 .units {
 	text-align: left;
 }
