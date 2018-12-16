@@ -156,6 +156,10 @@ function resizeIcons() {
 				width = unitTypes[id][2];
 				height = unitTypes[id][3];
 				break;
+			} else if(classList[i].startsWith('o-fpk-')) {
+				width = 16;
+				height = 16;
+				break; 
 			}
 		}
 		$(item).css('width', width*multip).css('margin-left',-(width*multip/2)).css('margin-top',-height*multip/2);

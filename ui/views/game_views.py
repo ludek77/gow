@@ -14,14 +14,13 @@ def game_list_rest(request):
 def game_select_rest(request):
     game = request.GET.get("g")
     g = Game.objects.filter(pk=game, user__id=request.user.id)
+    request.session['selected_game'] = None
+    request.session['selected_turn'] = None
     if len(g) == 1: 
         request.session['selected_game'] = str(g[0].id)
-        
-        turns = Turn.objects.filter(game=g[0], open=True)
-        if len(turns) == 1:
-            request.session['selected_turn'] = str(turns[0].id)
-        else:
-            request.session['selected_turn'] = 0
+#         turns = Turn.objects.filter(game=g[0], open=True)
+#         if len(turns) == 1:
+#             request.session['selected_turn'] = str(turns[0].id)
     return HttpResponse('OK')
 
 @login_required

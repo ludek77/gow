@@ -119,6 +119,7 @@ class TestGameFlow(TestBase):
         turn = self.assertNextTurn(turn, '2004', 'TeStGameFlow: turn')
         testGame = Game.objects.get(pk=testGame.pk) 
         self.assertEqual(2, testGame.status)
+        self.assertEqual('Russia', testGame.winner.name)
         self.assertEqual(turn.newUnits, False)
         # verify units
         self.assertCity(turn, 'Spain', 'Russia')

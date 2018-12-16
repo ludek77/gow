@@ -113,12 +113,11 @@ class TurnProcessor:
                 newUnit.unitType = cmd.unit.unitType
                 newUnit.field = field
                 newUnit.save()
-                if game.status == 1:
-                    # add default command
-                    newCommand = Command()
-                    newCommand.unit = newUnit
-                    newCommand.commandType = newTurn.game.defaultCommandType
-                    newCommand.escape = mapProcessor.getEscapeFieldPks(newUnit)
-                    newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)
-                    #print(str(newCommand)+': '+str(newCommand.removePriority))
-                    newCommand.save()
+                # add default command
+                newCommand = Command()
+                newCommand.unit = newUnit
+                newCommand.commandType = newTurn.game.defaultCommandType
+                newCommand.escape = mapProcessor.getEscapeFieldPks(newUnit)
+                newCommand.removePriority = mapProcessor.getRemoveIndex(newUnit)
+                #print(str(newCommand)+': '+str(newCommand.removePriority))
+                newCommand.save()

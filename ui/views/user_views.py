@@ -17,11 +17,11 @@ def login_rest(request):
         login(request, user)
         #if one game available, select it
         games = Game.objects.filter(user__id=request.user.id)
-        if len(games) >= 1:
+        if len(games) > 0:
             request.session['selected_game'] = str(games[0].id)
             
-            turns = Turn.objects.filter(game=games[0], open=True)
-            if len(turns) == 1:
+            turns = Turn.objects.filter(game=games[0]).order_by('-deadline')
+            if len(turns) > 0:
                 request.session['selected_turn'] = str(turns[0].id)
         return HttpResponse('OK')
     else:

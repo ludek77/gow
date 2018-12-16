@@ -162,6 +162,14 @@ body {
 	margin: 5px;
 }
 
+.winner {
+	border-radius: 15px;
+	padding: 10px;
+	font-weight: bold;
+	font-size: 30px;
+	text-align: center;
+}
+
 .cities {
 	font-style: italic;
 	font-weight: normal;

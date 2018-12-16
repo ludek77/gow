@@ -15,13 +15,13 @@ def country_setup_rest(request):
     else:
         selectedTurn = None
         
-    if selectedTurn.open:
+    if selectedTurn is not None and selectedTurn.open:
         countries = Country.objects.filter(game=selectedGame, owner__id=request.user.id)
     else:
         countries = Country.objects.filter(game=selectedGame)
     separator = ''
     output =  '{'
-    if selectedTurn.open:
+    if selectedTurn is not None and selectedTurn.open:
         output += '"open":true,'
     output += '"countries":['
     for country in countries:

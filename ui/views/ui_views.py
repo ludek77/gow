@@ -28,6 +28,8 @@ def index(request):
                             context['nextTurn'] = nextTurn
                 if len(countries)>0:
                     context['country'] = countries[0]
+                if games[0].winner is not None:
+                    context['winner'] = games[0].winner
     template = loader.get_template('index.html')
     return HttpResponse(template.render(context, request))
 

@@ -521,9 +521,8 @@ class Engine:
                         newUnit = Unit()
                         newUnit.country = country
                         newUnit.unitType = cmd.newUnitType
-                        if self.game.status == 1:
-                            newCommand = Command()
-                            newCommand.unit = newUnit
+                        newCommand = Command()
+                        newCommand.unit = newUnit
                         self.dropUnit(newCommand, cmd.city.field)
                         cmd.result = 'ok'
                         cmd.save()
@@ -557,7 +556,8 @@ class Engine:
         self.log('Synchronizing units')
         countries = Country.objects.filter(game=self.game)
         maxCityUnitPoints = 0
-        maxCityUnitPointsCount = 0;
+        maxCityUnitPointsCount = 0
+        maxCountryUnitPoints = None
         for country in countries:
             # count city points
             cityUnitPoints = 0
@@ -579,12 +579,17 @@ class Engine:
             if maxCityUnitPoints < cityUnitPoints:
                 maxCityUnitPoints = cityUnitPoints
                 maxCityUnitPointsCount = 1
+                maxCountryUnitPoints = country
             elif maxCityUnitPoints == cityUnitPoints:
                 maxCityUnitPointsCount += 1
+                maxCountryUnitPoints = None
         # indicate won game
         if maxCityUnitPoints >= self.game.winPoints and maxCityUnitPointsCount == 1:
             self.game.status = 2
+            self.game.winner = maxCountryUnitPoints
             self.game.save()
+            newTurn.open = False
+            newTurn.save()
     
     def saveResults(self):
         self.log('Saving results')

@@ -8,6 +8,8 @@
 	map.on('zoomend', function() {resizeIcons()});
 	map.on('click', function(e) {onMapClick(e)});
 	map.on('moveend', function(e) {centerMap()});
-	
+
+{% if game.status > 0 %}
 	$(document).ready(function() {setupGame()});
+{% endif %}
 </script>

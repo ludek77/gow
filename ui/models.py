@@ -46,12 +46,13 @@ class Game(models.Model):
     tileServer= models.CharField(max_length = 100)
     winPoints = models.IntegerField(default=50) #win points needed to win the game
     defaultCommandType = models.ForeignKey(CommandType, on_delete=models.CASCADE)
-    turnMinutes = models.IntegerField(default=5)
+    turnMinutes = models.IntegerField(default=1440)
     status = models.IntegerField(default=0) #0-initialized, 1-playing, 2-ended
+    winner = models.ForeignKey('Country', related_name='winner', null=True, default=None, blank=True, on_delete=models.CASCADE)
     
     def __str__(self):
         return self.name
-    
+
 class Country(models.Model):
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)

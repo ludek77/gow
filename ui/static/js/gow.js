@@ -85,6 +85,9 @@ function renderFieldDialog(json) {
 		if(json.command && json.command.escape) {
 			$('#field-dialog .escape').show();
 			$('#field-dialog .escape-field').text(json.command.escape.name);
+			if(json.open) {
+				$('#field-dialog .escape-field').addClass('clickable').click(function(){selectEscape()});
+			}
 		} else {
 			$('#field-dialog .escape').hide();
 			$('#field-dialog .escape-field').html('');

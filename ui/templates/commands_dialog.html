@@ -1,20 +1,30 @@
-{% if country and turn %}
-<script>
-	$(document).ready(function() {
-		$('#commands').dialog({dialogClass:commands-dialog,
-			minWidth: 300,
-			maxWidth: 500,
-			width: 500,
-			position:{my:"right top",at:"right-20 top+10", of:"body"}});
-	});
-</script>
-{% endif %}
-
 {% if turn %}
+	{% if country %}
+	<script>
+		$(document).ready(function() {
+			$('#commands').dialog({dialogClass:commands-dialog,
+				minWidth: 300,
+				maxWidth: 500,
+				width: 500,
+				position:{my:"right top",at:"right-20 top+10", of:"body"}});
+		});
+	</script>
+	{% endif %}
+
 	{% if turn.open %}
 		<div id="commands" title="Open turn {{turn.name}}" style="display:none">
 	{% else %}
-		<div id="commands" title="Closed Turn {{turn.name}}" style="display:none">
+	    {% if game and game.status == 1 %}
+			<div id="commands" title="Closed Turn {{turn.name}}" style="display:none">
+		{% else %}
+			<div id="commands" title="Ended Game, Closed Turn {{turn.name}}" style="display:none">
+		{% endif %}
+	{% endif %}
+	
+	{% if winner %}
+		<div class="winner" style="background-color:{{winner.color}}; color:{{winner.fgcolor}}">
+		Won by {{ winner.name }}
+		</div>
 	{% endif %}
 	
 	{% if turn.newUnits %}
@@ -34,9 +44,8 @@
 		<input id="next-turn" class="button-icon next" type="button" />
 	{% endif %}
 
-{% endif %}
-
 	</div>
 
 	<div id="commands-content"></div>
 </div>
+{% endif %}
