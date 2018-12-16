@@ -21,6 +21,21 @@
 </script>
 
 <div id="field-dialog">
+	<div class="unit unit-color">
+		<div><span class="unit-type"></span> of <span class="unit-country"></span></div>
+
+		<div class="unit-owner-only">
+			Unit command <select id="unit-command"></select>
+			<div id='unit-command-targets'></div>
+	
+			<div class="escape">
+				<span class="label">Escape</span><span id="escape-0" class="escape-field clickable" onclick="selectEscape()"></span>
+			</div>
+	
+			<div id="unit-command-result"/>
+		</div>
+	</div>
+
 	<div class="country country-color">
 		<div>
 			City of <span class="country-name"></span>
@@ -35,20 +50,5 @@
 		<div id="field-command-result"/>
 	</div>
 		
-	</div>
-	
-	<div class="unit unit-color">
-		<div><span class="unit-type"></span> of <span class="unit-country"></span></div>
-
-		<div class="unit-owner-only">
-			Unit command <select id="unit-command"></select>
-			<div id='unit-command-targets'></div>
-	
-			<div class="escape">
-				<span class="label">Escape</span><span id="escape-0" class="escape-field clickable" onclick="selectEscape()"></span>
-			</div>
-	
-			<div id="unit-command-result"/>
-		</div>
 	</div>
 </div>

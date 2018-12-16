@@ -163,8 +163,13 @@ function clickTarget(e,pk) {
 		renderFieldDialog(json);
 		renderCountryDialog();
 		hideCommand(selectedField);
-		if(json.field && json.command.args && json.command.args[0] && json.command.res != 'invalid') {
-			renderCommand(json.field.ll[0],json.field.ll[1],json.command.args[0].ll[0],json.command.args[0].ll[1],json.unit.color,json.command.name,selectedField);
+		if(json.field && json.command.args && json.command.res != 'invalid') {
+			if(json.command.args[0]) {
+				renderCommand(json.field.ll[0],json.field.ll[1],json.command.args[0].ll[0],json.command.args[0].ll[1],json.unit.color,json.command.name,selectedField);
+				if(json.command.args[1]) {
+					renderCommand(json.command.args[0].ll[0],json.command.args[0].ll[1],json.command.args[1].ll[0],json.command.args[1].ll[1],json.unit.color,json.command.name,selectedField);
+				}
+			}
 		}
 	});
 	fieldClickHandler = defaultClickField;
@@ -202,7 +207,10 @@ function setupGame() {
 			var unit = json.units[i];
 			renderUnit(unit.latlng[0],unit.latlng[1], unit.id, unit.fid, unit.clr, unit.type);
 			if(unit.tgt && unit.res != 'invalid') {
-				renderCommand(unit.latlng[0],unit.latlng[1],unit.tgt[0],unit.tgt[1],unit.clr,unit.cmd,unit.fid);
+				renderCommand(unit.latlng[0],unit.latlng[1],unit.tgt[0][0],unit.tgt[0][1],unit.clr,unit.cmd,unit.fid);
+				if(unit.tgt[1]) {
+					renderCommand(unit.tgt[0][0],unit.tgt[0][1],unit.tgt[1][0],unit.tgt[1][1],unit.clr,unit.cmd+'1',unit.fid);
+				}
 			}
 		}
 		for(var i in json.paths) {

@@ -75,6 +75,19 @@ class Engine:
                 if targetField is not None:
                     return targetField    
         return None
+
+    def getTargetFields(self, cmd):
+        args = cmd.args.split(',')
+        index = 0
+        result = []
+        while index < len(args):
+            target = args[index]
+            if target != '' and target != '0':
+                targetField = self.getField(target)
+                if targetField is not None:
+                    result.append(targetField)
+            index += 1
+        return result
         
     def initialize(self, turn):
         self.turn = turn

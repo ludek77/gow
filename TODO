@@ -1,9 +1,9 @@
 map
   create complete map
 
-victory
-  check implementation
-  test victory
+test game
+  play test game
+  test victory display
 
 displaying commands
   test - sending commands to other units

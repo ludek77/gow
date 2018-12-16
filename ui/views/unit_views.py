@@ -79,7 +79,7 @@ def unitResponse(request, fieldId,message=None):
                 output += ',"template":['+cmd.commandType.template+']'
                 if cmd.result is not None:
                     result = commandValidator.getResult(cmd)
-                    output += ',"res":"'+cmd.result[:cmd.result.index('.')]+'"'
+                    output += ',"res":"'+cmd.result[:cmd.result.find('.')]+'"'
                     output += ',"result":"'+result+'"'
                 # append arguments
                 if cmd.args != '':
