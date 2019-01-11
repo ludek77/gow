@@ -5,7 +5,6 @@ test game
   play test game
 
 displaying commands
-  test - sending commands to other units
   test - setting current turn
   test - displaying previous commands
   test - changing older commands

@@ -24,6 +24,8 @@ class TestRest(TestCase):
         self.doTestRest('ui/tests/rest/rus-auth', 'game_setup:')
         self.doTestRest('ui/tests/rest/rus-auth', 'unit_get:f=1')
         self.doTestRest('ui/tests/rest/rus-auth', 'unit_get:f=29')
+        self.doTestRest('ui/tests/rest/rus-auth', 'unit_command:f=29&ct=1&args=1')
+        self.doTestRest('ui/tests/rest/rus-auth', 'city_command:f=29&ct=1&args=1')
         
     def testAuthorizedSpainRest(self):
         print('---- test Spain ----')
@@ -35,7 +37,31 @@ class TestRest(TestCase):
         self.doTestRest('ui/tests/rest/spain-auth', 'game_select:g=1')
         self.doTestRest('ui/tests/rest/spain-auth', 'game_setup:')
         self.doTestRest('ui/tests/rest/spain-auth', 'unit_get:f=1')
-        self.doTestRest('ui/tests/rest/spain-auth', 'unit_get:f=29')    
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_get:f=29')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=1&args=')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=1&args=1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=2&args=2')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=2&args=8')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=3&args=1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=3&args=1,8')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=3&args=1,1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=4&args=1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=5&args=1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=6&args=1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=7&args=1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=8&args=')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=prio&args=')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=prio&args=1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=prio&args=-1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=esc&args=')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=esc&args=1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'unit_command:f=29&ct=esc&args=8')
+        self.doTestRest('ui/tests/rest/spain-auth', 'city_command:f=29&ct=1&args=1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'city_command:f=29&ct=2&args=')
+        self.doTestRest('ui/tests/rest/spain-auth', 'city_command:f=29&ct=3&args=')
+        self.doTestRest('ui/tests/rest/spain-auth', 'city_command:f=29&ct=prio&args=')
+        self.doTestRest('ui/tests/rest/spain-auth', 'city_command:f=29&ct=prio&args=1')
+        self.doTestRest('ui/tests/rest/spain-auth', 'city_command:f=29&ct=prio&args=-1')
 
     def testUnauthorizedRest(self):
         print('---- test NoAuth ----')
@@ -45,7 +71,9 @@ class TestRest(TestCase):
         self.doTestRest('ui/tests/rest/no-auth', 'game_select:g=1')
         self.doTestRest('ui/tests/rest/no-auth', 'game_setup:')
         self.doTestRest('ui/tests/rest/no-auth', 'unit_get:f=1')
-        
+        self.doTestRest('ui/tests/rest/no-auth', 'unit_command:f=29&ct=1&args=1')
+        self.doTestRest('ui/tests/rest/no-auth', 'city_command:f=29&ct=1&args=1')
+         
     def writeResult(self, filename, content):
         file = open(filename, 'w')
         file.write(content)
@@ -61,6 +89,7 @@ class TestRest(TestCase):
         url = '/ui/' + filename.replace(':','/?')
         result = self.client.get(url)
         resultContent = result.content.decode('utf-8')
+#         expectedResult = 'load'
         if expectedResult == 'load':
             print('writing '+filename)
             self.writeResult(rootUrl+'/'+filename, resultContent)

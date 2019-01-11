@@ -30,9 +30,16 @@ class CommandValidator:
             'invalid.empty': 'No {0} defined',
             'invalid.not_next': 'Unreachable {0}',
             'invalid.not_reachable': 'Unit cannot go to {0}',
+            'invalid.no_unit': 'Missing unit',
+            'invalid.no_unit_type': 'Missing unit type',
+            'invalid.no_city': 'Missing city',
+            'invalid.no_field': 'Missing field',
+            'invalid.no_command': 'Missing command',
+            'invalid.no_command_type': 'Missing command type',
             'invalid.missing_unit': 'Missing unit on {0}',
             'invalid.not_unit': '{1} not found on {0}',
             'invalid.not_field': '{1} not on {0}',
+            'invalid.too-many-parameters': 'Too many parameters',
         }[key]
     
     def getResult(self, command):
@@ -56,6 +63,11 @@ class CommandValidator:
             data = self.parseTemplate(template)
             parIndex = resultKey.find('par_')
             par = int(resultKey[parIndex+4:])
+            #print('result:'+resultKey)
+            #print('par:'+str(par))
+            #print('data0:'+str(data['T']))
+            #print('data1:'+str(data['T'][par]))
+            #print('data2:'+str(data['T'][par][0]))
             parText = str(data['T'][par][0]).lower()
             # get type
             type = resultKey[index+1:parIndex-1]
@@ -131,8 +143,8 @@ class CommandValidator:
         turn = command.unit.turn
         template = command.commandType.template
         args = command.args
-        #print('template:'+str(template))
-        #print('args:'+str(args))
+#         print('template:'+str(template))
+#         print('args:'+str(args))
         if template != '[]':
             data = self.parseTemplate(template)
             args = args.split(',')
@@ -141,10 +153,10 @@ class CommandValidator:
             for par in data['T']:
                 parName = par[0]
                 parTemplate = par[1]
-                #print('par:'+str(parName)+'='+str(parTemplate))
+#                 print('par:'+str(parName)+'='+str(parTemplate))
                 if index < len(args) and args[index] != '' and args[index] != '0':
                     arg = args[index]
-                    #print('arg:'+str(arg))
+#                     print('arg:'+str(arg))
                     result = None
                     if arg != '0':
                         nextField = Field.objects.get(pk=arg)

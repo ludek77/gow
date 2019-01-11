@@ -81,6 +81,7 @@ def unitResponse(request, fieldId,message=None):
                     result = commandValidator.getResult(cmd)
                     output += ',"res":"'+cmd.result[:cmd.result.find('.')]+'"'
                     output += ',"result":"'+result+'"'
+                output += ',"prio":'+str(cmd.removePriority)
                 # append arguments
                 if cmd.args != '':
                     output += ',"args":['
@@ -132,6 +133,7 @@ def unitResponse(request, fieldId,message=None):
                     if cityCommand.result is not None:
                         output += ',"result":"'+commandValidator.getResult(cityCommand)+'"'
                     newTypes = UnitType.objects.filter(fieldTypes=selectedField.type)
+                    output += ',"prio":'+str(cityCommand.priority)
                     output += ',"fcmds":['
                     separator = ''
                     for type in newTypes:
@@ -158,29 +160,43 @@ def unit_command_rest(request):
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
     if selectedTurn.deadline is None or selectedTurn.deadline > timezone.now():
         selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
-        selectedUnit = Unit.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
-        selectedCommand = Command.objects.get(unit=selectedUnit)
-        # changing remove priority
-        if ctid == 'prio':
-            commands = Command.objects.filter(unit__turn=selectedTurn,unit__country=selectedCountry).order_by('removePriority')
-            processor = MapProcessor(selectedTurn)
-            processor.orderCommand(selectedCommand, int(args), commands)
-        # chaing escape priority
-        elif ctid == 'esc':
-            escape = Field.objects.get(pk=int(args))
-            processor = MapProcessor(selectedTurn)
-            messageKey = processor.setPriorityEscape(selectedCommand, escape)
-        # setting command and arguments
-        else:
-            commandType = CommandType.objects.get(pk=ctid)
-            selectedCommand.commandType = commandType
-            if(args is None):
-                args = '';
-            selectedCommand.args = args;
-            # validate command
-            validator.validateCommand(selectedCommand)
-            #save command
-            selectedCommand.save()
+        try:
+            selectedUnit = Unit.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+            selectedCommand = Command.objects.get(unit=selectedUnit)
+            # changing remove priority
+            if ctid == 'prio':
+                commands = Command.objects.filter(unit__turn=selectedTurn,unit__country=selectedCountry).order_by('removePriority')
+                if args != '':
+                    processor = MapProcessor(selectedTurn)
+                    processor.orderCommand(selectedCommand, int(args), commands)
+            # chaing escape priority
+            elif ctid == 'esc':
+                try:
+                    escape = Field.objects.get(pk=int(args), game=selectedGame)
+                    processor = MapProcessor(selectedTurn)
+                    messageKey = processor.setPriorityEscape(selectedCommand, escape)
+                except ValueError:
+                    messageKey = 'invalid.no_field'
+            # setting command and arguments
+            else:
+                commandType = CommandType.objects.get(pk=ctid)
+                selectedCommand.commandType = commandType
+                if(args is None):
+                    args = '';
+                selectedCommand.args = args;
+                # validate command
+                selectedCommand.result = None
+                validator.validateCommand(selectedCommand)
+                #save command
+                selectedCommand.save()
+        except Unit.DoesNotExist:
+            messageKey = 'invalid.no_unit'
+        except Command.DoesNotExist:
+            messageKey = 'invalid.no_command'
+        except CommandType.DoesNotExist:
+            messageKey = 'invalid.no_command_type'
+        except Field.DoesNotExist:
+            messageKey = 'invalid.no_field'
     else:
         messageKey = 'fail.turn-closed' 
 
@@ -193,25 +209,34 @@ def city_command_rest(request):
     ctid = request.GET.get("ct")
     args = request.GET.get("args")
     validator = CommandValidator()
-    message = None
+    messageKey = None
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
     if selectedTurn.deadline is None or selectedTurn.deadline > timezone.now():
         selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
-        selectedCity = City.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
-        selectedCommand = CityCommand.objects.get(city=selectedCity)
-        if ctid == 'prio':
-            commands = CityCommand.objects.filter(city__turn=selectedTurn,city__country=selectedCountry).order_by('priority')
-            processor = MapProcessor(selectedTurn)
-            processor.orderCommand(selectedCommand, int(args), commands)
-        else:
-            newUnitType = UnitType.objects.get(pk=ctid)
-            selectedCommand.newUnitType = newUnitType
-            #validate command
-            validator.validateCityCommand(selectedCommand)
-            #save command
-            selectedCommand.save()
+        try:
+            selectedCity = City.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+            selectedCommand = CityCommand.objects.get(city=selectedCity)
+            if ctid == 'prio':
+                commands = CityCommand.objects.filter(city__turn=selectedTurn,city__country=selectedCountry).order_by('priority')
+                try:
+                    processor = MapProcessor(selectedTurn)
+                    processor.orderCommand(selectedCommand, int(args), commands)
+                except ValueError:
+                    messageKey = 'invalid.no_field'
+            else:
+                newUnitType = UnitType.objects.get(pk=ctid)
+                selectedCommand.newUnitType = newUnitType
+                #validate command
+                validator.validateCityCommand(selectedCommand)
+                #save command
+                selectedCommand.save()
+        except City.DoesNotExist:
+            messageKey = 'invalid.no_city'
+        except UnitType.DoesNotExist:
+            messageKey = 'invalid.no_unit_type'
     else:
-        message = 'fail.turn-closed'
+        messageKey = 'fail.turn-closed'
         
+    message = validator.getError(messageKey)
     return unitResponse(request, fieldId, message)
