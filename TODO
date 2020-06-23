@@ -4,7 +4,7 @@ map
 test game
   play test game
 
-displaying commands
+displaying commands - using rest
   test - setting current turn
   test - displaying previous commands
   test - changing older commands

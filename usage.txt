@@ -4,5 +4,5 @@ python manage.py runserver
 python manage.py test
   - run all tests
 
-python manage.py test ui.tests.TestAttacks
+python manage.py test ui.tests.testAttacks
   - run specific test
