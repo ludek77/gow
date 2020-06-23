@@ -11,5 +11,9 @@ heroku create dip2 --region eu
 git push heroku master
 
 
+app running on https://github.com/ludek77/gow
+
+
 *** migrate database ***
 sh initdb.sh
+
