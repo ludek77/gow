@@ -1,5 +1,8 @@
 python manage.py runserver
   - run web server
 
+python manage.py test
+  - run all tests
+
 python manage.py test ui.tests.TestAttacks
   - run specific test
