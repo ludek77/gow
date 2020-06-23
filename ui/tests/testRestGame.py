@@ -16,5 +16,5 @@ class TestRestGame(TestRest):
         print('---- test First Move ----')
         response = self.client.post('/ui/login/', {'username': 'russia', 'password': 'russia456'})
         self.assertEqual(response.status_code, 200)
-        self.doTestRest('ui/tests/rest/game', 'unit_command:f=1&ct=1&args=2')
+        self.doTestRest('ui/tests/rest/game/1', 'unit_command:f=7&ct=2&args=5')
 
