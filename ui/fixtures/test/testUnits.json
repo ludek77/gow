@@ -1,5 +1,5 @@
 [
-	{"model": "ui.turn", "pk": 1, "fields": {"name": "1999", "game": 1, "newUnits": true, "open": true, "deadline": "2020-09-22T21:03:37Z", "previous": null}}, 
+	{"model": "ui.turn", "pk": 1, "fields": {"name": "1999", "game": 1, "newUnits": true, "open": true, "deadline": "2100-01-01T21:03:37Z", "previous": null}}, 
 	
 	{"model": "ui.city", "pk": 1, "fields": {"turn": 1, "field": 1, "country": 1}}, 
 	{"model": "ui.city", "pk": 2, "fields": {"turn": 1, "field": 2, "country": 1}}, 
