@@ -40,7 +40,7 @@
 		<input id="previous-turn" class="button-icon prev" type="button" />
 	{% endif %}
 	{% if turn.deadline and turn.open %}
-		Deadline: {{turn.deadline}}
+		Deadline: {{turn.deadline|date:'Y-m-d H:i'}}
 	{% else %}
 		History
 	{% endif %}

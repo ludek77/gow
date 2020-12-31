@@ -11,8 +11,7 @@ class TestRest(TestRest):
         
     def testAuthorizedRusRest(self):
         print('---- test Rus ----')
-        response = self.client.post('/ui/login/', {'username': 'russia', 'password': 'russia456'})
-        self.assertEqual(response.status_code, 200)
+        self.loginRussia()
         self.doTestRest('ui/tests/rest/rus-auth', 'city_get:c=1')
         self.doTestRest('ui/tests/rest/rus-auth', 'city_get:c=2')
         self.doTestRest('ui/tests/rest/rus-auth', 'country_setup:')
@@ -27,8 +26,7 @@ class TestRest(TestRest):
         
     def testAuthorizedSpainRest(self):
         print('---- test Spain ----')
-        response = self.client.post('/ui/login/', {'username': 'spain', 'password': 'spain258'})
-        self.assertEqual(response.status_code, 200)
+        self.loginSpain()
         self.doTestRest('ui/tests/rest/spain-auth', 'city_get:c=2')
         self.doTestRest('ui/tests/rest/spain-auth', 'country_setup:')
         self.doTestRest('ui/tests/rest/spain-auth', 'game_list:')
