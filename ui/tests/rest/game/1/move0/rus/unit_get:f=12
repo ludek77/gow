@@ -1,0 +1,1 @@
+{"field":{"name":"Croatia","ll":[45.03,19.42],"type":"Beach"},"open":true,"unit":{"country":"Russia","color":"#8b0000","textColor":"white","type":"Army"},"command":{"pk":1,"name":"defend","template":[[]],"prio":0,"escape":{"pk":1,"name":"Spain"}},"cmds":[[1,"defend"],[2,"attack"],[3,"move"],[4,"support_defence"],[5,"support_attack"],[7,"invade"]]}
