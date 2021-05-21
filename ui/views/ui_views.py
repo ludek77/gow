@@ -4,6 +4,8 @@ from django.template import loader
 from django.utils import timezone
 from ui.models import Game, Turn, Country, Unit
 from ui.engine.Engine import Engine
+from datetime import datetime
+import pytz
 
 def index(request):
     context = {}
@@ -17,8 +19,9 @@ def index(request):
                     turn = Turn.objects.filter(pk=request.session.get('selected_turn'))
                     if len(turn) == 1:
                         turn = turn.first()
-                        if turn.open and turn.deadline and turn.deadline <= timezone.now():
-                            while turn.deadline <= timezone.now():
+                        now = datetime.now(tz=pytz.utc)
+                        if turn.open and turn.deadline and turn.deadline <= now:
+                            while turn.deadline <= now:
                                 newTurn = Engine().calculateNextTurn(turn)
                                 turn = newTurn
                             request.session['selected_turn'] = turn.pk

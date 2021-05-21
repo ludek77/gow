@@ -1,7 +1,8 @@
 from django.test import TestCase
 from ui.models import Turn, Game
 from django.utils import timezone, dateformat
-import os
+from datetime import datetime
+import os, pytz
 
 class TestRest(TestCase):
     
@@ -18,6 +19,7 @@ class TestRest(TestCase):
         file.close()
         # replace placeholder if defined
         if(replaceText != None):
+            #print("replacing #### with '"+replaceText+"'")
             expectedResult = expectedResult.replace('####', replaceText)
         # get real result
         url = '/ui/' + filename.replace(':','/?')
@@ -51,12 +53,12 @@ class TestRest(TestCase):
         game = Game.objects.get(pk=1)
         # get turn and set deadline to now
         turn = Turn.objects.get(game=game, open=True)
-        turn.deadline = timezone.now()
+        turn.deadline = datetime.now(tz=pytz.utc)
         turn.save()
         # call index to recalculate move
         newDeadline = turn.deadline + timezone.timedelta(minutes=turn.game.turnMinutes)
-        # move by one more hour for timezone diff
-        newDeadline = newDeadline + timezone.timedelta(hours = 1)
+        # move by one/two more hour for timezone diff
+        newDeadline = newDeadline + timezone.timedelta(hours = 2)
         self.doTestRest(indexFolder, indexFile, dateformat.format(newDeadline, 'Y-m-d H:i'))
         # verify that move was done
         nextTurn = Turn.objects.get(game=game, open=True)
