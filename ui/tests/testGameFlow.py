@@ -137,5 +137,5 @@ class TestGameFlow(TestBase):
         self.assertUnit(turn, 'Ukraine', 'Army', 'Russia')
         # test calculation
         turn = self.assertNextTurn(turn, '2005', 'TeStGameFlow: turn')
-        self.assertEquals(None, turn)
+        self.assertEqual(None, turn)
         

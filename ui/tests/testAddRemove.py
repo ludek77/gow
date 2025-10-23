@@ -141,7 +141,7 @@ class TestAddRemove(TestBase):
         self.setAssertCommand(turn, 'Sweden', 'move', 'Norway')
         # calculate turn
         turn = self.assertNextTurn(turn, '2000', 'AddRemove: Move units')
-        self.assertEquals(False,turn.newUnits)
+        self.assertEqual(False,turn.newUnits)
         # verify units
         self.assertNoUnit(turn, 'Sweden')
         self.assertUnit(turn, 'North Sea', 'Ship', 'Spain')
@@ -151,7 +151,7 @@ class TestAddRemove(TestBase):
         self.setAssertCommand(turn, 'North Sea', 'move', 'Sweden')
         # calculate turn
         turn = self.assertNextTurn(turn, '2001', 'AddRemove: Dont take city yet')
-        self.assertEquals(True,turn.newUnits)
+        self.assertEqual(True,turn.newUnits)
         self.assertAddCommands(turn, 'Spain', ['Spain','London','France','Ireland'])
         self.assertRemoveCommands(turn, 'Russia', ['Norwegian Sea','Norway','Baltic Sea','Croatia','Ukraine'])
         # verify units
@@ -163,7 +163,7 @@ class TestAddRemove(TestBase):
         self.setAssertCityCommand(turn, 'Spain', 'Ship')
         # calculate turn
         turn = self.assertNextTurn(turn, '2002', 'AddRemove: Take City')
-        self.assertEquals(False,turn.newUnits)
+        self.assertEqual(False,turn.newUnits)
         # verify units
         self.assertUnit(turn, 'Norway', 'Army', 'Russia')
         self.assertUnit(turn, 'Sweden', 'Ship', 'Spain')

@@ -137,7 +137,7 @@ class TestBase(TestCase):
         i = 0
         for er in expectedResult:
             cmd = cmds[i]
-            self.assertEquals(er, cmd.city.field.name)
+            self.assertEqual(er, cmd.city.field.name)
             i += 1
         
     def assertRemoveCommands(self, turn, countryName, expectedResult):
@@ -145,5 +145,5 @@ class TestBase(TestCase):
         i = 0
         for er in expectedResult:
             cmd = cmds[i]
-            self.assertEquals(er, cmd.unit.field.name)
+            self.assertEqual(er, cmd.unit.field.name)
             i += 1
