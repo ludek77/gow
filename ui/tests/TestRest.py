@@ -2,7 +2,7 @@ from django.test import TestCase
 from ui.models import Turn, Game
 from django.utils import timezone, dateformat
 from datetime import datetime
-import os, pytz
+import os, pytz, re
 
 class TestRest(TestCase):
     
@@ -10,6 +10,12 @@ class TestRest(TestCase):
         file = open(filename, 'w')
         file.write(content)
         file.close()
+
+    # Normalize dynamic content (deadlines) for comparison
+    def normalize_timestamps(self, content):
+        # Replace deadline timestamps with a fixed placeholder
+        # Pattern matches "Deadline: YYYY-MM-DD HH:MM"
+        return re.sub(r'Deadline: \d{4}-\d{2}-\d{2} \d{2}:\d{2}', 'Deadline: ####-##-## ##:##', content)
         
     def doTestRest(self, rootUrl, filename, replaceText=None):
         print('Testing '+rootUrl+'/'+filename)
@@ -40,6 +46,9 @@ class TestRest(TestCase):
             url = '/ui/'
         result = self.client.get(url)
         resultContent = result.content.decode('utf-8').rstrip()
+        
+        expectedResult = self.normalize_timestamps(expectedResult)
+        resultContent = self.normalize_timestamps(resultContent)
 #         expectedResult = 'load'
         if expectedResult == 'load':
             print('writing '+filename)
@@ -49,7 +58,7 @@ class TestRest(TestCase):
                 self.assertEqual(expectedResult, resultContent)
             else:
                 self.assertEqual(expectedResult, 'response:'+str(result.status_code))
-    
+
     def loginRussia(self):
         response = self.client.post('/ui/login/', {'username': 'russia', 'password': 'russia456'})
         self.assertEqual(response.status_code, 200)
