@@ -9,12 +9,14 @@ from django.utils import timezone
 User = get_user_model()
 
 class FieldType(models.Model):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name
 
 class UnitType(models.Model):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     icon = models.CharField(max_length=100)
     width = models.IntegerField()
@@ -26,6 +28,7 @@ class UnitType(models.Model):
         return str(self.pk) + '.' + self.name
 
 class CommandType(models.Model):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     unitType = models.ManyToManyField(UnitType, blank=True)
     template = models.CharField(max_length=200)
@@ -41,6 +44,7 @@ class CommandType(models.Model):
         return self.name
 
 class Game(models.Model):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     user = models.ManyToManyField(User, blank=True)
     tileServer= models.CharField(max_length = 100)
@@ -54,6 +58,7 @@ class Game(models.Model):
         return self.name
 
 class Country(models.Model):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     color = models.CharField(max_length=10)
@@ -66,6 +71,7 @@ class Country(models.Model):
         return str(self.pk) + '.' + self.game.name + '.'+ self.name
 
 class Field(models.Model):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     type = models.ForeignKey(FieldType, on_delete=models.CASCADE)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
@@ -84,6 +90,7 @@ class Field(models.Model):
         return self.name + '.' + str(self.pk)
 
 class Turn(models.Model):
+    id = models.BigAutoField(primary_key=True)
     name = models.CharField(max_length=100)
     game = models.ForeignKey(Game, on_delete=models.CASCADE)
     newUnits = models.BooleanField(default=False)
@@ -96,6 +103,7 @@ class Turn(models.Model):
         return str(self.pk) + '.' + self.name
 
 class City(models.Model):
+    id = models.BigAutoField(primary_key=True)
     turn = models.ForeignKey(Turn, on_delete=models.CASCADE)
     field = models.ForeignKey(Field, on_delete=models.CASCADE)
     country = models.ForeignKey(Country, null=True, default=None, blank=True, on_delete=models.CASCADE)
@@ -104,6 +112,7 @@ class City(models.Model):
         return "[" + str(self.country.pk) + '.' + self.country.name + "," + self.turn.name + "," + str(self.field.pk) + '.' + self.field.name + "]"
 
 class CityCommand(models.Model):
+    id = models.BigAutoField(primary_key=True)
     city = models.ForeignKey(City, on_delete=models.CASCADE)
     priority = models.IntegerField()
     newUnitType = models.ForeignKey(UnitType, on_delete=models.CASCADE)
@@ -113,6 +122,7 @@ class CityCommand(models.Model):
         return "["+str(self.city.turn.name)+"."+self.city.country.name+"."+str(self.priority)+"."+self.city.field.name+"."+self.newUnitType.name+"]"
 
 class Unit(models.Model):
+    id = models.BigAutoField(primary_key=True)
     turn = models.ForeignKey(Turn, on_delete=models.CASCADE)
     country = models.ForeignKey(Country, on_delete=models.CASCADE)
     unitType = models.ForeignKey(UnitType, on_delete=models.CASCADE)
@@ -122,6 +132,7 @@ class Unit(models.Model):
         return "[" + self.turn.name + "." + self.country.name + "." + self.unitType.name + "." + self.field.name + "]"
 
 class Command(models.Model):
+    id = models.BigAutoField(primary_key=True)
     unit = models.ForeignKey(Unit, on_delete=models.CASCADE)
     commandType = models.ForeignKey(CommandType, on_delete=models.CASCADE)
     args = models.CharField(max_length=100, default='',blank=True)
