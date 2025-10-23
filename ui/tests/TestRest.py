@@ -13,8 +13,12 @@ class TestRest(TestCase):
         
     def doTestRest(self, rootUrl, filename, replaceText=None):
         print('Testing '+rootUrl+'/'+filename)
+        # Convert filename format to match actual file names on disk
+        # Replace : with .colon., = with .equals., and & with .and.
+        disk_filename = filename.replace(':', '.colon.').replace('&', '.and.').replace('=', '.equals.').replace('=', '.equals.')
+                
         # get expected result
-        file = open(rootUrl+'/'+filename, 'r')
+        file = open(rootUrl+'/'+disk_filename, 'r')
         expectedResult = file.read()
         file.close()
         # replace placeholder if defined
