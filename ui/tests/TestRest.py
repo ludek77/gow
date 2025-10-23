@@ -23,8 +23,8 @@ class TestRest(TestCase):
         # Replace remaining = with .equals.
         disk_filename = disk_filename.replace('=', '.equals.')
         
-        if disk_filename.endswith('.colon.'):
-            disk_filename = disk_filename[:-7] + '.colon.end'
+        if disk_filename.endswith('.'):
+            disk_filename = disk_filename[:-1] + '.end'
                 
         # get expected result
         file = open(rootUrl+'/'+disk_filename, 'r')

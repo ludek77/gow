@@ -4,15 +4,15 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 		
-		<script src="/static/js/jquery-3.2.1.min.c9f5aeeca3ad.js"></script>
+		<script src="/static/js/jquery-3.2.1.min.js"></script>
 		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
-		<script src="/static/js/gow.eda001989036.js"></script>
-		<script src="/static/js/gow-ui.02b264c08e6c.js"></script>
+		<script src="/static/js/gow.js"></script>
+		<script src="/static/js/gow-ui.js"></script>
 		
 		<script src="https://unpkg.com/leaflet@1.2.0/dist/leaflet.js"></script>
 		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.2.0/dist/leaflet.css"/>
 		<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-		<link rel="stylesheet" href="/static/css/gow.5b97c9800ce8.css"/>
+		<link rel="stylesheet" href="/static/css/gow.css"/>
 		<link rel="icon" href="/static/icon/favicon.ico"/>
  	</head>
 	<body>
