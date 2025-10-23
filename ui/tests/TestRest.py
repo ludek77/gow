@@ -15,11 +15,20 @@ class TestRest(TestCase):
         print('Testing '+rootUrl+'/'+filename)
         # Convert filename format to match actual file names on disk
         # Replace : with .colon., = with .equals., and & with .and.
-        disk_filename = filename.replace(':', '.colon.').replace('&', '.and.').replace('=', '.equals.').replace('=', '.equals.')
+        disk_filename = filename.replace(':', '.colon.').replace('&', '.and.')
+        
+        # Handle cases where parameter ends with = (empty value)
+        import re
+        disk_filename = re.sub(r'=([&]|$)', r'.equals.end\1', disk_filename)
+        # Replace remaining = with .equals.
+        disk_filename = disk_filename.replace('=', '.equals.')
+        
+        if disk_filename.endswith('.colon.'):
+            disk_filename = disk_filename[:-7] + '.colon.end'
                 
         # get expected result
         file = open(rootUrl+'/'+disk_filename, 'r')
-        expectedResult = file.read()
+        expectedResult = file.read().rstrip()
         file.close()
         # replace placeholder if defined
         if(replaceText != None):
@@ -30,7 +39,7 @@ class TestRest(TestCase):
         if(url.startswith('/ui/index')):
             url = '/ui/'
         result = self.client.get(url)
-        resultContent = result.content.decode('utf-8')
+        resultContent = result.content.decode('utf-8').rstrip()
 #         expectedResult = 'load'
         if expectedResult == 'load':
             print('writing '+filename)
