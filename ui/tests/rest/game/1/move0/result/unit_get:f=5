@@ -1,1 +1,0 @@
-{"field":{"name":"Poland","ll":[51.73,17.31],"type":"Beach"},"open":true,"unit":{"country":"Russia","color":"#8b0000","textColor":"white","type":"Army"},"command":{"pk":1,"name":"defend","template":[[]],"prio":14,"escape":{"pk":7,"name":"Ukraine"}},"cmds":[[1,"defend"],[2,"attack"],[3,"move"],[4,"support_defence"],[5,"support_attack"],[7,"invade"]]}
