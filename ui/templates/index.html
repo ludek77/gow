@@ -24,9 +24,9 @@
 				$('#dialog').dialog({position:{my:"left top",at:"left+150 top+70", of:"body"}}).dialog("close");
 				$("#dialog").on("dialogclose", function(event) {fieldClickHandler=defaultClickField;});
 				
-				// Dialog icon button click handler
-				$('#dialog-icon-btn').click(function(e) {
-					openDialog();
+				// Commands button click handler
+				$('#commands-btn').click(function(e) {
+					openCommandsDialog();
 				});
 				
 				// Logout button click handler
@@ -35,18 +35,21 @@
 				});
 			});
 			
-			function openDialog() {
-				// Example: Load game dialog content
-				$('#dialog').load('/ui/game_dialog/', function() {
-					$('#dialog').dialog('open');
-				});
+			function openCommandsDialog() {
+				// Open the existing commands dialog that's included from commands_dialog.html
+				if ($('#commands').length > 0) {
+					$('#commands').dialog('open');
+				} else {
+					alert('Commands dialog not available. Please make sure you are logged in and have selected a game.');
+				}
 			}
+
 		</script>
 
 		<div id="workspace">
 			<div id="menu">
-				<button id="dialog-icon-btn" class="icon-button" title="Open Dialog">
-					<img src="{% static 'icon/command/move.png' %}" alt="Dialog" width="24" height="24"/>
+				<button id="commands-btn" class="icon-button" title="Open commands">
+					<img src="{% static 'icon/command/move.png' %}" alt="Open commands" width="24" height="24"/>
 				</button>
 
 				<button id="logout-btn" class="icon-button" title="Logout">

@@ -8,7 +8,7 @@
 
 {% if request.user.is_authenticated %}
 	{% include "games.html" %}
-	<input id="logout-btn-original" class="logout-button" type="button" />
+	<!--input id="logout-btn-original" class="logout-button" type="button" / -->
 	{% include "commands_dialog.html" %}
 {% else %}
 	<form id="login-form">
