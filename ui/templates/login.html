@@ -1,0 +1,27 @@
+<script>
+	$(document).ready(function() {
+		$('#login-user').click(function(e) {login()});
+		
+		// Handle Enter key on username and password fields
+		$('#login-form .username, #login-form .password').keypress(function(e) {
+			if (e.which === 13) { // Enter key
+				e.preventDefault();
+				login();
+			}
+		});
+		
+		// Handle form submission
+		$('#login-form').submit(function(e) {
+			e.preventDefault();
+			login();
+		});
+	});
+</script>
+
+<form id="login-form">
+	{% csrf_token %}
+	<input type="text" class="username" name="username"/>
+	<input type="password" class="password" name="password"/>
+	<input id="login-user" class="login-button" type="button" />
+	<span id="login-error"></span>
+</form>

@@ -1,6 +1,5 @@
 <script>
 	$(document).ready(function() {
-		$('#login-user').click(function(e) {login()});
 		$('#logout-btn-original').click(function(e) {logout()});
 		$('#menu').dialog({dialogClass:'noTitle', height:70, width:300, position:{my:"left top",at:"left+60 top+10", of:"body"}});
 	});
@@ -11,12 +10,6 @@
 	<!--input id="logout-btn-original" class="logout-button" type="button" / -->
 	{% include "commands_dialog.html" %}
 {% else %}
-	<form id="login-form">
-		{% csrf_token %}
-		<input type="text" class="username" name="username"/>
-		<input type="password" class="password" name="password"/>
-		<input id="login-user" class="login-button" type="button" />
-		<span id="login-error"></span>
-	</form>
+	{% include "login.html" %}
 {% endif %}
  
