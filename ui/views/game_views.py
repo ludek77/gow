@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from ui.models import Game, Turn, Field, UnitType, City, Unit, Country, CityCommand, Command
 from ui.engine.TurnProcessor import TurnProcessor
 from ui.engine.Engine import Engine
+import logging
 
 @login_required
 def game_list_rest(request):
@@ -92,9 +93,13 @@ def game_setup_rest(request):
     output += ']'
     
     if selectedTurn is not None:
+        logging.info(f"Initializing engine for turn: {selectedTurn.id}")
         engine = Engine()
         engine.initialize(selectedTurn)
-        selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+        try:
+            selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+        except Country.DoesNotExist:
+            selectedCountry = None
         commands = Command.objects.filter(unit__turn=selectedTurn).order_by('removePriority')
         output += ',"units":['
         separator = ''
@@ -108,7 +113,7 @@ def game_setup_rest(request):
             output += ',"clr":"'+unit.country.color+'"'
             output += ',"type":'+str(unit.unitType.pk)
             output += ',"cmd":"'+command.commandType.name+'"'
-            if unit.country == selectedCountry or not selectedTurn.open:
+            if (selectedCountry and unit.country == selectedCountry) or not selectedTurn.open:
                 targets = engine.getTargetFields(command)
                 if len(targets) > 0:
                     output += ',"tgt":['

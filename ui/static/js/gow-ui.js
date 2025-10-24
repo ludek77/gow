@@ -90,14 +90,10 @@ function renderField(lat, lng, pk) {
 }
 
 function renderCityElement(lat, lng, fpk, clr, home) {
+	renderFieldElement(lat,lng,fpk);
 	var opacity = 0.5;
 	if(home) opacity = 1;
-	L.rectangle([[lat-1.5,lng-2],[lat+1.5,lng+2]], {
-		color: clr,
-		fillColor: clr,
-		fillOpacity: opacity,
-		className: 'c-id-'+fpk
-	}).on('click', function(e){
+	L.circle([lat,lng], 100000, {color: clr, fillColor:clr, fillOpacity: opacity, className: 'c-id-'+fpk}).on('click', function(e){
 		onClickField(e,fpk);
 	}).addTo(map);
 }
