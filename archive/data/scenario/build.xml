@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+
+<!--
+ Pouziti:
+ Vygenerovani scenare.
+ 
+ ant -Ddir=scenar
+      Vygenerovani scenare
+      
+  ant test -Ddir=scenar
+      Vygenerovani testovacich map
+-->
+
+
+<project name="scenario_builder" basedir="." default="build">
+
+  <property name="dir" value="" />
+  
+  <property name="lib.dir" value="../../bin/lib" />
+  <property name="xslt.dir" value="../../bin/xslt" />
+  
+  <property name="map.png.class" value="dip.scenario.Png2XmlMapConverter" />
+  <property name="map.xml.class" value="dip.scenario.Txt2XmlScenarioConverter" />
+  <property name="map.test.class" value="dip.scenario.MapTester" />
+  <property name="dip.jar" value="${lib.dir}/dip.jar;${lib.dir}/xstream-1.2.2.jar;${lib.dir}/xpp3_min-1.1.3.4.O.jar" />
+      
+  <!-- Compiles classes -->
+  <target name="build">
+    <java
+          classname="${map.png.class}"
+          classpath="${dip.jar}"
+          fork="true"
+          failonerror="true"
+          maxmemory="512m"
+      >
+          <arg value="${dir}"/>
+    </java>
+    <java
+          classname="${map.xml.class}"
+          classpath="${dip.jar}"
+          fork="true"
+          failonerror="true"
+          maxmemory="512m"
+      >
+          <arg value="${dir}/map.src/scenario.txt"/>
+          <arg value="${dir}/scenario.xml"/>
+          <arg value="${dir}/position.0.xml"/>
+    </java>
+  </target>
+  
+  <target name="test">
+    <java
+          classname="${map.test.class}"
+          classpath="${dip.jar}"
+          fork="true"
+          failonerror="true"
+          maxmemory="512m"
+      >
+          <arg value="${dir}"/>
+    </java>
+  </target>
+  
+  <!-- BUILD INDEX.HTML FILE -->
+  <target name="neighbours">
+    <xslt in="${dir}/scenario.xml" out="${dir}/ships.html" style="${xslt.dir}/neighbours.xslt" force="true">
+      <param name="type" expression="ships" />
+    </xslt>
+    <xslt in="${dir}/scenario.xml" out="${dir}/armies.html" style="${xslt.dir}/neighbours.xslt" force="true">
+      <param name="type" expression="armies" />
+    </xslt>
+  </target>
+  
+</project> 

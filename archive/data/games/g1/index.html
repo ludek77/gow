@@ -1,0 +1,607 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script><script type="text/javascript">
+        try {
+          var pageTracker = _gat._getTracker("UA-3812126-6");
+          pageTracker._trackPageview();
+        } catch(err) {}
+      </script><script language="javascript">
+        function setImage(image) {
+          document.getElementById('map').style.backgroundImage = 'url('+image+')';
+          document.getElementById('headertext').innerHTML = image.substring(0,5);
+        }
+        function scroll(value) {
+          document.getElementById('map').style.backgroundPosition = value;
+        }
+        function displayResult(value) {
+          window.open(value);
+        }
+        var images=new Array(
+          '1900j/results.png','1900j/map.png','1900j/commands.png','1900p/results.png','1900p/map.png','1900p/commands.png','1901j/results.png','1901j/map.png','1901j/commands.png','1901p/results.png','1901p/map.png','1901p/commands.png','1902j/results.png','1902j/map.png','1902j/commands.png','1902p/results.png','1902p/map.png','1902p/commands.png','1903j/results.png','1903j/map.png','1903j/commands.png','1903p/results.png','1903p/map.png','1903p/commands.png','1904j/results.png','1904j/map.png','1904j/commands.png','1904p/results.png','1904p/map.png','1904p/commands.png','1905j/results.png','1905j/map.png','1905j/commands.png','1905p/results.png','1905p/map.png','1905p/commands.png','1906j/results.png','1906j/map.png','1906j/commands.png','1906p/results.png','1906p/map.png','1906p/commands.png','1907j/results.png','1907j/map.png','1907j/commands.png','1907p/results.png','1907p/map.png','1907p/commands.png','1908j/results.png','1908j/map.png','1908j/commands.png','1908p/results.png','1908p/map.png','1908p/commands.png','1909j/results.png','1909j/map.png','1909j/commands.png','1909p/results.png','1909p/map.png','1909p/commands.png','1910j/results.png','1910j/map.png','1910j/commands.png','1910p/results.png','1910p/map.png','1910p/commands.png','1911j/results.png','1911j/map.png','1911j/commands.png','1911p/results.png','1911p/map.png','1911p/commands.png','1912j/results.png','1912j/map.png','1912j/commands.png','1912p/results.png','1912p/map.png','1912p/commands.png','1913j/results.png','1913j/map.png','1913j/commands.png','1913p/results.png','1913p/map.png','1913p/commands.png','1914j/results.png','1914j/map.png','1914j/commands.png','1914p/results.png','1914p/map.png','1914p/commands.png','1915j/results.png','1915j/map.png','1915j/commands.png','1915p/results.png','1915p/map.png','1915p/commands.png','1916j/results.png','1916j/map.png','1916j/commands.png','1916p/results.png','1916p/map.png','1916p/commands.png','1917j/results.png','1917j/map.png','1917j/commands.png','1917p/results.png','1917p/map.png','1917p/commands.png','1918j/results.png','1918j/map.png',
+          'STOP'
+        );
+        var actual = -1;
+        function animate() {
+          setImage(images[actual]);
+          actual++;
+          if(images[actual]!='STOP') {
+            window.setTimeout("animate()",2000);
+          }
+        }
+      </script><link rel="StyleSheet" href="main.css" type="text/css"><style>
+        #map {
+          width: 900px;
+          height: 600px;
+        }
+      </style></head>
+   <body>
+      <table>
+         <tr>
+            <td style="vertical-align: top">
+               <div class="years" style="height:600px">
+                  <table>
+                     <tr>
+                        <td class="year">1900j</td>
+                        <td></td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1900j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1900j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1900j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1900p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1900p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1900p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1900p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1900p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1901j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1901j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1901j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1901j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1901j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1901p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1901p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1901p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1901p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1901p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1902j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1902j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1902j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1902j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1902j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1902p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1902p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1902p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1902p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1902p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1903j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1903j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1903j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1903j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1903j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1903p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1903p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1903p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1903p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1903p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1904j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1904j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1904j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1904j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1904j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1904p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1904p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1904p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1904p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1904p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1905j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1905j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1905j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1905j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1905j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1905p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1905p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1905p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1905p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1905p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1906j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1906j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1906j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1906j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1906j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1906p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1906p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1906p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1906p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1906p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1907j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1907j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1907j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1907j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1907j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1907p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1907p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1907p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1907p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1907p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1908j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1908j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1908j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1908j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1908j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1908p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1908p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1908p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1908p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1908p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1909j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1909j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1909j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1909j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1909j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1909p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1909p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1909p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1909p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1909p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1910j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1910j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1910j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1910j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1910j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1910p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1910p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1910p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1910p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1910p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1911j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1911j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1911j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1911j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1911j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1911p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1911p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1911p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1911p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1911p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1912j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1912j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1912j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1912j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1912j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1912p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1912p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1912p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1912p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1912p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1913j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1913j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1913j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1913j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1913j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1913p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1913p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1913p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1913p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1913p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1914j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1914j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1914j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1914j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1914j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1914p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1914p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1914p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1914p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1914p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1915j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1915j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1915j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1915j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1915j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1915p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1915p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1915p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1915p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1915p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1916j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1916j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1916j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1916j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1916j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1916p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1916p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1916p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1916p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1916p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1917j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1917j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1917j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1917j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1917j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1917p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1917p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1917p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('1917p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1917p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">1918j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('1918j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('1918j/map.png')"></div>
+                        </td>
+                        <td></td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('1918j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td colspan="5"><a href="#" class="button" onclick="actual=0;animate()">Animace</a></td>
+                     </tr>
+                  </table>
+               </div>
+            </td>
+            <td style="vertical-align: top">
+               <div id="header">
+                  <div id="headertext"></div><a href="#" class="scroll button" onclick="scroll(0)">Evropa</a><a href="#" class="scroll button" onclick="scroll(300)">Amerika</a><a href="#" class="scroll button" onclick="scroll(600)">Asie</a></div>
+               <div id="map"></div>
+            </td>
+         </tr>
+      </table>
+   </body><script language="javascript">setImage('1918j/map.png');</script></html>

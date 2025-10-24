@@ -1,0 +1,69 @@
+.menu {
+  height: 105px;
+  border-bottom: 1px solid black;
+}
+.group {
+  margin: 0 0 0 230px;
+  padding-top: 10px;
+  float: left;
+}
+.title {
+  font-weight: bold;
+  text-align: center;
+}
+.main {
+  width: 1300px;
+  height: 100%;
+  border: none;
+}
+.logo {
+  position: absolute;
+  background: url('../img/pikle.png') no-repeat;
+  width: 150px;
+  height: 105px;
+  color: 090c8e;
+  font-size: 2em;
+  padding-left: 70px;
+  font-weight: bold;
+  cursor: pointer;
+}
+body {
+  background-color: #63b4f8;
+}
+.button {
+  text-decoration: none;
+  padding-bottom: 3px;
+  background: url('../img/button.png');
+  height: 30px;
+  width: 200px;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  float: left;
+}
+.button:hover {
+  background: url('../img/button-hover.png');
+}
+.tab {
+  text-decoration: none;
+  background: url('../img/tab.png');
+  width: 200px;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  float: left;
+}
+.selected {
+  background: url('../img/tab-selected.png');
+}
+.tab:hover {
+  background: url('../img/tab-hover.png');
+}
+.info {
+  height: 20px;
+}
+.infohead {
+}
+.infotext {
+  font-weight: bold;
+}

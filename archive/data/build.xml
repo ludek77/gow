@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+
+<!--
+  Pouziti
+  
+  Zaloha vsech dat (jen vstupy)
+    ant pack
+-->
+
+<project name="dip" basedir="." default="pack">
+
+  <tstamp>
+	  <format property="CURRENT_TS" pattern="yy.MM.dd.HH.mm" locale="en" />
+	</tstamp>
+  
+  <target name="pack">
+    <property name="zipfile" value="dip-data.${CURRENT_TS}.zip" />
+  
+    <zip destfile="${zipfile}" basedir=".." includes="data/**" excludes="**/map.xml, data/games/**/*.png, data/games/**/*.html, data/games/**/result.xml, data/games/**/position.xml" />
+  </target>
+  
+</project> 

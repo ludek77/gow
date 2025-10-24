@@ -1,0 +1,244 @@
+<status id="1">
+  <units id="2">
+    <base id="3">
+      <id>2</id>
+      <countryId>E</countryId>
+      <fieldId>2</fieldId>
+    </base>
+    <base id="4">
+      <id>3</id>
+      <countryId>E</countryId>
+      <fieldId>3</fieldId>
+    </base>
+    <base id="5">
+      <id>6</id>
+      <countryId>E</countryId>
+      <fieldId>6</fieldId>
+    </base>
+    <base id="6">
+      <id>12</id>
+      <countryId>R</countryId>
+      <fieldId>12</fieldId>
+    </base>
+    <base id="7">
+      <id>13</id>
+      <countryId>R</countryId>
+      <fieldId>13</fieldId>
+    </base>
+    <base id="8">
+      <id>14</id>
+      <countryId>R</countryId>
+      <fieldId>14</fieldId>
+    </base>
+    <base id="9">
+      <id>18</id>
+      <countryId>A</countryId>
+      <fieldId>18</fieldId>
+    </base>
+    <base id="10">
+      <id>20</id>
+      <countryId>A</countryId>
+      <fieldId>20</fieldId>
+    </base>
+    <base id="11">
+      <id>23</id>
+      <countryId>A</countryId>
+      <fieldId>23</fieldId>
+    </base>
+    <base id="12">
+      <id>27</id>
+      <countryId>I</countryId>
+      <fieldId>27</fieldId>
+    </base>
+    <base id="13">
+      <id>29</id>
+      <countryId>I</countryId>
+      <fieldId>29</fieldId>
+    </base>
+    <base id="14">
+      <id>28</id>
+      <countryId>I</countryId>
+      <fieldId>28</fieldId>
+    </base>
+    <base id="15">
+      <id>31</id>
+      <countryId>D</countryId>
+      <fieldId>31</fieldId>
+    </base>
+    <base id="16">
+      <id>38</id>
+      <countryId>M</countryId>
+      <fieldId>38</fieldId>
+    </base>
+    <base id="17">
+      <id>43</id>
+      <countryId>M</countryId>
+      <fieldId>43</fieldId>
+    </base>
+    <base id="18">
+      <id>47</id>
+      <countryId>D</countryId>
+      <fieldId>47</fieldId>
+    </base>
+    <base id="19">
+      <id>44</id>
+      <countryId>M</countryId>
+      <fieldId>44</fieldId>
+    </base>
+    <base id="20">
+      <id>51</id>
+      <countryId>S</countryId>
+      <fieldId>51</fieldId>
+    </base>
+    <base id="21">
+      <id>50</id>
+      <countryId>D</countryId>
+      <fieldId>50</fieldId>
+    </base>
+    <base id="22">
+      <id>53</id>
+      <countryId>S</countryId>
+      <fieldId>53</fieldId>
+    </base>
+    <base id="23">
+      <id>58</id>
+      <countryId>L</countryId>
+      <fieldId>58</fieldId>
+    </base>
+    <base id="24">
+      <id>56</id>
+      <countryId>L</countryId>
+      <fieldId>56</fieldId>
+    </base>
+    <base id="25">
+      <id>60</id>
+      <countryId>L</countryId>
+      <fieldId>60</fieldId>
+    </base>
+    <base id="26">
+      <id>70</id>
+      <countryId>O</countryId>
+      <fieldId>70</fieldId>
+    </base>
+    <base id="27">
+      <id>71</id>
+      <countryId>O</countryId>
+      <fieldId>71</fieldId>
+    </base>
+    <base id="28">
+      <id>76</id>
+      <countryId>Z</countryId>
+      <fieldId>76</fieldId>
+    </base>
+    <base id="29">
+      <id>78</id>
+      <countryId>Z</countryId>
+      <fieldId>78</fieldId>
+    </base>
+    <base id="30">
+      <id>79</id>
+      <countryId>Z</countryId>
+      <fieldId>79</fieldId>
+    </base>
+    <base id="31">
+      <id>72</id>
+      <countryId>O</countryId>
+      <fieldId>72</fieldId>
+    </base>
+    <base id="32">
+      <id>85</id>
+      <countryId>K</countryId>
+      <fieldId>85</fieldId>
+    </base>
+    <base id="33">
+      <id>86</id>
+      <countryId>K</countryId>
+      <fieldId>86</fieldId>
+    </base>
+    <base id="34">
+      <id>82</id>
+      <countryId>K</countryId>
+      <fieldId>82</fieldId>
+    </base>
+    <base id="35">
+      <id>93</id>
+      <countryId>U</countryId>
+      <fieldId>93</fieldId>
+    </base>
+    <base id="36">
+      <id>95</id>
+      <countryId>U</countryId>
+      <fieldId>95</fieldId>
+    </base>
+    <base id="37">
+      <id>94</id>
+      <countryId>U</countryId>
+      <fieldId>94</fieldId>
+    </base>
+    <base id="38">
+      <id>88</id>
+      <countryId>X</countryId>
+      <fieldId>88</fieldId>
+    </base>
+    <base id="39">
+      <id>91</id>
+      <countryId>X</countryId>
+      <fieldId>91</fieldId>
+    </base>
+    <base id="40">
+      <id>102</id>
+      <countryId>T</countryId>
+      <fieldId>102</fieldId>
+    </base>
+    <base id="41">
+      <id>103</id>
+      <countryId>T</countryId>
+      <fieldId>103</fieldId>
+    </base>
+    <base id="42">
+      <id>96</id>
+      <countryId>X</countryId>
+      <fieldId>96</fieldId>
+    </base>
+    <base id="43">
+      <id>110</id>
+      <countryId>B</countryId>
+      <fieldId>110</fieldId>
+    </base>
+    <base id="44">
+      <id>111</id>
+      <countryId>B</countryId>
+      <fieldId>111</fieldId>
+    </base>
+    <base id="45">
+      <id>106</id>
+      <countryId>T</countryId>
+      <fieldId>106</fieldId>
+    </base>
+    <base id="46">
+      <id>119</id>
+      <countryId>G</countryId>
+      <fieldId>119</fieldId>
+    </base>
+    <base id="47">
+      <id>118</id>
+      <countryId>G</countryId>
+      <fieldId>118</fieldId>
+    </base>
+    <base id="48">
+      <id>114</id>
+      <countryId>G</countryId>
+      <fieldId>114</fieldId>
+    </base>
+    <base id="49">
+      <id>113</id>
+      <countryId>B</countryId>
+      <fieldId>113</fieldId>
+    </base>
+    <base id="50">
+      <id>121</id>
+      <countryId>S</countryId>
+      <fieldId>121</fieldId>
+    </base>
+  </units>
+</status>

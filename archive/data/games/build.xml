@@ -1,0 +1,199 @@
+<?xml version="1.0"?>
+
+<!--
+ Pouziti:
+ Tento skript je spousten ze skriptu v adresarich jednotlivych her a stara se o vypocet
+ novych tahu, pripadne o mazani dat atd.
+ 
+ Vytvoreni nove hry
+   ant new -Dgame=<game_name> -Dscenario=<scenario_name>
+   
+ Vytvoreni datoveho baliku pro publikovany automat 
+   ant client -Dgame=hra -Dscenario=scenar
+   
+ Zkopirovani dat pro publikovani
+   ant publish -Dgame=hra
+   
+-->
+
+<project name="dip4" basedir="." default="eval">
+
+  <property name="scenario" value="" />
+  <property name="game" value="" />
+  <property name="in" value="" />
+  <property name="out" value="" />
+
+  <property name="bin.dir" value="../../bin" />
+  <property name="data.dir" value=".." />
+  
+  <property name="lib.dir" value="${bin.dir}/lib" />
+  <property name="scenario.root" value="${data.dir}/scenario" />
+  <property name="game.root" value="${data.dir}/games" />
+  
+  <property name="client.dir" value="d:/temp/dip" />
+  <property name="publish.dir" value="d:/temp/_publish.dip" />
+
+  <property name="dip.class" value="dip.Run" />
+  <property name="dip.jar" value="${lib.dir}/dip.jar;${lib.dir}/xstream-1.2.2.jar;${lib.dir}/xpp3_min-1.1.3.4.O.jar" />
+
+  <property name="xslt.dir" value="${bin.dir}/xslt" />
+
+  <property name="scenario.dir" value="${scenario.root}/${scenario}" />
+  <property name="in.dir" value="${game.root}/${game}/${in}" />
+  <property name="out.dir" value="${game.root}/${game}/${out}" />
+
+  <property name="maps" value="true" />
+  <property name="arrows" value="true" />
+  
+  <property name="map_width" value="900px" />
+  <property name="map_height" value="600px" />
+  <property name="map_scrollable" value="true" />
+
+  <!-- COUNT ONE SPECIFIC MOVE -->
+  <target name="evaluate">
+      <java
+          classname="${dip.class}"
+          classpath="${dip.jar}"
+          fork="true"
+          failonerror="true"
+          maxmemory="512m"
+      >
+          <arg value="-Ds=${scenario.dir}"/>
+          <arg value="-Di=${in.dir}"/>
+          <arg value="-Do=${out.dir}"/>
+          <arg value="-Dm=${maps}"/>
+          <arg value="-Da=${arrows}"/>
+      </java>
+      
+      <move file="${out.dir}/commands.png" todir="${in.dir}" failonerror="false" />
+  </target>
+  
+  <!-- CRETE RESULT HTML --> 
+  <target name="results">    
+      <xslt in="${out.dir}/result.xml" out="${out.dir}/result.html" style="${xslt.dir}/result.xslt" force="true" />
+  </target>
+  
+  <!-- COUNT STATISTICS -->
+  <target name="counters">
+    <xslt in="${out.dir}/result.xml" out="${out.dir}/counters.dat" style="${xslt.dir}/counters.xslt" force="true" />
+  </target>
+
+  <!-- COUNT ONE SPECIFIC MOVE -->
+  <target name="eval">
+    <echo message="evaluating ${out}" />
+    <mkdir dir="${out.dir}" />
+      
+    <antcall target="evaluate" />
+    <antcall target="results" />
+    <antcall target="counters" />
+  </target>
+  
+  <!-- CLEAR SPECIFIC MOVE OUTPUTS AND GAME INDEX.HTML -->
+  <target name="clean">
+    <delete file="${out.dir}/map.png" failonerror="false" />
+    <delete file="${out.dir}/results.png" failonerror="false" />
+    <delete file="${in.dir}/commands.png" failonerror="false" />
+    <delete file="${out.dir}/position.xml" failonerror="false" />
+    <delete file="${out.dir}/result.xml" failonerror="false" />
+    <delete file="${out.dir}/result.html" failonerror="false" />
+    <delete file="${game.root}/${game}/index.html" failonerror="false" />
+  </target>
+  
+  <!-- CREATE A NEW GAME -->
+  <target name="new">
+    <mkdir dir="${game}" />
+    <mkdir dir="${game}/1999n" />
+    <copy file="${scenario.dir}/position.0.xml" tofile="${game}/1999n/position.xml" />
+    <copy file="_template/build.xml" tofile="${game}/build.xml" overwrite="yes">
+      <filterset>
+        <filter token="GAME" value="${game}" />
+        <filter token="SCENARIO" value="${scenario}" />
+      </filterset>
+    </copy>
+  </target>
+
+  <!-- BUILD INDEX.HTML FILE -->
+  <target name="index" depends="listdirectory">
+    <xslt in="${game}/dir.xml" out="${game}/index.html" style="${xslt.dir}/index.xslt" force="true">
+      <param name="map_width" expression="${map_width}" />
+      <param name="map_height" expression="${map_height}" />
+      <param name="map_scrollable" expression="${map_scrollable}" />
+    </xslt>
+    <delete file="${game}/dir.xml" />
+    <copy file="_template/main.css" tofile="${game}/main.css" /> 
+  </target>
+
+  <!-- COPY DATA TO CLIENT DIRECTORY -->
+  <target name="client">
+    <mkdir dir="${client.dir}/data/scenario/${scenario}" />
+    <copy todir="${client.dir}/data/scenario/${scenario}">
+      <fileset dir="${scenario.dir}">
+        <include name="map.xml" />
+        <include name="scenario.xml" />
+      </fileset>
+    </copy>
+    <mkdir dir="${client.dir}/data/games/${game}" />
+    <copy todir="${client.dir}/data/games/${game}">
+      <fileset dir="${game.root}/${game}">
+        <include name="**/tahy.txt" />
+        <include name="**/position.xml" />
+      </fileset>
+    </copy>
+    <copy todir="${client.dir}/data/games/${game}">
+      <fileset file="${game.root}/${game}/build.xml" />
+    </copy>
+    <copy todir="${client.dir}/data/games">
+      <fileset file="build.xml" />
+    </copy>
+  </target>
+  
+  <target name="publish">
+    <mkdir dir="${publish.dir}/games/${game}" />
+    <copy todir="${publish.dir}/games/${game}">
+      <fileset dir="${game.root}/${game}">
+        <include name="**/*.png" />
+        <include name="**/*.html" />
+        <include name="**/*.css" />
+      </fileset>
+    </copy>
+  </target>
+
+  <!-- LIST SPECIFIED DIRECTORY TO DIR.XML FILE -->
+  <target name="listdirectory">
+    <property name="temp" value="${game}/dir-temporary.xml" />
+    <property name="outfile" value="${game}/dir.xml" />
+
+    <dirset id="myfiles" dir="${game}" includes="**/*" />
+    <dirset id="rootdir" dir="${game}" excludes="**/*" />
+
+    <pathconvert 
+      property="root" 
+      dirsep="/" 
+      pathsep="&lt;/file&gt;${line.separator}  &lt;file&gt;" 
+      refid="rootdir">
+    </pathconvert>
+
+    <pathconvert 
+      property="myfiles2" 
+      dirsep="/" 
+      pathsep="&lt;/file&gt;${line.separator}  &lt;file&gt;" 
+      refid="myfiles">
+      <map from="${root}/" to="" />
+    </pathconvert>
+
+    <delete file="${temp}" />
+    <echo file="${temp}" append="yes" message="&lt;?xml version='1.0' encoding='utf-8'?&gt;${line.separator}" />
+    <echo file="${temp}" append="yes" message="&lt;files&gt;${line.separator}  &lt;file&gt;" />
+    <echo file="${temp}" append="yes" message="@FILES@" />
+    <echo file="${temp}" append="yes" message="&lt;/file&gt;${line.separator}&lt;/files&gt;" />
+
+    <copy file="${temp}" tofile="${outfile}" overwrite="yes">
+      <filterset>
+        <filter token="FILES" value="${myfiles2}" />
+      </filterset>
+    </copy>
+
+    <delete file="${temp}" />
+  </target>
+
+</project> 

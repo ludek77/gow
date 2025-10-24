@@ -1,0 +1,555 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script><script type="text/javascript">
+        try {
+          var pageTracker = _gat._getTracker("UA-3812126-6");
+          pageTracker._trackPageview();
+        } catch(err) {}
+      </script><script language="javascript">
+        function setImage(image) {
+          document.getElementById('map').style.backgroundImage = 'url('+image+')';
+          document.getElementById('headertext').innerHTML = image.substring(0,5);
+        }
+        function scroll(value) {
+          document.getElementById('map').style.backgroundPosition = value;
+        }
+        function displayResult(value) {
+          window.open(value);
+        }
+        var images=new Array(
+          '2010j/results.png','2010j/map.png','2010j/commands.png','2010p/results.png','2010p/map.png','2010p/commands.png','2011j/results.png','2011j/map.png','2011j/commands.png','2011p/results.png','2011p/map.png','2011p/commands.png','2012j/results.png','2012j/map.png','2012j/commands.png','2012p/results.png','2012p/map.png','2012p/commands.png','2013j/results.png','2013j/map.png','2013j/commands.png','2013p/results.png','2013p/map.png','2013p/commands.png','2014j/results.png','2014j/map.png','2014j/commands.png','2014p/results.png','2014p/map.png','2014p/commands.png','2015j/results.png','2015j/map.png','2015j/commands.png','2015p/results.png','2015p/map.png','2015p/commands.png','2016j/results.png','2016j/map.png','2016j/commands.png','2016p/results.png','2016p/map.png','2016p/commands.png','2017j/results.png','2017j/map.png','2017j/commands.png','2017p/results.png','2017p/map.png','2017p/commands.png','2018j/results.png','2018j/map.png','2018j/commands.png','2018p/results.png','2018p/map.png','2018p/commands.png','2019j/results.png','2019j/map.png','2019j/commands.png','2019p/results.png','2019p/map.png','2019p/commands.png','2020j/results.png','2020j/map.png','2020j/commands.png','2020p/results.png','2020p/map.png','2020p/commands.png','2021j/results.png','2021j/map.png','2021j/commands.png','2021p/results.png','2021p/map.png','2021p/commands.png','2022j/results.png','2022j/map.png','2022j/commands.png','2022p/results.png','2022p/map.png','2022p/commands.png','2023j/results.png','2023j/map.png','2023j/commands.png','2023p/results.png','2023p/map.png','2023p/commands.png','2024j/results.png','2024j/map.png','2024j/commands.png','2024p/results.png','2024p/map.png','2024p/commands.png','2025j/results.png','2025j/map.png','2025j/commands.png','2025p/results.png','2025p/map.png','2025p/commands.png','2026j/results.png','2026j/map.png',
+          'STOP'
+        );
+        var actual = -1;
+        function animate() {
+          setImage(images[actual]);
+          actual++;
+          if(images[actual]!='STOP') {
+            window.setTimeout("animate()",2000);
+          }
+        }
+        function nuke(e) {
+          var nuke = document.getElementById('nuke');
+          nuke.style.backgroundImage = 'url(../../img/nuke.gif?rand='+new Date().getTime()+')';
+          nuke.style.top = e.clientY - 60;
+          nuke.style.left = e.clientX - 40;
+        }
+      </script><link rel="StyleSheet" href="main.css" type="text/css"><style>
+        #map {
+          width: 900px;
+          height: 600px;
+        }
+      </style></head>
+   <body>
+      <table>
+         <tr>
+            <td style="vertical-align: top; padding-top: 30px">
+               <div class="years" style="height:600px">
+                  <table>
+                     <tr>
+                        <td class="year">2010j</td>
+                        <td></td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2010j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2010j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2010j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2010p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2010p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2010p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2010p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2010p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2011j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2011j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2011j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2011j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2011j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2011p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2011p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2011p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2011p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2011p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2012j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2012j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2012j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2012j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2012j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2012p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2012p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2012p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2012p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2012p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2013j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2013j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2013j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2013j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2013j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2013p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2013p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2013p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2013p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2013p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2014j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2014j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2014j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2014j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2014j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2014p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2014p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2014p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2014p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2014p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2015j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2015j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2015j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2015j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2015j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2015p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2015p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2015p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2015p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2015p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2016j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2016j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2016j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2016j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2016j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2016p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2016p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2016p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2016p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2016p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2017j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2017j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2017j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2017j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2017j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2017p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2017p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2017p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2017p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2017p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2018j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2018j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2018j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2018j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2018j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2018p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2018p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2018p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2018p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2018p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2019j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2019j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2019j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2019j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2019j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2019p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2019p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2019p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2019p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2019p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2020j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2020j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2020j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2020j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2020j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2020p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2020p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2020p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2020p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2020p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2021j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2021j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2021j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2021j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2021j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2021p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2021p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2021p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2021p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2021p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2022j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2022j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2022j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2022j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2022j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2022p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2022p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2022p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2022p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2022p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2023j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2023j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2023j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2023j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2023j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2023p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2023p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2023p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2023p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2023p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2024j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2024j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2024j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2024j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2024j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2024p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2024p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2024p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2024p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2024p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2025j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2025j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2025j/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2025j/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2025j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2025p</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2025p/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2025p/map.png')"></div>
+                        </td>
+                        <td>
+                           <div class="command_icon" onclick="setImage('2025p/commands.png')"></div>
+                        </td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2025p/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td class="year">2026j</td>
+                        <td>
+                           <div class="result_icon" onclick="setImage('2026j/results.png')"></div>
+                        </td>
+                        <td>
+                           <div class="map_icon" onclick="setImage('2026j/map.png')"></div>
+                        </td>
+                        <td></td>
+                        <td>
+                           <div class="detail_icon" onclick="displayResult('2026j/result.html')"></div>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td colspan="5"><a href="#" class="button" onclick="actual=0;animate()">Animace</a></td>
+                     </tr>
+                  </table>
+               </div>
+            </td>
+            <td style="vertical-align: top">
+               <div id="header">
+                  <div id="headertext"></div><a href="#" class="scroll button" onclick="scroll(0)">Evropa</a><a href="#" class="scroll button" onclick="scroll(300)">Amerika</a><a href="#" class="scroll button" onclick="scroll(600)">Asie</a></div>
+               <div id="map" onclick="javascript:nuke(event)">
+                  <div style="position:absolute;height:121px;width:78px" id="nuke"></div>
+               </div>
+            </td>
+         </tr>
+      </table>
+   </body><script language="javascript">setImage('2026j/map.png');</script></html>

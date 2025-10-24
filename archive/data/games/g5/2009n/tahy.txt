@@ -1,0 +1,66 @@
+RECOUNT_UNITS
+
+A Arábie
+
+++f 16
+++a 20
+++f 23
+++a 25
+
+B Brazílie
+
+++A 110
+++F 105
+++F 107
+++A 103
+
+C Čína
+
+++f 35
+++a 37
+++a 42
+++f 46
+
+I Indie
+
+J JAR
+
+++F 66
+++A 68
+++F 71
+++F 78
+
+K Kanada
+
+++f 82
+++f 86
+++f 87
+++a 88
+
+L Alžír
+
+++F 69
+++A 67
+++A 64
+++F 58
+
+N Argentina
+
+++f 113
+++f 119
+++f 114
+++a 117
+
+R Rusko
+
+++A 12
+++A 13
+++A 14
+++A 40
+
+U Amerika
+
+++a 91
+++f 96
+++f 95
+++a 94

@@ -1,0 +1,39 @@
+RECOUNT_UNITS
+
+U USA
+++f 95
+
+S Siouxové
+++f 88
+
+O Kolumbie
+++f 106
+
+K Kanada
+++f 82
+
+J JAR
+++f 79
+
+D Indonésie
+++f 50
+++f 47
+
+I Indie
+++f 27
+
+G Egypt
+++f 71
+
+T Austrálie
+++f 51
+
+N Argentina
+++f 119
+++f 114
+
+A Arábie
+++f 20
+
+L Alžír
+++f 59

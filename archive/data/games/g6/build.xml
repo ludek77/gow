@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+
+<!--
+ Pouziti:
+ Vypocet tahu teto hry.
+ 
+ ant -Din=<zdroj> -Dout=<cil>
+      vypocet jednoho tahu
+      
+ ant -Dcmd=index
+      vytvoreni indexu
+      
+ ant all
+      vypocet kompletni hry
+      
+ and all -Dcmd=clean
+      promazani kompletni hry
+-->
+
+<project name="dip4" basedir="." default="eval">
+
+  <property name="in" value="" />
+  <property name="out" value="" />
+  <property name="cmd" value="eval" />
+  
+  <property name="maps" value="true" />
+  <property name="arrows" value="true" />
+ 
+  <property name="game" value="g6" />
+  <property name="scenario" value="world2010" />
+
+  <target name="eval">
+    <ant antfile="build.xml" dir=".." target="${cmd}">
+      <property name="game" value="${game}" />
+      <property name="scenario" value="${scenario}" />
+      <property name="in" value="${in}" />
+      <property name="out" value="${out}" />
+      <property name="maps" value="${maps}" />
+      <property name="arrows" value="${arrows}" />
+    </ant>
+  </target>
+
+  <target name="all">
+    <antcall target="eval">
+       <param name="in" value="2099n" />
+       <param name="out" value="2100j" />
+    </antcall>
+    
+    <!-- ADD CALL FOR EVERY MOVE HERE -->
+  </target>
+
+</project> 

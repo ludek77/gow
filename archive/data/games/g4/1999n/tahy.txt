@@ -1,0 +1,81 @@
+RECOUNT_UNITS
+
+L Al¾ír
+++f 58
+++a 59
+++a 60
+
+A Arábie
+++a 19
+++f 20
+++a 23
+
+N Argentina
+++a 114
+++a 118
+++f 119
+
+T Austrálie
+++f 51
+++f 53
+++f 55
+
+B Brazílie
+++a 110
+++f 111
+++a 113
+
+C Èína
+++f 33
+++a 37
+++f 44
+
+G Egypt
+++a 69
+++a 70
+++a 71
+
+E Evropa
+++a 1
+++a 2
+++a 6
+
+I Indie
+++f 27
+++a 28
+++f 29
+
+D Indonésie
+++f 31
+++f 47
+++f 50
+
+J JAR
+++a 76
+++a 78
+++f 79
+
+K Kanada
+++f 82
+++a 85
+++a 86
+
+O Kolumbie
+++f 103
+++f 105
+++f 106
+
+R Rusko
+++a 10
+++a 11
+++a 25
+
+S Siouxové
+++a 88
+++a 91
+++f 96
+
+U USA
+++a 93
+++a 94
+++f 95

@@ -1,0 +1,659 @@
+<status id="1">
+  <units id="2">
+    <base id="3">
+      <id>91</id>
+      <countryId>S</countryId>
+      <fieldId>91</fieldId>
+    </base>
+    <base id="4">
+      <id>88</id>
+      <countryId>S</countryId>
+      <fieldId>88</fieldId>
+    </base>
+    <base id="5">
+      <id>47</id>
+      <countryId>D</countryId>
+      <fieldId>47</fieldId>
+    </base>
+    <base id="6">
+      <id>31</id>
+      <countryId>D</countryId>
+      <fieldId>31</fieldId>
+    </base>
+    <base id="7">
+      <id>27</id>
+      <countryId>I</countryId>
+      <fieldId>27</fieldId>
+    </base>
+    <base id="8">
+      <id>58</id>
+      <countryId>L</countryId>
+      <fieldId>58</fieldId>
+    </base>
+    <base id="9">
+      <id>60</id>
+      <countryId>L</countryId>
+      <fieldId>60</fieldId>
+    </base>
+    <base id="10">
+      <id>59</id>
+      <countryId>L</countryId>
+      <fieldId>59</fieldId>
+    </base>
+    <ship id="11">
+      <id>122</id>
+      <countryId>D</countryId>
+      <fieldId>162</fieldId>
+    </ship>
+    <ship id="12">
+      <id>138</id>
+      <countryId>L</countryId>
+      <fieldId>129</fieldId>
+    </ship>
+    <army id="13">
+      <id>139</id>
+      <countryId>L</countryId>
+      <fieldId>107</fieldId>
+    </army>
+    <army id="14">
+      <id>140</id>
+      <countryId>L</countryId>
+      <fieldId>13</fieldId>
+    </army>
+    <army id="15">
+      <id>149</id>
+      <countryId>I</countryId>
+      <fieldId>23</fieldId>
+    </army>
+    <ship id="16">
+      <id>152</id>
+      <countryId>J</countryId>
+      <fieldId>145</fieldId>
+    </ship>
+    <army id="17">
+      <id>163</id>
+      <countryId>S</countryId>
+      <fieldId>97</fieldId>
+    </army>
+    <base id="18">
+      <id>177</id>
+      <countryId>I</countryId>
+      <fieldId>30</fieldId>
+    </base>
+    <base id="19">
+      <id>179</id>
+      <countryId>D</countryId>
+      <fieldId>33</fieldId>
+    </base>
+    <base id="20">
+      <id>185</id>
+      <countryId>L</countryId>
+      <fieldId>69</fieldId>
+    </base>
+    <base id="21">
+      <id>186</id>
+      <countryId>L</countryId>
+      <fieldId>70</fieldId>
+    </base>
+    <base id="22">
+      <id>187</id>
+      <countryId>L</countryId>
+      <fieldId>64</fieldId>
+    </base>
+    <base id="23">
+      <id>189</id>
+      <countryId>J</countryId>
+      <fieldId>73</fieldId>
+    </base>
+    <base id="24">
+      <id>190</id>
+      <countryId>S</countryId>
+      <fieldId>85</fieldId>
+    </base>
+    <ship id="25">
+      <id>198</id>
+      <countryId>D</countryId>
+      <fieldId>151</fieldId>
+    </ship>
+    <ship id="26">
+      <id>203</id>
+      <countryId>L</countryId>
+      <fieldId>94</fieldId>
+    </ship>
+    <ship id="27">
+      <id>204</id>
+      <countryId>L</countryId>
+      <fieldId>125</fieldId>
+    </ship>
+    <army id="28">
+      <id>205</id>
+      <countryId>L</countryId>
+      <fieldId>93</fieldId>
+    </army>
+    <army id="29">
+      <id>209</id>
+      <countryId>I</countryId>
+      <fieldId>25</fieldId>
+    </army>
+    <ship id="30">
+      <id>211</id>
+      <countryId>J</countryId>
+      <fieldId>114</fieldId>
+    </ship>
+    <base id="31">
+      <id>222</id>
+      <countryId>D</countryId>
+      <fieldId>50</fieldId>
+    </base>
+    <base id="32">
+      <id>229</id>
+      <countryId>S</countryId>
+      <fieldId>82</fieldId>
+    </base>
+    <base id="33">
+      <id>231</id>
+      <countryId>S</countryId>
+      <fieldId>89</fieldId>
+    </base>
+    <ship id="34">
+      <id>237</id>
+      <countryId>L</countryId>
+      <fieldId>87</fieldId>
+    </ship>
+    <base id="35">
+      <id>246</id>
+      <countryId>L</countryId>
+      <fieldId>1</fieldId>
+    </base>
+    <base id="36">
+      <id>251</id>
+      <countryId>D</countryId>
+      <fieldId>51</fieldId>
+    </base>
+    <base id="37">
+      <id>252</id>
+      <countryId>D</countryId>
+      <fieldId>49</fieldId>
+    </base>
+    <base id="38">
+      <id>254</id>
+      <countryId>D</countryId>
+      <fieldId>53</fieldId>
+    </base>
+    <army id="39">
+      <id>263</id>
+      <countryId>D</countryId>
+      <fieldId>40</fieldId>
+    </army>
+    <ship id="40">
+      <id>264</id>
+      <countryId>D</countryId>
+      <fieldId>29</fieldId>
+    </ship>
+    <ship id="41">
+      <id>266</id>
+      <countryId>L</countryId>
+      <fieldId>144</fieldId>
+    </ship>
+    <ship id="42">
+      <id>268</id>
+      <countryId>J</countryId>
+      <fieldId>106</fieldId>
+    </ship>
+    <army id="43">
+      <id>270</id>
+      <countryId>S</countryId>
+      <fieldId>90</fieldId>
+    </army>
+    <base id="44">
+      <id>274</id>
+      <countryId>L</countryId>
+      <fieldId>11</fieldId>
+    </base>
+    <base id="45">
+      <id>275</id>
+      <countryId>J</countryId>
+      <fieldId>19</fieldId>
+    </base>
+    <base id="46">
+      <id>277</id>
+      <countryId>D</countryId>
+      <fieldId>38</fieldId>
+    </base>
+    <base id="47">
+      <id>279</id>
+      <countryId>D</countryId>
+      <fieldId>44</fieldId>
+    </base>
+    <base id="48">
+      <id>280</id>
+      <countryId>D</countryId>
+      <fieldId>55</fieldId>
+    </base>
+    <base id="49">
+      <id>287</id>
+      <countryId>L</countryId>
+      <fieldId>105</fieldId>
+    </base>
+    <base id="50">
+      <id>290</id>
+      <countryId>D</countryId>
+      <fieldId>122</fieldId>
+    </base>
+    <army id="51">
+      <id>291</id>
+      <countryId>D</countryId>
+      <fieldId>83</fieldId>
+    </army>
+    <army id="52">
+      <id>292</id>
+      <countryId>D</countryId>
+      <fieldId>35</fieldId>
+    </army>
+    <army id="53">
+      <id>294</id>
+      <countryId>L</countryId>
+      <fieldId>15</fieldId>
+    </army>
+    <army id="54">
+      <id>295</id>
+      <countryId>J</countryId>
+      <fieldId>14</fieldId>
+    </army>
+    <army id="55">
+      <id>299</id>
+      <countryId>S</countryId>
+      <fieldId>92</fieldId>
+    </army>
+    <base id="56">
+      <id>300</id>
+      <countryId>L</countryId>
+      <fieldId>2</fieldId>
+    </base>
+    <base id="57">
+      <id>301</id>
+      <countryId>J</countryId>
+      <fieldId>20</fieldId>
+    </base>
+    <base id="58">
+      <id>311</id>
+      <countryId>L</countryId>
+      <fieldId>111</fieldId>
+    </base>
+    <base id="59">
+      <id>314</id>
+      <countryId>D</countryId>
+      <fieldId>166</fieldId>
+    </base>
+    <ship id="60">
+      <id>315</id>
+      <countryId>D</countryId>
+      <fieldId>165</fieldId>
+    </ship>
+    <ship id="61">
+      <id>316</id>
+      <countryId>D</countryId>
+      <fieldId>158</fieldId>
+    </ship>
+    <ship id="62">
+      <id>317</id>
+      <countryId>D</countryId>
+      <fieldId>159</fieldId>
+    </ship>
+    <army id="63">
+      <id>318</id>
+      <countryId>L</countryId>
+      <fieldId>119</fieldId>
+    </army>
+    <army id="64">
+      <id>319</id>
+      <countryId>L</countryId>
+      <fieldId>16</fieldId>
+    </army>
+    <base id="65">
+      <id>324</id>
+      <countryId>L</countryId>
+      <fieldId>5</fieldId>
+    </base>
+    <base id="66">
+      <id>326</id>
+      <countryId>L</countryId>
+      <fieldId>16</fieldId>
+    </base>
+    <base id="67">
+      <id>328</id>
+      <countryId>D</countryId>
+      <fieldId>37</fieldId>
+    </base>
+    <base id="68">
+      <id>329</id>
+      <countryId>D</countryId>
+      <fieldId>42</fieldId>
+    </base>
+    <base id="69">
+      <id>333</id>
+      <countryId>L</countryId>
+      <fieldId>116</fieldId>
+    </base>
+    <ship id="70">
+      <id>335</id>
+      <countryId>D</countryId>
+      <fieldId>142</fieldId>
+    </ship>
+    <ship id="71">
+      <id>336</id>
+      <countryId>D</countryId>
+      <fieldId>148</fieldId>
+    </ship>
+    <army id="72">
+      <id>337</id>
+      <countryId>D</countryId>
+      <fieldId>28</fieldId>
+    </army>
+    <ship id="73">
+      <id>338</id>
+      <countryId>L</countryId>
+      <fieldId>77</fieldId>
+    </ship>
+    <army id="74">
+      <id>339</id>
+      <countryId>L</countryId>
+      <fieldId>84</fieldId>
+    </army>
+    <ship id="75">
+      <id>340</id>
+      <countryId>L</countryId>
+      <fieldId>100</fieldId>
+    </ship>
+    <base id="76">
+      <id>343</id>
+      <countryId>I</countryId>
+      <fieldId>25</fieldId>
+    </base>
+    <base id="77">
+      <id>345</id>
+      <countryId>D</countryId>
+      <fieldId>40</fieldId>
+    </base>
+    <base id="78">
+      <id>346</id>
+      <countryId>D</countryId>
+      <fieldId>46</fieldId>
+    </base>
+    <base id="79">
+      <id>350</id>
+      <countryId>S</countryId>
+      <fieldId>96</fieldId>
+    </base>
+    <ship id="80">
+      <id>352</id>
+      <countryId>D</countryId>
+      <fieldId>147</fieldId>
+    </ship>
+    <ship id="81">
+      <id>353</id>
+      <countryId>D</countryId>
+      <fieldId>163</fieldId>
+    </ship>
+    <ship id="82">
+      <id>354</id>
+      <countryId>L</countryId>
+      <fieldId>103</fieldId>
+    </ship>
+    <ship id="83">
+      <id>355</id>
+      <countryId>L</countryId>
+      <fieldId>126</fieldId>
+    </ship>
+    <army id="84">
+      <id>356</id>
+      <countryId>L</countryId>
+      <fieldId>102</fieldId>
+    </army>
+    <base id="85">
+      <id>359</id>
+      <countryId>L</countryId>
+      <fieldId>6</fieldId>
+    </base>
+    <base id="86">
+      <id>360</id>
+      <countryId>L</countryId>
+      <fieldId>10</fieldId>
+    </base>
+    <base id="87">
+      <id>361</id>
+      <countryId>J</countryId>
+      <fieldId>14</fieldId>
+    </base>
+    <base id="88">
+      <id>362</id>
+      <countryId>I</countryId>
+      <fieldId>26</fieldId>
+    </base>
+    <base id="89">
+      <id>364</id>
+      <countryId>L</countryId>
+      <fieldId>94</fieldId>
+    </base>
+    <ship id="90">
+      <id>366</id>
+      <countryId>L</countryId>
+      <fieldId>101</fieldId>
+    </ship>
+    <army id="91">
+      <id>367</id>
+      <countryId>L</countryId>
+      <fieldId>86</fieldId>
+    </army>
+    <army id="92">
+      <id>368</id>
+      <countryId>I</countryId>
+      <fieldId>26</fieldId>
+    </army>
+    <army id="93">
+      <id>369</id>
+      <countryId>I</countryId>
+      <fieldId>27</fieldId>
+    </army>
+    <army id="94">
+      <id>370</id>
+      <countryId>J</countryId>
+      <fieldId>20</fieldId>
+    </army>
+    <base id="95">
+      <id>372</id>
+      <countryId>L</countryId>
+      <fieldId>86</fieldId>
+    </base>
+    <ship id="96">
+      <id>376</id>
+      <countryId>D</countryId>
+      <fieldId>146</fieldId>
+    </ship>
+    <ship id="97">
+      <id>377</id>
+      <countryId>I</countryId>
+      <fieldId>30</fieldId>
+    </ship>
+    <army id="98">
+      <id>379</id>
+      <countryId>S</countryId>
+      <fieldId>85</fieldId>
+    </army>
+    <base id="99">
+      <id>381</id>
+      <countryId>L</countryId>
+      <fieldId>108</fieldId>
+    </base>
+    <ship id="100">
+      <id>383</id>
+      <countryId>L</countryId>
+      <fieldId>79</fieldId>
+    </ship>
+    <army id="101">
+      <id>384</id>
+      <countryId>S</countryId>
+      <fieldId>98</fieldId>
+    </army>
+    <army id="102">
+      <id>385</id>
+      <countryId>S</countryId>
+      <fieldId>99</fieldId>
+    </army>
+    <base id="103">
+      <id>386</id>
+      <countryId>L</countryId>
+      <fieldId>87</fieldId>
+    </base>
+    <base id="104">
+      <id>388</id>
+      <countryId>L</countryId>
+      <fieldId>100</fieldId>
+    </base>
+    <base id="105">
+      <id>389</id>
+      <countryId>J</countryId>
+      <fieldId>106</fieldId>
+    </base>
+    <base id="106">
+      <id>390</id>
+      <countryId>J</countryId>
+      <fieldId>114</fieldId>
+    </base>
+    <ship id="107">
+      <id>391</id>
+      <countryId>L</countryId>
+      <fieldId>118</fieldId>
+    </ship>
+    <ship id="108">
+      <id>392</id>
+      <countryId>J</countryId>
+      <fieldId>120</fieldId>
+    </ship>
+    <base id="109">
+      <id>394</id>
+      <countryId>L</countryId>
+      <fieldId>71</fieldId>
+    </base>
+    <base id="110">
+      <id>395</id>
+      <countryId>L</countryId>
+      <fieldId>66</fieldId>
+    </base>
+    <base id="111">
+      <id>396</id>
+      <countryId>L</countryId>
+      <fieldId>78</fieldId>
+    </base>
+    <base id="112">
+      <id>397</id>
+      <countryId>L</countryId>
+      <fieldId>93</fieldId>
+    </base>
+    <base id="113">
+      <id>398</id>
+      <countryId>L</countryId>
+      <fieldId>95</fieldId>
+    </base>
+    <base id="114">
+      <id>399</id>
+      <countryId>L</countryId>
+      <fieldId>103</fieldId>
+    </base>
+    <base id="115">
+      <id>400</id>
+      <countryId>L</countryId>
+      <fieldId>110</fieldId>
+    </base>
+    <base id="116">
+      <id>401</id>
+      <countryId>L</countryId>
+      <fieldId>113</fieldId>
+    </base>
+    <ship id="117">
+      <id>402</id>
+      <countryId>L</countryId>
+      <fieldId>139</fieldId>
+    </ship>
+    <army id="118">
+      <id>403</id>
+      <countryId>L</countryId>
+      <fieldId>76</fieldId>
+    </army>
+    <army id="119">
+      <id>404</id>
+      <countryId>L</countryId>
+      <fieldId>71</fieldId>
+    </army>
+    <base id="120">
+      <id>405</id>
+      <countryId>I</countryId>
+      <fieldId>23</fieldId>
+    </base>
+    <base id="121">
+      <id>406</id>
+      <countryId>D</countryId>
+      <fieldId>29</fieldId>
+    </base>
+    <base id="122">
+      <id>407</id>
+      <countryId>D</countryId>
+      <fieldId>28</fieldId>
+    </base>
+    <base id="123">
+      <id>408</id>
+      <countryId>D</countryId>
+      <fieldId>35</fieldId>
+    </base>
+    <base id="124">
+      <id>409</id>
+      <countryId>L</countryId>
+      <fieldId>76</fieldId>
+    </base>
+    <base id="125">
+      <id>410</id>
+      <countryId>L</countryId>
+      <fieldId>79</fieldId>
+    </base>
+    <base id="126">
+      <id>411</id>
+      <countryId>L</countryId>
+      <fieldId>119</fieldId>
+    </base>
+    <base id="127">
+      <id>412</id>
+      <countryId>L</countryId>
+      <fieldId>118</fieldId>
+    </base>
+    <army id="128">
+      <id>413</id>
+      <countryId>D</countryId>
+      <fieldId>31</fieldId>
+    </army>
+    <army id="129">
+      <id>414</id>
+      <countryId>D</countryId>
+      <fieldId>47</fieldId>
+    </army>
+    <army id="130">
+      <id>415</id>
+      <countryId>D</countryId>
+      <fieldId>50</fieldId>
+    </army>
+    <ship id="131">
+      <id>416</id>
+      <countryId>L</countryId>
+      <fieldId>59</fieldId>
+    </ship>
+    <army id="132">
+      <id>417</id>
+      <countryId>L</countryId>
+      <fieldId>60</fieldId>
+    </army>
+    <ship id="133">
+      <id>418</id>
+      <countryId>L</countryId>
+      <fieldId>58</fieldId>
+    </ship>
+  </units>
+</status>

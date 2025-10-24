@@ -1,0 +1,63 @@
+.button {
+  background: url('../../img/button.png');
+  height: 30px;
+  font-weight: bold;
+  text-align: center;
+  color: black;
+  width: 200px;
+  text-decoration: none;
+  padding-bottom: 3px;
+  display: block;
+}
+.button:hover {
+  background: url('../../img/button-hover.png');
+}
+.scroll {
+  margin-left: 50px;
+  float: left;
+}
+#header {
+  height: 30px;
+}
+#headertext {
+  font-size: 2em;
+  float: left;
+}
+body {
+  background: #0671cb url('../../img/background.png') no-repeat;
+}
+.map_icon {
+  background: url('../../img/map.png');
+  width: 32px;
+  height: 32px;
+  border: 0;
+  cursor: pointer;
+}
+.command_icon {
+  background: url('../../img/commands.png');
+  width: 32px;
+  height: 32px;
+  border: 0;
+  cursor: pointer;
+}
+.result_icon {
+  background: url('../../img/results.png');
+  width: 32px;
+  height: 32px;
+  border: 0;
+  cursor: pointer;
+}
+.detail_icon {
+  background: url('../../img/detail.png');
+  width: 32px;
+  height: 32px;
+  border: 0;
+  cursor: pointer;
+}
+.years {
+  width: 240px;
+  overflow: auto;
+}
+.year {
+  font-weight: bold;
+}

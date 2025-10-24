@@ -1,0 +1,540 @@
+<html>
+  <head>
+    <title>Diplomacie - test pravidel</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="jquery-1.2.3.pack.js"></script>
+    <style>
+      div.hidden {
+        display: none;
+      }
+      div.ans {
+        color: red;
+        display: none;
+      }
+      div.hint {
+        font-weight: bold;
+      }
+      div.t {
+        font-weight: bold;
+      }
+    </style>
+    <script>
+      var cur;
+      var counter = 1;
+      $(document).ready(function() {
+        $('.quest').hide();
+        cur = $('.first');
+        cur.show();
+        setCounter();
+      });
+      function showResults() {
+        $('.ans').show();
+      }
+      function nextQuest() {
+        $('.ans').hide();
+        cur.hide();
+        cur = cur.next();
+        cur.show();
+        counter ++;
+        setCounter();
+      }
+      function setCounter() {
+        $('#counter').html(counter+'/'+$('.quest').size());
+      }
+    </script>
+    <script type="text/javascript" src="http://www.google-analytics.com/ga.js" />
+    <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-3812126-6");
+        pageTracker._trackPageview();
+      } catch(err) {}
+    </script>
+  </head>
+  <body>
+    <div>
+      <img src="map.png" />
+    </div>
+    <div id="counter"></div>
+    <div class="first quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Kolik jednotek je před prvním tahem na mapě?</div>
+      <div class="ans">Žádná, před prvním tahem (nasazením) hráči pouze vlastní zásobovací centra, žádné jednotky. To že jsou na mapě pole vybarvena tak, jakoby tam jednotky byly, je z důvodu lepší čitelnosti mapy.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Co znamená, že na některých pozemních polích jsou kolečka?</div>
+      <div class="ans">Takové pole jsou zároveň zásobovacími centry</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Co se stane, když v nepřepočítávacím tahu moje jednotka dojde do nějakého zásobovacího centra?</div>
+      <div class="ans">Nic zvláštního</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Co se stane, když v přepočítávacím kole moje jednotka dojde do nějakého zásobovacího centra?</div>
+      <div class="ans">Toto centrum získám, kolečko se obarví se mojí barvou a získám nárok na nasazení jednotky (pokud jsem někde jinde naopak neztratil).</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Co znamená, když na některém zásobovacím poli je jednotka jiné barvy, než jakou je vybarveno kolečko?</div>
+      <div class="ans">Minulý tah nebyl přepočítávací (pokud by byl, změnilo by zásobovací centrum majitele a tudíž barvu) a zásobovací centrum stále patří původnímu majiteli (pokud je kolečko bílé, pak ještě nikomu), nicméně na něm již stojí jednotka. Pokud tato jednotka v následujícím tahu odjede, zůstává centrum původnímu majiteli. Pokud neodjede, pak ji získá ten hráč, jemuž patří jednotka.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Mohu nasadit novou jednotku v domovském centru, kde již mám jinou jednotku?</div>
+      <div class="ans">Ne. Aby bylo možné nasadit novou jednotku, nesmí být v příslušném domovském centru (kde se nasazuje) žádná jednotka. Obecně platí, že na jednom hracím poli může být nejvýše jedna jednotka, tento princip nemůže být nikdy porušen.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Pokud mi všechna má původní domovská centra někdo obsadil, tj. kolečka jsou jiné barvy, než mám já, jakým způsobem můžu nasadit nové jednotky?</div>
+      <div class="ans">V této situaci žádným. Je ale možné svá domovská centra dobýt zpět, a poté je získat. Pozor, po zpětném získání domovského centra (v přepočítávacím tahu) do něj ještě není možné nasazovat nové jednotky, viz předchozí otázka. To bude možné až v následujícím přepočítávacím tahu, tj. o 2 tahy později, pokud do té doby domovské centrum uvolním a nikdo mi tam nevjede.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Které rozkazy může hráč odehrát při prvním (nasazovacím) tahu?</div>
+      <div class="ans">Pouze ++a číslo jednotky, nebo ++f číslo jednotky. Jelikož před prvním tahem nejsou na mapě žádné jednotky, nemá smysl zadávat žádné přesuny, útoky, obrany, podpory, atd.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Které rozkazy může hráč odehrát při druhém tahu (první nenasazovací tah, označený jako jaro)?</div>
+      <div class="ans">Pouze přesuny, dvojpřesuny, útoky, obrany atd. Nemají smysl ++a, ani ++f, ani -- protože na konci druhého tahu nedochází k přepočítání zásobovacích center.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Které typy rozkazů mají smysl ve třetím tahu (podzim)?</div>
+      <div class="ans">Všechny</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Co se stane, pokud hráč v prvním (nasazovacím) tahu nezadá rozkazy?</div>
+      <div class="ans">Automat to vyhodnotí stejně, jako by zadal rozkaz ++a pro všechna jeho domovská centra (pro všechny státy vyjma Austrálie a Indonésie), nebo ++f pro všechna jeho domovská centra v případě Austrálie, nebo v případě Indonésie ++f pro 2 domovská centra na ostrovech a ++a pro jedno centrum na pevnině.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Co udělá automat s rozkazem, který hráč zadal pro jednotku (armádu, nebo flotilu), která není jeho?</div>
+      <div class="ans">Ignoruje jej, ale v reportu je takový rozkaz opsán s komentářem, že šlo o pokus zadat rozkaz cizí jednotce</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Lze změnit armádu na flotilu, nebo naopak?</div>
+      <div class="ans">Nelze. Lze si však nechat danou jednotku zničit (soupeřem, spojencem, nebo i sám sebou) a v rámci přepočtu nasadit jinou jednotku)</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Kde je možné nasazovat nové jednotky?</div>
+      <div class="ans">Pouze v domovských centrech. To jsou ta centra, která jsou vyznačena na úplně první mapě hry (první rok). Není možné nasazovat v jiných zásobovacích centrech, získaných v průběhu hry. Nasazuje se tedy vždy pouze „doma“.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Kdy je možné nasazovat nové jednotky?</div>
+      <div class="ans">Pouze v sudých tazích, kdy dochází k přepočítání center. Podmínkou nasazení nové jednotky je to, aby hráč měl více zásobovacích center, než jednotek.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Kolik nejvíce jednotek může hráč nasadit v přepočítavacím kole?</div>
+      <div class="ans">Maximálně tolik, kolik má domovských center, v této hře tedy 3.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Kdy je možné ztratit jednotku?</div>
+      <div class="ans">Existují 2 možnosti První možnost: v každém tahu je možné, aby byla jednotka zničena. Ke zničení dojde v případě, kdy je na ní veden útok, kterému se jednotka neubrání (tj. silnější útok než obrana) a kdy jednotka nemá kam ustoupit. Speciálním případem je pak situace, kdy 2 pod silnějším útokem jednotky mají kam ustoupit, avšak mají stejné pořadí ústupů, v takovém případě budou zničeny obě. Druhá možnost: v každém druhém tahu, při přepočítání center hráč ztratí tolik jednotek, o kolik jich má více, než zásobovacích center. Které jednotky to budou lze ovlivnit rozkazem --.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Má smysl zadávat rozkaz --, pokud si neplánuji ztratit jednotku?</div>
+      <div class="ans">Často to sice neplánuji, ale situace se může okolo mě změnit proti mé vůli. Pak je dobré být připraven a rozhodnout o ztrátě té jednotky, kterou budu nejméně potřebovat v následujícím boji. Pokud existuje alespoň teoretická šance, že nějakou jednotku ztratím, rozhodně má smyl zadávat rozkaz --. V opačném případě se může stát, že ztratím tu, kterou potřebuji nejvíce.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Má smysl útočit na vlastní jednotky?</div>
+      <div class="ans">V některých případech má. Např. je můžu chtít zničit, abych si mohl nasadit za ně náhradu. Nebo je můžu donutit k ústupu, přičemž lze velmi výhodně využít možnost specifikace pořadí ústupových míst. To lze využít např. v situaci, kdy můžu vstoupit do jednoho z několika zásobovacích míst soupeře a  vím, že soupeř je schopen si jejich část obránit a část ne a pouze nevím, které konkrétní bude a které nebude bránit. Ve hře určitě přijdete na další možnosti, jak ústupy využít.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Modelová situace (netýká se této hry!): pokud na mapě hraje 10 hráčů, mapa je rozdělena celkem na 153 pevninských území a 55 mořských území a k dispozici je celkem 67 zásobovacích center. Jaká je přesná podmínka pro vítězství ve hře?</div>
+      <div class="ans">Získat alespoň 34 zásobovacích center, jelikož je to více než polovina všech na světě.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Herní systém</div>
+      <div class="t">Co se stane, pokud hráč ztratí všechna zásobovací centra (ať již domovská, nebo ta, která získal v průběhu hry)?</div>
+      <div class="ans">Hra pro tohoto hráče končí, bohužel vítězem nebude</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Austrálie</div>
+      51 > 52<br/>
+      55 > 52<br/>
+      <div class="t">A jak to dopadne když půjde o přesuny?</div>
+      <div class="ans">Stejně, oba přesuny zablokovány, nepřesouvá se nikdo</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Austrálie</div>
+      51 > 52<br/>
+      55 -> 52<br/>
+      <div class="t">Je silnější útok nebo přesun?</div>
+      <div class="ans">Útok vyjde a jednotka se přesune na 52, přesun zablokován</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Austrálie</div>
+      51 -> 53<br/>
+      53 -> 51<br/>
+      <div class="t">Co když dvě jednotky na sebe zaútočí?</div>
+      <div class="ans">Nestane se nic, oba zůstanou na svých místech</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Austrálie</div>
+      51 -> 53<br/>
+      53 X<br/>
+      <div class="t">Co když zaútočí jen jeden?</div>
+      <div class="ans">Nestane se nic, útok není dost silný</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Austrálie</div>
+      51 > 53<br/>
+      53 X<br/>
+      <div class="t">Co když nepřítel zkusí jen přesun?</div>
+      <div class="ans">Nestane se nic, přesun samozřejmě nemůže vytlačit nepřítele</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Austrálie</div>
+      51 > 53<br/>
+      53 -> 51<br/>
+      <div class="t">Co když jeden zkusí útok a druhý jen přesun?</div>
+      <div class="ans">Opět nic. Útok zruší přesun ale není dost silný na zatlačení nepřítele</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Austrálie</div>
+      51 > 53<br/>
+      53 > 51<br/>
+      <div class="t">A co když místo útoku zkusí oba mírumilovný přesun?</div>
+      <div class="ans">V tom případě dojde k výměně obou jednotek</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Asie</div>
+      41 -> 37<br/>
+      37 -> 36<br/>
+      36 -> 41<br/>
+      <div class="t">Posunou se jednotky při cyklickém útoku?</div>
+      <div class="ans">Ano, cyklus je celý proveden, všichni se přesunou</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Asie</div>
+      41 > 37<br/>
+      37 > 36<br/>
+      36 > 41<br/>
+      <div class="t">A pokud všichni provedou jen přesun?</div>
+      <div class="ans">Ano, cyklus je celý proveden, všichni se přesunou</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Asie</div>
+      41 -> 37<br/>
+      37 > 36<br/>
+      36 > 41<br/>
+      <div class="t">Co když v cyklu někteří zkusí přesun, někteří útok?</div>
+      <div class="ans">Nic se nestane, útoky zruší přesuny ale nejsou dost silné na vytlačení jednotek z pozic</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Afrika</div>
+      63 -> 67<br/>
+      62 ^ 63 67<br/>
+      67 X<br/>
+      <div class="t">Do hry vstupují podpory...</div>
+      <div class="ans">Útok je podpořen a proto dost silný, jednotka na 67 musí ustupovat</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Afrika</div>
+      63 -> 67<br/>
+      62 ^ 63 67<br/>
+      67 X<br/>
+      70 ~ 67<br/>
+      <div class="t">Nepřítel podporuje své jednotky v obraně</div>
+      <div class="ans">Útok i obrana jsou opět stejně silné, nikdo se nikam nepohne</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Afrika</div>
+      63 -> 67<br/>
+      62 ^ 63 67<br/>
+      67 X<br/>
+      70 ~ 67<br/>
+      69 -> 70<br/>
+      <div class="t">Co když útočník napadá i podporující jednotky?</div>
+      <div class="ans">Podpora obrany zrušena, 67 musí ustupovat</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Afrika</div>
+      63 -> 67<br/>
+      62 ^ 63 67<br/>
+      67 X<br/>
+      70 -> 62<br/>
+      69 -> 70<br/>
+      <div class="t">Obránce může místo obrany zvolit útok</div>
+      <div class="ans">Podpora útoku zrušena a žádný útok není dost silný, situace se nemění</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Afrika</div>
+      63 -> 67<br/>
+      62 ^ 63 67<br/>
+      67 -> 62<br/>
+      70 ~ 67<br/>
+      69 -> 70<br/>
+      <div class="t">Obránce může zkusit jak útočit do pozic útočníka tak podporovat své jednotky v obraně</div>
+      <div class="ans">Tato kombinace však obránci nevyšla, nelze zrušit podporu útoku na sebe sama</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Severní Amerika</div>
+      86 -> 85<br/>
+      <div class="t">Může flotila provést tento útok?</div>
+      <div class="ans">Obě pole jsou sice na pobřeží, ale nemají žádné pobřeží společné. Útok je tedy neplatný a není proveden</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Afrika</div>
+      64 -> 63<br/>
+      67 ^ 64 63<br/>
+      66 -> 138<br/>
+      63 -> 67<br/>
+      61 ~ 63<br/>
+      138 > 64<br/>
+      <div class="t">Opět komplikovaná situace, věnujte pozornost flotilám. Jak situace dopadne?</div>
+      <div class="ans">Armáda 66 nemůže útočit do moře, rozkaz je neplatný. Flotila 61 nemůže podporovat jednotku ve vnitrozemí, rozkaz je neplatný. 63 nemůže zrušit podporu útoku na sebe sama, tedy útok 64 je dostatečně silný a bude proveden, 63 musí ustoupit. Útok na 138 byl neplatný, proto se 138 přesouvá do 64.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Afrika</div>
+      138 -> 64<br/>
+      61 ^ 138 64<br/>
+      64 > 65<br/>
+      <div class="t">Co nyní?</div>
+      <div class="ans">Tentokrát flotila 61 podporuje útok na pobřeží, proto útok vyšel. Přesun 64 byl zrušen útokem a jednotka musí ustoupit.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Atlantický oceán</div>
+      131 > 166<br/>
+      166 >> 131<br/>
+      <div class="t">Jaký je rozdíl mezi jednoduchým a dvojitím přesunem? Jak situace dopadne?</div>
+      <div class="ans">Vše je v pořádku, 166 >> 131 (respektive 166 >> 131 131) je ekvivalent 166 > 131</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Atlantický oceán</div>
+      166 >> 134 166<br/>
+      134 >> 166 134<br/>
+      <div class="t">Dojde k výměně?</div>
+      <div class="ans">Vše je v pořádku, jednotky se v jednom tahu dvakrát vymění takže nakonec zůstanou na svých pozicích</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Atlantický oceán</div>
+      166 >> 123 123<br/>
+      131 >> 131 123<br/>
+      <div class="t">Co se stane?</div>
+      <div class="ans">166 se v první fázi přesouvá na 123, 131 zůstává na místě. Ve druhé fázi tahu se jednotka ze 131 již na 123 nedostane, protože je toto pole již obsazeno jednotkou z 166.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Atlantický oceán</div>
+      166 >> 123 166<br/>
+      134 >> 166 95<br/>
+      <div class="t">Projede 134?</div>
+      <div class="ans">Ano, v první fázi 166 uhne na 123, 134 přejde na 166, ve druhé fázi 134 dokončí přesun na 95 a 166 se vrátí zpět.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Svět</div>
+      <div class="t">V kolika tazích lze objet celý svět pokud by se na mapě nevyskytovaly žádné jiné jednotky? Kudy?</div>
+      <div class="ans">Tři dvojpřesuny stačí na objetí celého světa po moři na jihu okolo Antarktidy. Moře umožňují extrémně rychlé přesuny flotil, například flotila nasazená na jihu Afriky (79) může na konci příštího roku (během dvou tahů) být na Novém Zélandu.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Indonésie</div>
+      151 >> 50 155<br/>
+      50 >> 155 151<br/>
+      155 >> 151 50<br/>
+      <div class="t">Které výměny vyjdou a které budou zrušeny?</div>
+      <div class="ans">Opět vyjdou všechny přesuny</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Arábie</div>
+      19 >> 18 20<br/>
+      20 >> 19 20<br/>
+      <div class="t">Kde skončí jednotky u kterých došlo ke srážce v druhé fázi dvojpřesunu? Jaký má pro Arábii dopad pokud se jedná o sudý nebo lichý tah?</div>
+      <div class="ans">První fáze dvojpřesunu vyšla, kolize nastala ve druhé fázi, jednotky zůstanou na 18 a 19, což by v sudém tahu znamenalo pro Arábii konec hry protože ztrácí poslední zásobovací centrum, v lichém tahu by měl ještě jeden tah na vymyšlení nějaké cesty k záchraně (obsazení nějakého zásobovacího centra)</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Irák</div>
+      23 >> 24 26<br/>
+      26 >> 24 25<br/>
+      25 >> 25 24<br/>
+      <div class="t">A co když se do situace přimíchá další jednotka?</div>
+      <div class="ans">23 a 26 se srazí v první fázi, jejich druhé fáze se neprovedou, 25 uspěje a skončí v 24</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Irák</div>
+      23 >> 24 26<br/>
+      26 >> 24 25<br/>
+      25 >> 24 24<br/>
+      <div class="t">Jak dopadne situace když Indie trochu změní tah?</div>
+      <div class="ans">V první fázi se všichni srazí, druhé fáze přesunů se také neprovedou</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Irák</div>
+      23 >> 23 26<br/>
+      25 >> 25 24<br/>
+      26 >> 24 25<br/>
+      <div class="t">A co tato situace?</div>
+      <div class="ans">Nide nedochází ke kolizi, všechny tahy budou provedeny.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Irák</div>
+      23 >> 24 26<br/>
+      25 >> 26 24<br/>
+      26 -> 24<br/>
+      <div class="t">Tentokrát jednotka na F útočí. Jak tím změní situaci?</div>
+      <div class="ans">Útok 26 uspěje a posune se, dvojpřesun 23 je zrušen, protože na 23 byl veden útok již v první fázi a 25 uspěje v první fázi a druhý přesun nelze provést protože na 24 již je jednotka.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Irák</div>
+      23 -> 24<br/>
+      25 -> 24<br/>
+      26 >> 26 24<br/>
+      <div class="t">Jaký je výsledek?</div>
+      <div class="ans">Útoky 23 a 25 se srazí, žádný není silnější a proto jsou zablokovány. 26 v první fázi zůstává na místě, druhá fáze je zrušena protože na 24 byl veden útok.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Asie</div>
+      41 -> 36<br/>
+      36 -> 28<br/>
+      37 >> 41 14<br/>
+      <div class="t">Tato kombinace byla mnohokrát úspěšně použita a jistě ještě mnoho slz zapříčiní. Co se stane?</div>
+      <div class="ans">Všechny útoky i přesuny vyjdou</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Asie</div>
+      25 -> 36<br/>
+      36 ~ 37<br/>
+      37 ~ 36<br/>
+      <div class="t">Tato situace vypadá na remízu, zdá se že k proražení bariér neprojde. Nebo ano?</div>
+      <div class="ans">Útok samozřejmě není dost silný a situace se nemění</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Asie</div>
+      41 -> 36<br/>
+      23 -> 26<br/>
+      25 ^ 23 26<br/>
+      20 > 23<br/>
+      35 ^ 41 36<br/>
+      37 >> 41 14<br/>
+      36 X<br/>
+      26 -> 24<br/>
+      143 -> 23<br/>
+      <div class="t">A zde vidíme použití podpory útoku do vlastních řad v praxi. Co se stalo?</div>
+      <div class="ans">41 chtěla jen rušit případnou podporu obrany pro 36. Útok jí však díky podpoře Indie vyšel a jednotka 37 se dostává Evropě do týla na 14. 26 se přesouvá na 24, 23 na 26 a útok 143 také vyšel a obsazuje 23.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Afrika</div>
+      70 X<br/>
+      69 -> 70<br/>
+      144 ^ 69 70<br/>
+      <div class="t">Kam ustoupí jednotka ze 70?</div>
+      <div class="ans">Jednotka automaticky ustupuje směrem ke svým centrům, pokud je stejně vzdálených sousedních polí stejně, pak na to s nižším číslem. V tomto případě 70 ustupuje do centra 73</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Afrika</div>
+      70 X # 68<br/>
+      69 -> 70<br/>
+      144 ^ 69 70<br/>
+      <div class="t">Kam ustoupí jednotka nyní?</div>
+      <div class="ans">Tentorkát jednotka dostala rozkaz k ústupu na 68 který v případě že jednotka ustupuje (což nastalo), bude proveden. Jednotka ustoupí na 68.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Afrika</div>
+      70 X # 69 67 71<br/>
+      69 -> 70<br/>
+      144 ^ 69 70<br/>
+      <div class="t">Kam ustoupí jednotka nyní?</div>
+      <div class="ans">Nelze ustupovat na místo odkud byl veden útok, také nelze ustoupit tam kde se již jednotka nachází, předdefinované ústupy jsou vyčerpány a jednotka ustupuje na 73</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Severní Amerika</div>
+      86 X<br/>
+      85 -> 86<br/>
+      90 ^ 85 86<br/>
+      166 >> 123 84<br/>
+      124 >> 166 123<br/>
+      <div class="t">Kam ustoupí jednotka z 86?</div>
+      <div class="ans">Jednotka nemá kam ustoupit a je zrušena</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Severní Amerika</div>
+      88 X<br/>
+      91 -> 88<br/>
+      92 ^ 91 88<br/>
+      85 -> 88<br/>
+      89 ^ 85 88<br/>
+      <div class="t">Co se stane s jednotkou na 88?</div>
+      <div class="ans">Na jednotku 88 jsou vedeny dva stejně silné útoky, proto ani jeden útok nevyjde protože není nejsilnější. Situace se tedy nezmění i jednotka 88 zůstane.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Severní Amerika</div>
+      88 X<br/>
+      91 -> 88<br/>
+      92 ^ 91 88<br/>
+      85 -> 88<br/>
+      89 ^ 85 88<br/>
+      90 -> 92<br/>
+      <div class="t">Změní situaci útok 90 -> 92?</div>
+      <div class="ans">Podpora útoku 91 -> 88 z 92 je zrušena, útok 85 -> 88 je tedy silnější a je proveden. Jednotka 88 nemá kam ustoupit a je zrušena.</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Asie</div>
+      43 -> 40<br/>
+      13 ^ 43 40<br/>
+      40 X # 14 42<br/>
+      36 -> 41<br/>
+      37 ^ 36 41<br/>
+      41 -> 37 # 14 42<br/>
+      <div class="t">Co se stane s jednotkami 40 a 41?</div>
+      <div class="ans">Obě jednotky musí ustupovat, při ústupech se však postupně sráží, vyčerpají všechny možnosti a jsou obě zrušeny</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Indický oceán</div>
+      143 T 27<br/>
+      27 I 143 72<br/>
+      <div class="t">Jak situace dopadne?</div>
+      <div class="ans">Jednotka 27 provede invazi (přemístí se) na 72</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Indický oceán</div>
+      143 T 27<br/>
+      27 I 143 72<br/>
+      144 -> 143<br/>
+      <div class="t">Co když je transport pod útokem?</div>
+      <div class="ans">Transport je zrušen, nikdo se nepohne</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Suezský průplav</div>
+      144 T 19<br/>
+      19 I 144 70<br/>
+      69 ^ 19 70<br/>
+      70 -> 144<br/>
+      <div class="t">A v této situaci?</div>
+      <div class="ans">Jednotka nemůže zrušit transport pokud je veden na ni samou, invaze vyšla a jednotka 70 musí ustoupit</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Evropa</div>
+      ++a 5<br/>
+      <div class="t">Co znamená tento rozkaz?</div>
+      <div class="ans">V sudém tahu dochází k přepočtu jednotek a center, pokud Evropa má více center než jednotek (nikdo jiný v Evropě nasazovat nemůže), chce prioritně nasadit armádu na 5</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Evropa</div>
+      ++f 1<br/>
+      <div class="t">Co znamená tento rozkaz?</div>
+      <div class="ans">V sudém tahu dochází k přepočtu jednotek a center, pokud Evropa má více center než jednotek, chce prioritně nasadit flotilu na 1</div>
+    </div>
+    <div class="quest">
+      <div class="hint">Evropa</div>
+      -- 13<br/>
+      <div class="t">Co znamená tento rozkaz?</div>
+      <div class="ans">V sudém tahu dochází k přepočtu jednotek a center, pokud hráč má více jednotek než center, chce prioritně zrušit jednotku na 13</div>
+    </div>
+    <div class="quest">
+      To je vše, nyní byste měli být připraveni k boji. Pokud Vám stále není něco jasné, popište pokud možno konkrétní situaci a přidáme ji s vysvětlením do tohoto tutorialu. Nezapomeňte, že důležitější než umět spočítat výsledek tahu je vědět co ostatní plánují. 
+    </div>
+    <input type="button" onclick="showResults()" value="Zobrazit výsledek" />
+    <input type="button" onclick="nextQuest()" value="Další" />
+  </body>
+</html>

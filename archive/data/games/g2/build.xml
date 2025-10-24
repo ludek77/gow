@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+
+<!--
+ Pouziti:
+ Vypocet tahu teto hry.
+ 
+ ant -Din=<zdroj> -Dout=<cil>
+      vypocet jednoho tahu
+      
+ ant -Dcmd=index
+      vytvoreni indexu
+      
+ ant all
+      vypocet kompletni hry
+      
+ and all -Dcmd=clean
+      promazani kompletni hry
+-->
+
+<project name="dip4" basedir="." default="eval">
+
+  <property name="in" value="" />
+  <property name="out" value="" />
+  <property name="cmd" value="eval" />
+  
+  <property name="maps" value="true" />
+  <property name="arrows" value="true" />
+ 
+  <property name="game" value="g2" />
+  <property name="scenario" value="world" />
+
+  <target name="eval">
+    <ant antfile="build.xml" dir=".." target="${cmd}">
+      <property name="game" value="${game}" />
+      <property name="scenario" value="${scenario}" />
+      <property name="in" value="${in}" />
+      <property name="out" value="${out}" />
+      <property name="maps" value="${maps}" />
+      <property name="arrows" value="${arrows}" />
+    </ant>
+  </target>
+ 
+  <target name="all">
+    <antcall target="eval">
+       <param name="in" value="1999n" />
+       <param name="out" value="2000j" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2000j" />
+       <param name="out" value="2000p" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2000p" />
+       <param name="out" value="2001j" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2001j" />
+       <param name="out" value="2001p" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2001p" />
+       <param name="out" value="2002j" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2002j" />
+       <param name="out" value="2002p" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2002p" />
+       <param name="out" value="2003j" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2003j" />
+       <param name="out" value="2003p" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2003p" />
+       <param name="out" value="2004j" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2004j" />
+       <param name="out" value="2004p" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2004p" />
+       <param name="out" value="2005j" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2005j" />
+       <param name="out" value="2005p" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2005p" />
+       <param name="out" value="2006j" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2006j" />
+       <param name="out" value="2006p" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2006p" />
+       <param name="out" value="2007j" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2007j" />
+       <param name="out" value="2007p" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2007p" />
+       <param name="out" value="2008j" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2008j" />
+       <param name="out" value="2008p" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2008p" />
+       <param name="out" value="2009j" />
+    </antcall>
+
+    <antcall target="eval">
+       <param name="in" value="2009j" />
+       <param name="out" value="2009p" />
+    </antcall>
+    
+    <antcall target="eval">
+       <param name="in" value="2009p" />
+       <param name="out" value="2010j" />
+    </antcall>
+    
+    <antcall target="eval">
+       <param name="in" value="2010j" />
+       <param name="out" value="2010p" />
+    </antcall>
+    
+    <antcall target="eval">
+       <param name="in" value="2010p" />
+       <param name="out" value="2011j" />
+    </antcall>
+    
+    <antcall target="eval">
+       <param name="in" value="2011j" />
+       <param name="out" value="2011p" />
+    </antcall>
+    
+    <antcall target="eval">
+       <param name="in" value="2011p" />
+       <param name="out" value="2012j" />
+    </antcall>
+    
+    <antcall target="eval">
+       <param name="in" value="2012j" />
+       <param name="out" value="2012p" />
+    </antcall>
+    
+    <antcall target="eval">
+       <param name="in" value="2012p" />
+       <param name="out" value="2013j" />
+    </antcall>
+    
+    <antcall target="eval">
+       <param name="in" value="2013j" />
+       <param name="out" value="2013p" />
+    </antcall>
+    
+    <antcall target="eval">
+       <param name="in" value="2013p" />
+       <param name="out" value="2014j" />
+    </antcall>
+  </target>
+
+</project> 

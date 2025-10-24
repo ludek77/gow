@@ -1,0 +1,48 @@
+RECOUNT_UNITS
+
+G Británie
+
+++f 23
+++f 28
+++f 29
+
+F Francie
+
+++a 11
+++a 9
+++a 8
+
+I Itálie
+
+++a 30
+++f 31
+++f 35
+
+Y Jugoslávie
+
+D Nìmecko
+
+B Pobaltí
+
+++a 54
+++a 55
+++a 58
+
+R Rusko
+
+++a 71
+++a 72
+++a 75
+
+S Skandinávie
+
+E Španìlsko
+
+T Turecko
+
+U Ukrajina
+
+++a 61
+++a 62
+++a 64
+

@@ -1,0 +1,61 @@
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script type="text/javascript" src="http://www.google-analytics.com/ga.js" />
+    <script type="text/javascript">
+      try {
+        var pageTracker = _gat._getTracker("UA-3812126-6");
+        pageTracker._trackPageview();
+      } catch(err) {}
+    </script>
+    <link rel="StyleSheet" href="css/blue.css" type="text/css">
+  </head>
+  <body>
+    <script language="javascript">
+      var e_selected;
+      function openMain(url,e) {
+        document.getElementById('mainFrame').src = url;
+        if(e_selected != null) {
+          e_selected.className = "tab";
+        }
+        e.className = "tab selected";
+        e_selected = e;
+      }
+      function openNew(url) {
+        window.open(url, '_blank');
+      }
+    </script>
+    <div class="logo">Diplomacie</div>
+    <table style="height:100%;width:100%">
+      <tr>
+        <td class="menu">
+          <div class="group">
+            <a href="#" class="button" onclick="javascript:openNew('http://dipstat.webpark.cz/')">Almanach</a>
+            <a href="#" class="button" onclick="javascript:openNew('http://diproot.xf.cz/rules/index.html')">Pravidla</a>
+            <a href="#" class="button" onclick="javascript:openNew('http://diproot.xf.cz/rules/test')">Test pravidel</a>
+            <a class="button" href="http://diproot.xf.cz/dip.zip">Automat ke stažení</a>
+            <a href="#" class="button" onclick="javascript:openNew('http://diproot.xf.cz/scenario/world2009/armies.html')">Souslednost - armády</a>
+            <a href="#" class="button" onclick="javascript:window.open('http://diproot.xf.cz/scenario/world2009/ships.html', '_blank')">Souslednost - flotily</a>
+            <a href="#" class="button" onclick="javascript:openNew('http://jkloc.com/dip')">Zadávání rozkazů</a>
+            <a href="mailto:diplomacie.root@gmail.com" class="button">Kontakt</a>
+          </div>
+          <div class="group">
+            <a href="#" onclick="javascript:openMain('http://diproot.xf.cz/g1',this)" class="tab">G1</a>
+            <a href="#" onclick="javascript:openMain('http://diproot.xf.cz/g2',this)" class="tab">G2</a>
+            <a href="#" onclick="javascript:openMain('http://diproot.xf.cz/g3',this)" class="tab">G3</a>
+            <a href="#" onclick="javascript:openMain('http://diproot.xf.cz/g4',this)" class="tab">G4</a>
+            <a href="#" onclick="javascript:openMain('http://diproot.xf.cz/g5',this)" class="tab selected" id="actualTab">Aktuální hra</a>
+          </div>
+          <script language="javascript">
+            e_selected = document.getElementById("actualTab");
+          </script>
+        </td>
+      </tr>
+      <tr>
+        <td>
+          <iframe class="main" frameborder="0" id="mainFrame" src="http://diproot.xf.cz/g5" />
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

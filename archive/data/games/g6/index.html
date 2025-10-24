@@ -1,0 +1,485 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="http://www.google-analytics.com/ga.js"></script><script type="text/javascript">
+        try {
+          var pageTracker = _gat._getTracker("UA-3812126-6");
+          pageTracker._trackPageview();
+        } catch(err) {}
+      </script><script language="javascript">
+        function setImage(image) {
+          document.getElementById('map').style.backgroundImage = 'url('+image+')';
+          document.getElementById('headertext').innerHTML = image.substring(0,5);
+        }
+        function scroll(value) {
+          document.getElementById('map').style.backgroundPosition = value;
+        }
+        function displayResult(value) {
+          window.open(value);
+        }
+        var images=new Array(
+          '2099n/results.png','2099n/map.png','2099n/commands.png','2100j/results.png','2100j/map.png','2100j/commands.png','2100p/results.png','2100p/map.png','2100p/commands.png','2101j/results.png','2101j/map.png','2101j/commands.png','2101p/results.png','2101p/map.png','2101p/commands.png','2102j/results.png','2102j/map.png','2102j/commands.png','2102p/results.png','2102p/map.png','2102p/commands.png','2103j/results.png','2103j/map.png','2103j/commands.png','2103p/results.png','2103p/map.png','2103p/commands.png','2104j/results.png','2104j/map.png','2104j/commands.png','2104p/results.png','2104p/map.png','2104p/commands.png','2105j/results.png','2105j/map.png','2105j/commands.png','2105p/results.png','2105p/map.png','2105p/commands.png','2106j/results.png','2106j/map.png','2106j/commands.png','2106p/results.png','2106p/map.png','2106p/commands.png','2107j/results.png','2107j/map.png','2107j/commands.png','2107p/results.png','2107p/map.png','2107p/commands.png','2108j/results.png','2108j/map.png','2108j/commands.png','2108p/results.png','2108p/map.png','2108p/commands.png','2109j/results.png','2109j/map.png','2109j/commands.png','2109p/results.png','2109p/map.png','2109p/commands.png','2110j/results.png','2110j/map.png','2110j/commands.png','2110p/results.png','2110p/map.png','2110p/commands.png','2111j/results.png','2111j/map.png','2111j/commands.png','2111p/results.png','2111p/map.png','2111p/commands.png','2112j/results.png','2112j/map.png','2112j/commands.png','2112p/results.png','2112p/map.png','2112p/commands.png','2113j/results.png','2113j/map.png','2113j/commands.png','2113p/results.png','2113p/map.png','2113p/commands.png','2114j/results.png','2114j/map.png','2114j/commands.png','2114p/results.png','2114p/map.png','2114p/commands.png','2115j/results.png','2115j/map.png','2115j/commands.png','2115p/results.png','2115p/map.png','2115p/commands.png','2116j/results.png','2116j/map.png','2116j/commands.png','2116p/results.png','2116p/map.png','2116p/commands.png','2117j/results.png','2117j/map.png','2117j/commands.png','2117p/results.png','2117p/map.png','2117p/commands.png','2118j/results.png','2118j/map.png',
+          'STOP'
+        );
+        var actual = -1;
+        function animate() {
+          setImage(images[actual]);
+          actual++;
+          if(images[actual]!='STOP') {
+            window.setTimeout("animate()",2000);
+          }
+        }
+        function nuke(e) {
+          var nuke = document.getElementById('nuke');
+          nuke.style.backgroundImage = 'url(../../img/nuke.gif?rand='+new Date().getTime()+')';
+          nuke.style.top = e.clientY - 60;
+          nuke.style.left = e.clientX - 40;
+        }
+      </script>
+<link rel="StyleSheet" href="main.css" type="text/css">
+<style>
+        #map {
+          width: 900px;
+          height: 600px;
+        }
+      </style>
+</head>
+<body>
+<table>
+<tr>
+<td style="vertical-align: top; padding-top: 30px">
+<div class="years" style="height:600px">
+<table>
+<tr>
+<td class="year">2099n</td><td></td><td>
+<div class="map_icon" onclick="setImage('2099n/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2099n/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2099n/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2100j</td><td>
+<div class="result_icon" onclick="setImage('2100j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2100j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2100j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2100j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2100p</td><td>
+<div class="result_icon" onclick="setImage('2100p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2100p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2100p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2100p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2101j</td><td>
+<div class="result_icon" onclick="setImage('2101j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2101j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2101j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2101j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2101p</td><td>
+<div class="result_icon" onclick="setImage('2101p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2101p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2101p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2101p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2102j</td><td>
+<div class="result_icon" onclick="setImage('2102j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2102j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2102j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2102j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2102p</td><td>
+<div class="result_icon" onclick="setImage('2102p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2102p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2102p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2102p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2103j</td><td>
+<div class="result_icon" onclick="setImage('2103j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2103j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2103j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2103j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2103p</td><td>
+<div class="result_icon" onclick="setImage('2103p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2103p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2103p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2103p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2104j</td><td>
+<div class="result_icon" onclick="setImage('2104j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2104j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2104j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2104j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2104p</td><td>
+<div class="result_icon" onclick="setImage('2104p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2104p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2104p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2104p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2105j</td><td>
+<div class="result_icon" onclick="setImage('2105j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2105j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2105j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2105j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2105p</td><td>
+<div class="result_icon" onclick="setImage('2105p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2105p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2105p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2105p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2106j</td><td>
+<div class="result_icon" onclick="setImage('2106j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2106j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2106j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2106j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2106p</td><td>
+<div class="result_icon" onclick="setImage('2106p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2106p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2106p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2106p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2107j</td><td>
+<div class="result_icon" onclick="setImage('2107j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2107j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2107j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2107j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2107p</td><td>
+<div class="result_icon" onclick="setImage('2107p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2107p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2107p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2107p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2108j</td><td>
+<div class="result_icon" onclick="setImage('2108j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2108j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2108j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2108j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2108p</td><td>
+<div class="result_icon" onclick="setImage('2108p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2108p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2108p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2108p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2109j</td><td>
+<div class="result_icon" onclick="setImage('2109j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2109j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2109j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2109j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2109p</td><td>
+<div class="result_icon" onclick="setImage('2109p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2109p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2109p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2109p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2110j</td><td>
+<div class="result_icon" onclick="setImage('2110j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2110j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2110j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2110j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2110p</td><td>
+<div class="result_icon" onclick="setImage('2110p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2110p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2110p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2110p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2111j</td><td>
+<div class="result_icon" onclick="setImage('2111j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2111j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2111j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2111j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2111p</td><td>
+<div class="result_icon" onclick="setImage('2111p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2111p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2111p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2111p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2112j</td><td>
+<div class="result_icon" onclick="setImage('2112j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2112j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2112j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2112j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2112p</td><td>
+<div class="result_icon" onclick="setImage('2112p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2112p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2112p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2112p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2113j</td><td>
+<div class="result_icon" onclick="setImage('2113j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2113j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2113j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2113j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2113p</td><td>
+<div class="result_icon" onclick="setImage('2113p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2113p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2113p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2113p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2114j</td><td>
+<div class="result_icon" onclick="setImage('2114j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2114j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2114j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2114j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2114p</td><td>
+<div class="result_icon" onclick="setImage('2114p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2114p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2114p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2114p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2115j</td><td>
+<div class="result_icon" onclick="setImage('2115j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2115j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2115j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2115j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2115p</td><td>
+<div class="result_icon" onclick="setImage('2115p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2115p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2115p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2115p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2116j</td><td>
+<div class="result_icon" onclick="setImage('2116j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2116j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2116j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2116j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2116p</td><td>
+<div class="result_icon" onclick="setImage('2116p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2116p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2116p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2116p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2117j</td><td>
+<div class="result_icon" onclick="setImage('2117j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2117j/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2117j/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2117j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2117p</td><td>
+<div class="result_icon" onclick="setImage('2117p/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2117p/map.png')"></div>
+</td><td>
+<div class="command_icon" onclick="setImage('2117p/commands.png')"></div>
+</td><td>
+<div class="detail_icon" onclick="displayResult('2117p/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td class="year">2118j</td><td>
+<div class="result_icon" onclick="setImage('2118j/results.png')"></div>
+</td><td>
+<div class="map_icon" onclick="setImage('2118j/map.png')"></div>
+</td><td></td><td>
+<div class="detail_icon" onclick="displayResult('2118j/result.html')"></div>
+</td>
+</tr>
+<tr>
+<td colspan="5"><a href="#" class="button" onclick="actual=0;animate()">Animace</a></td>
+</tr>
+</table>
+</div>
+</td><td style="vertical-align: top">
+<div id="header">
+<div id="headertext"></div>
+<a href="#" class="scroll button" onclick="scroll(0)">Evropa</a><a href="#" class="scroll button" onclick="scroll(300)">Amerika</a><a href="#" class="scroll button" onclick="scroll(600)">Asie</a>
+</div>
+<div id="map" onclick="javascript:nuke(event)">
+<div style="position:absolute;height:121px;width:78px" id="nuke"></div>
+</div>
+</td>
+</tr>
+</table>
+</body>
+<script language="javascript">setImage('2118j/map.png');</script>
+</html>

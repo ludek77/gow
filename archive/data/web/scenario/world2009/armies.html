@@ -1,0 +1,691 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8"><style>
+        td.def {
+          width: 30px;
+          font-weight: bold;
+        }
+        td.neighbours {
+        }
+      </style></head>
+   <body>
+      <table>
+         <tr>
+            <td class="def">1</td>
+            <td class="neighbours">2, 4, </td>
+         </tr>
+         <tr>
+            <td class="def">2</td>
+            <td class="neighbours">1, 3, 4, 5, </td>
+         </tr>
+         <tr>
+            <td class="def">3</td>
+            <td class="neighbours">2, 8, 5, </td>
+         </tr>
+         <tr>
+            <td class="def">4</td>
+            <td class="neighbours">1, 9, 2, 5, </td>
+         </tr>
+         <tr>
+            <td class="def">5</td>
+            <td class="neighbours">2, 3, 8, 11, 9, 4, </td>
+         </tr>
+         <tr>
+            <td class="def">6</td>
+            <td class="neighbours">7, 10, </td>
+         </tr>
+         <tr>
+            <td class="def">7</td>
+            <td class="neighbours">6, 8, 10, </td>
+         </tr>
+         <tr>
+            <td class="def">8</td>
+            <td class="neighbours">3, 7, 5, 10, 11, </td>
+         </tr>
+         <tr>
+            <td class="def">9</td>
+            <td class="neighbours">4, 11, 5, </td>
+         </tr>
+         <tr>
+            <td class="def">10</td>
+            <td class="neighbours">6, 13, 7, 8, 11, 12, </td>
+         </tr>
+         <tr>
+            <td class="def">11</td>
+            <td class="neighbours">9, 16, 5, 8, 10, 12, </td>
+         </tr>
+         <tr>
+            <td class="def">12</td>
+            <td class="neighbours">10, 11, 13, 15, 16, </td>
+         </tr>
+         <tr>
+            <td class="def">13</td>
+            <td class="neighbours">10, 12, 14, 15, 40, </td>
+         </tr>
+         <tr>
+            <td class="def">14</td>
+            <td class="neighbours">13, 15, 25, 40, 41, </td>
+         </tr>
+         <tr>
+            <td class="def">15</td>
+            <td class="neighbours">12, 13, 14, 16, 25, </td>
+         </tr>
+         <tr>
+            <td class="def">16</td>
+            <td class="neighbours">11, 17, 12, 15, 23, </td>
+         </tr>
+         <tr>
+            <td class="def">17</td>
+            <td class="neighbours">16, 18, 20, 23, </td>
+         </tr>
+         <tr>
+            <td class="def">18</td>
+            <td class="neighbours">17, 19, 69, 20, </td>
+         </tr>
+         <tr>
+            <td class="def">19</td>
+            <td class="neighbours">18, 21, 20, 22, </td>
+         </tr>
+         <tr>
+            <td class="def">20</td>
+            <td class="neighbours">22, 23, 17, 18, 19, </td>
+         </tr>
+         <tr>
+            <td class="def">21</td>
+            <td class="neighbours">19, 22, </td>
+         </tr>
+         <tr>
+            <td class="def">22</td>
+            <td class="neighbours">20, 21, 19, </td>
+         </tr>
+         <tr>
+            <td class="def">23</td>
+            <td class="neighbours">20, 26, 16, 17, 24, 25, </td>
+         </tr>
+         <tr>
+            <td class="def">24</td>
+            <td class="neighbours">23, 25, 26, </td>
+         </tr>
+         <tr>
+            <td class="def">25</td>
+            <td class="neighbours">14, 15, 23, 24, 26, 36, 41, </td>
+         </tr>
+         <tr>
+            <td class="def">26</td>
+            <td class="neighbours">23, 27, 24, 25, 28, 36, </td>
+         </tr>
+         <tr>
+            <td class="def">27</td>
+            <td class="neighbours">26, 29, 28, </td>
+         </tr>
+         <tr>
+            <td class="def">28</td>
+            <td class="neighbours">26, 27, 29, 35, 36, </td>
+         </tr>
+         <tr>
+            <td class="def">29</td>
+            <td class="neighbours">27, 30, 28, </td>
+         </tr>
+         <tr>
+            <td class="def">30</td>
+            <td class="neighbours">29, 31, 32, 33, 34, 35, </td>
+         </tr>
+         <tr>
+            <td class="def">31</td>
+            <td class="neighbours">30, 32, </td>
+         </tr>
+         <tr>
+            <td class="def">32</td>
+            <td class="neighbours">31, 33, 30, </td>
+         </tr>
+         <tr>
+            <td class="def">33</td>
+            <td class="neighbours">32, 34, 30, </td>
+         </tr>
+         <tr>
+            <td class="def">34</td>
+            <td class="neighbours">33, 38, 30, 35, 37, </td>
+         </tr>
+         <tr>
+            <td class="def">35</td>
+            <td class="neighbours">28, 30, 34, 36, 37, </td>
+         </tr>
+         <tr>
+            <td class="def">36</td>
+            <td class="neighbours">25, 26, 28, 35, 37, 41, </td>
+         </tr>
+         <tr>
+            <td class="def">37</td>
+            <td class="neighbours">34, 35, 36, 38, 41, 42, </td>
+         </tr>
+         <tr>
+            <td class="def">38</td>
+            <td class="neighbours">34, 37, 42, 44, </td>
+         </tr>
+         <tr>
+            <td class="def">39</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">40</td>
+            <td class="neighbours">43, 13, 14, 41, 42, </td>
+         </tr>
+         <tr>
+            <td class="def">41</td>
+            <td class="neighbours">14, 25, 36, 37, 40, 42, </td>
+         </tr>
+         <tr>
+            <td class="def">42</td>
+            <td class="neighbours">37, 38, 40, 41, 43, 44, </td>
+         </tr>
+         <tr>
+            <td class="def">43</td>
+            <td class="neighbours">40, 42, 44, 45, </td>
+         </tr>
+         <tr>
+            <td class="def">44</td>
+            <td class="neighbours">45, 38, 42, 43, </td>
+         </tr>
+         <tr>
+            <td class="def">45</td>
+            <td class="neighbours">44, 46, 43, </td>
+         </tr>
+         <tr>
+            <td class="def">46</td>
+            <td class="neighbours">45, </td>
+         </tr>
+         <tr>
+            <td class="def">47</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">48</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">49</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">50</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">51</td>
+            <td class="neighbours">52, 53, 54, </td>
+         </tr>
+         <tr>
+            <td class="def">52</td>
+            <td class="neighbours">51, 55, 54, </td>
+         </tr>
+         <tr>
+            <td class="def">53</td>
+            <td class="neighbours">51, 54, </td>
+         </tr>
+         <tr>
+            <td class="def">54</td>
+            <td class="neighbours">53, 55, 51, 52, </td>
+         </tr>
+         <tr>
+            <td class="def">55</td>
+            <td class="neighbours">52, 54, </td>
+         </tr>
+         <tr>
+            <td class="def">56</td>
+            <td class="neighbours">57, 59, </td>
+         </tr>
+         <tr>
+            <td class="def">57</td>
+            <td class="neighbours">56, 58, 59, 60, </td>
+         </tr>
+         <tr>
+            <td class="def">58</td>
+            <td class="neighbours">57, 61, 60, </td>
+         </tr>
+         <tr>
+            <td class="def">59</td>
+            <td class="neighbours">56, 62, 57, 60, 63, </td>
+         </tr>
+         <tr>
+            <td class="def">60</td>
+            <td class="neighbours">57, 58, 59, 61, 63, </td>
+         </tr>
+         <tr>
+            <td class="def">61</td>
+            <td class="neighbours">58, 64, 60, 63, </td>
+         </tr>
+         <tr>
+            <td class="def">62</td>
+            <td class="neighbours">59, 69, 63, 67, 70, </td>
+         </tr>
+         <tr>
+            <td class="def">63</td>
+            <td class="neighbours">59, 60, 61, 62, 64, 67, </td>
+         </tr>
+         <tr>
+            <td class="def">64</td>
+            <td class="neighbours">61, 65, 63, 67, </td>
+         </tr>
+         <tr>
+            <td class="def">65</td>
+            <td class="neighbours">64, 66, 67, 68, </td>
+         </tr>
+         <tr>
+            <td class="def">66</td>
+            <td class="neighbours">65, 75, 68, 73, </td>
+         </tr>
+         <tr>
+            <td class="def">67</td>
+            <td class="neighbours">62, 63, 64, 65, 68, 70, </td>
+         </tr>
+         <tr>
+            <td class="def">68</td>
+            <td class="neighbours">65, 66, 67, 70, 73, </td>
+         </tr>
+         <tr>
+            <td class="def">69</td>
+            <td class="neighbours">18, 62, 70, </td>
+         </tr>
+         <tr>
+            <td class="def">70</td>
+            <td class="neighbours">69, 71, 62, 67, 68, 73, 74, </td>
+         </tr>
+         <tr>
+            <td class="def">71</td>
+            <td class="neighbours">70, 72, 74, </td>
+         </tr>
+         <tr>
+            <td class="def">72</td>
+            <td class="neighbours">71, 74, </td>
+         </tr>
+         <tr>
+            <td class="def">73</td>
+            <td class="neighbours">66, 68, 70, 74, 75, 76, 80, </td>
+         </tr>
+         <tr>
+            <td class="def">74</td>
+            <td class="neighbours">72, 80, 70, 71, 73, </td>
+         </tr>
+         <tr>
+            <td class="def">75</td>
+            <td class="neighbours">66, 78, 73, 76, </td>
+         </tr>
+         <tr>
+            <td class="def">76</td>
+            <td class="neighbours">73, 75, 77, 78, 80, </td>
+         </tr>
+         <tr>
+            <td class="def">77</td>
+            <td class="neighbours">79, 80, 76, 78, </td>
+         </tr>
+         <tr>
+            <td class="def">78</td>
+            <td class="neighbours">75, 79, 76, 77, </td>
+         </tr>
+         <tr>
+            <td class="def">79</td>
+            <td class="neighbours">77, 78, </td>
+         </tr>
+         <tr>
+            <td class="def">80</td>
+            <td class="neighbours">74, 77, 73, 76, </td>
+         </tr>
+         <tr>
+            <td class="def">81</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">82</td>
+            <td class="neighbours">83, </td>
+         </tr>
+         <tr>
+            <td class="def">83</td>
+            <td class="neighbours">82, 85, 84, 86, </td>
+         </tr>
+         <tr>
+            <td class="def">84</td>
+            <td class="neighbours">86, 83, </td>
+         </tr>
+         <tr>
+            <td class="def">85</td>
+            <td class="neighbours">83, 88, 86, 89, 90, </td>
+         </tr>
+         <tr>
+            <td class="def">86</td>
+            <td class="neighbours">84, 87, 83, 85, 90, </td>
+         </tr>
+         <tr>
+            <td class="def">87</td>
+            <td class="neighbours">86, 95, </td>
+         </tr>
+         <tr>
+            <td class="def">88</td>
+            <td class="neighbours">85, 91, 89, 92, </td>
+         </tr>
+         <tr>
+            <td class="def">89</td>
+            <td class="neighbours">85, 88, 90, 92, </td>
+         </tr>
+         <tr>
+            <td class="def">90</td>
+            <td class="neighbours">85, 86, 89, 92, 93, 94, </td>
+         </tr>
+         <tr>
+            <td class="def">91</td>
+            <td class="neighbours">88, 96, 92, 97, 98, </td>
+         </tr>
+         <tr>
+            <td class="def">92</td>
+            <td class="neighbours">88, 89, 90, 91, 93, 98, </td>
+         </tr>
+         <tr>
+            <td class="def">93</td>
+            <td class="neighbours">94, 98, 90, 92, </td>
+         </tr>
+         <tr>
+            <td class="def">94</td>
+            <td class="neighbours">93, 95, 90, </td>
+         </tr>
+         <tr>
+            <td class="def">95</td>
+            <td class="neighbours">87, 94, </td>
+         </tr>
+         <tr>
+            <td class="def">96</td>
+            <td class="neighbours">91, 99, 97, </td>
+         </tr>
+         <tr>
+            <td class="def">97</td>
+            <td class="neighbours">98, 100, 91, 96, 99, </td>
+         </tr>
+         <tr>
+            <td class="def">98</td>
+            <td class="neighbours">93, 97, 91, 92, </td>
+         </tr>
+         <tr>
+            <td class="def">99</td>
+            <td class="neighbours">96, 101, 97, 100, </td>
+         </tr>
+         <tr>
+            <td class="def">100</td>
+            <td class="neighbours">97, 101, 99, </td>
+         </tr>
+         <tr>
+            <td class="def">101</td>
+            <td class="neighbours">99, 100, 102, 103, </td>
+         </tr>
+         <tr>
+            <td class="def">102</td>
+            <td class="neighbours">101, 105, 103, 104, </td>
+         </tr>
+         <tr>
+            <td class="def">103</td>
+            <td class="neighbours">101, 106, 102, 104, 107, </td>
+         </tr>
+         <tr>
+            <td class="def">104</td>
+            <td class="neighbours">102, 103, 105, 107, 108, 109, 110, </td>
+         </tr>
+         <tr>
+            <td class="def">105</td>
+            <td class="neighbours">102, 110, 104, </td>
+         </tr>
+         <tr>
+            <td class="def">106</td>
+            <td class="neighbours">103, 107, </td>
+         </tr>
+         <tr>
+            <td class="def">107</td>
+            <td class="neighbours">106, 114, 103, 104, 108, 112, </td>
+         </tr>
+         <tr>
+            <td class="def">108</td>
+            <td class="neighbours">104, 107, 109, 112, </td>
+         </tr>
+         <tr>
+            <td class="def">109</td>
+            <td class="neighbours">104, 108, 110, 112, 113, </td>
+         </tr>
+         <tr>
+            <td class="def">110</td>
+            <td class="neighbours">105, 111, 104, 109, 113, </td>
+         </tr>
+         <tr>
+            <td class="def">111</td>
+            <td class="neighbours">110, 113, </td>
+         </tr>
+         <tr>
+            <td class="def">112</td>
+            <td class="neighbours">107, 108, 109, 113, 114, 115, 116, 117, </td>
+         </tr>
+         <tr>
+            <td class="def">113</td>
+            <td class="neighbours">111, 117, 109, 110, 112, </td>
+         </tr>
+         <tr>
+            <td class="def">114</td>
+            <td class="neighbours">107, 120, 112, 115, 119, </td>
+         </tr>
+         <tr>
+            <td class="def">115</td>
+            <td class="neighbours">112, 114, 116, 117, 118, 119, </td>
+         </tr>
+         <tr>
+            <td class="def">116</td>
+            <td class="neighbours">112, 115, 117, </td>
+         </tr>
+         <tr>
+            <td class="def">117</td>
+            <td class="neighbours">113, 118, 112, 115, 116, </td>
+         </tr>
+         <tr>
+            <td class="def">118</td>
+            <td class="neighbours">117, 119, 115, </td>
+         </tr>
+         <tr>
+            <td class="def">119</td>
+            <td class="neighbours">118, 120, 114, 115, </td>
+         </tr>
+         <tr>
+            <td class="def">120</td>
+            <td class="neighbours">114, 119, </td>
+         </tr>
+         <tr>
+            <td class="def">121</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">122</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">123</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">124</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">125</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">126</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">127</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">128</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">129</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">130</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">131</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">132</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">133</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">134</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">135</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">136</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">137</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">138</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">139</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">140</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">141</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">142</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">143</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">144</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">145</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">146</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">147</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">148</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">149</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">150</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">151</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">152</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">153</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">154</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">155</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">156</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">157</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">158</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">159</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">160</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">161</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">162</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">163</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">164</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">165</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">166</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">167</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">168</td>
+            <td class="neighbours"></td>
+         </tr>
+         <tr>
+            <td class="def">169</td>
+            <td class="neighbours"></td>
+         </tr>
+      </table>
+   </body>
+</html>

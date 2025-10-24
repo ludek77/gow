@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<status>
+    <units>
+    	<base><id>1</id><countryId>R</countryId><fieldId>12</fieldId></base>
+    	<base><id>2</id><countryId>R</countryId><fieldId>13</fieldId></base>
+    	<base><id>3</id><countryId>R</countryId><fieldId>14</fieldId></base>
+    	<base><id>4</id><countryId>R</countryId><fieldId>40</fieldId></base>
+    	<base><id>5</id><countryId>N</countryId><fieldId>113</fieldId></base>
+    	<base><id>6</id><countryId>N</countryId><fieldId>114</fieldId></base>
+    	<base><id>7</id><countryId>N</countryId><fieldId>117</fieldId></base>
+    	<base><id>8</id><countryId>N</countryId><fieldId>119</fieldId></base>
+    	<base><id>9</id><countryId>J</countryId><fieldId>66</fieldId></base>
+    	<base><id>10</id><countryId>J</countryId><fieldId>68</fieldId></base>
+    	<base><id>11</id><countryId>J</countryId><fieldId>71</fieldId></base>
+    	<base><id>12</id><countryId>J</countryId><fieldId>78</fieldId></base>
+    	<base><id>13</id><countryId>U</countryId><fieldId>91</fieldId></base>
+    	<base><id>14</id><countryId>U</countryId><fieldId>94</fieldId></base>
+    	<base><id>15</id><countryId>U</countryId><fieldId>95</fieldId></base>
+    	<base><id>16</id><countryId>U</countryId><fieldId>96</fieldId></base>
+    	<base><id>17</id><countryId>A</countryId><fieldId>16</fieldId></base>
+    	<base><id>18</id><countryId>A</countryId><fieldId>20</fieldId></base>
+    	<base><id>19</id><countryId>A</countryId><fieldId>23</fieldId></base>
+    	<base><id>20</id><countryId>A</countryId><fieldId>25</fieldId></base>
+    	<base><id>21</id><countryId>K</countryId><fieldId>82</fieldId></base>
+    	<base><id>22</id><countryId>K</countryId><fieldId>86</fieldId></base>
+    	<base><id>23</id><countryId>K</countryId><fieldId>87</fieldId></base>
+    	<base><id>24</id><countryId>K</countryId><fieldId>88</fieldId></base>
+    	<base><id>25</id><countryId>C</countryId><fieldId>34</fieldId></base>
+    	<base><id>26</id><countryId>C</countryId><fieldId>37</fieldId></base>
+    	<base><id>27</id><countryId>C</countryId><fieldId>42</fieldId></base>
+    	<base><id>28</id><countryId>C</countryId><fieldId>46</fieldId></base>
+    	<base><id>29</id><countryId>L</countryId><fieldId>58</fieldId></base>
+    	<base><id>30</id><countryId>L</countryId><fieldId>64</fieldId></base>
+    	<base><id>31</id><countryId>L</countryId><fieldId>67</fieldId></base>
+    	<base><id>32</id><countryId>L</countryId><fieldId>69</fieldId></base>
+    	<base><id>33</id><countryId>I</countryId><fieldId>27</fieldId></base>
+    	<base><id>34</id><countryId>I</countryId><fieldId>30</fieldId></base>
+    	<base><id>35</id><countryId>I</countryId><fieldId>35</fieldId></base>
+    	<base><id>36</id><countryId>I</countryId><fieldId>36</fieldId></base>
+    	<base><id>37</id><countryId>B</countryId><fieldId>103</fieldId></base>
+    	<base><id>38</id><countryId>B</countryId><fieldId>105</fieldId></base>
+    	<base><id>39</id><countryId>B</countryId><fieldId>107</fieldId></base>
+    	<base><id>40</id><countryId>B</countryId><fieldId>110</fieldId></base>
+    </units>
+</status>
