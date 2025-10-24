@@ -1,14 +1,14 @@
 <script>
 	$(document).ready(function() {
 		$('#login-user').click(function(e) {login()});
-		$('#logout-btn').click(function(e) {logout()});
+		$('#logout-btn-original').click(function(e) {logout()});
 		$('#menu').dialog({dialogClass:'noTitle', height:70, width:300, position:{my:"left top",at:"left+60 top+10", of:"body"}});
 	});
 </script>
 
 {% if request.user.is_authenticated %}
 	{% include "games.html" %}
-	<input id="logout-btn" class="logout-button" type="button" />
+	<input id="logout-btn-original" class="logout-button" type="button" />
 	{% include "commands_dialog.html" %}
 {% else %}
 	<form id="login-form">

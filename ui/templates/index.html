@@ -23,11 +23,36 @@
 			$(document).ready(function() {
 				$('#dialog').dialog({position:{my:"left top",at:"left+150 top+70", of:"body"}}).dialog("close");
 				$("#dialog").on("dialogclose", function(event) {fieldClickHandler=defaultClickField;});
+				
+				// Dialog icon button click handler
+				$('#dialog-icon-btn').click(function(e) {
+					openDialog();
+				});
+				
+				// Logout button click handler
+				$('#logout-btn').click(function(e) {
+					logout();
+				});
 			});
+			
+			function openDialog() {
+				// Example: Load game dialog content
+				$('#dialog').load('/ui/game_dialog/', function() {
+					$('#dialog').dialog('open');
+				});
+			}
 		</script>
 
 		<div id="workspace">
 			<div id="menu">
+				<button id="dialog-icon-btn" class="icon-button" title="Open Dialog">
+					<img src="{% static 'icon/command/move.png' %}" alt="Dialog" width="24" height="24"/>
+				</button>
+
+				<button id="logout-btn" class="icon-button" title="Logout">
+					<img src="{% static 'icon/logout.png' %}" alt="Logout" width="24" height="24"/>
+				</button>
+
 				{% include "menu.html" %}
 			</div>
 			

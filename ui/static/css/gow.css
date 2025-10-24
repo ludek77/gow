@@ -8,14 +8,32 @@ body {
 	flex-flow: column;
 	height: 100%;
 	width: 100%;
+	position: relative;
 }
 
 #menu {
 	flex: 0 1 auto;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 10px;
 }
 
 .noTitle .ui-dialog-titlebar {
 	display: none;
+}
+
+/* Make menu dialog transparent with no border */
+.noTitle .ui-dialog {
+	background: transparent !important;
+	border: none !important;
+	box-shadow: none !important;
+}
+
+.noTitle .ui-dialog-content {
+	background: transparent !important;
+	border: none !important;
+	padding: 0 !important;
 }
 
 #map {
@@ -58,7 +76,7 @@ body {
 	border: none;
 	width:  16px;
 	height: 16px;
-	background: url('../icon/result/fail.png') no-repeat;
+	background: url('../icon/logout.png') no-repeat;
 }
 
 #select-game {
@@ -230,4 +248,31 @@ body {
 
 .next {
 	background: url('../icon/order/down.png') no-repeat;
+}
+
+/* Icon button styling */
+.icon-button {
+	background: rgba(255, 255, 255, 0.9);
+	border: 2px solid #333;
+	border-radius: 5px;
+	padding: 8px;
+	cursor: pointer;
+	z-index: 1000;
+	transition: all 0.3s ease;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin: 5px;
+	position: relative;
+}
+
+.icon-button:hover {
+	background: rgba(255, 255, 255, 1);
+	transform: scale(1.1);
+}
+
+.icon-button:active {
+	transform: scale(0.95);
 }
