@@ -61,85 +61,90 @@ def unitResponse(request, fieldId,message=None):
     # owner restricted data if turn is open
     if selectedTurn is not None:
         commandValidator = CommandValidator()
-        selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
-        if selectedTurn.open:
-            selectedUnit = Unit.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
-        else:
-            selectedUnit = Unit.objects.filter(field__pk=fieldId, turn=selectedTurn)
-        if len(selectedUnit) == 1:
-            selectedUnit = selectedUnit.first(); 
+        try:
+            selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+        except Country.DoesNotExist:
+            selectedCountry = None
         
-            cmd = Command.objects.filter(unit__turn=selectedTurn, unit=selectedUnit)
-            if len(cmd) == 1:
-                cmd = cmd.first()
-                # append command
-                output += ',"command":{'
-                output += '"pk":'+str(cmd.commandType.pk)
-                output += ',"name":"'+cmd.commandType.name+'"'
-                output += ',"template":['+cmd.commandType.template+']'
-                if cmd.result is not None:
-                    result = commandValidator.getResult(cmd)
-                    output += ',"res":"'+cmd.result[:cmd.result.find('.')]+'"'
-                    output += ',"result":"'+result+'"'
-                output += ',"prio":'+str(cmd.removePriority)
-                # append arguments
-                if cmd.args != '':
-                    output += ',"args":['
-                    flds = cmd.args.split(',')
-                    separator = ''
-                    for fld in flds:
-                        if fld != '0' and fld != '':
-                            f = Field.objects.get(pk=fld)
-                            output += separator+'{'
-                            output += '"pk":'+str(f.pk)
-                            output += ',"name":"'+f.name+'"'
-                            output += ',"ll":['+str(f.lat)+','+str(f.lng)+']'
-                            output += '}'
-                        else:
-                            output += separator+'{0,"",[0,0]}'
-                        separator = ','
-                    output += ']'
-                #append escape
-                if cmd.escape is not None:
-                    escapes = cmd.escape.split(',')
-                    if escapes[0] is not None and escapes[0] != '':
-                        f = Field.objects.get(pk=escapes[0])
-                        if f is not None:
-                            output += ',"escape":{'
-                            output += '"pk":'+str(f.pk)
-                            output += ',"name":"'+f.name+'"'
-                            output += '}'
-                output += "}"
+        if selectedCountry:
+            if selectedTurn.open:
+                selectedUnit = Unit.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+            else:
+                selectedUnit = Unit.objects.filter(field__pk=fieldId, turn=selectedTurn)
+            if len(selectedUnit) == 1:
+                selectedUnit = selectedUnit.first(); 
             
-            cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
-            output += ',"cmds":['
-            separator = ''
-            for row in cmds:
-                output += separator+'['+str(row.id)+',"'+row.name+'"]'
-                separator = ','
-            output += ']'
-        if selectedTurn.open:
-            selectedCity = City.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
-        else:
-            selectedCity = City.objects.filter(field__pk=fieldId, turn=selectedTurn)
-        if len(selectedCity) == 1:
-            selectedCity = selectedCity.first()
-            if selectedField.isCity and selectedCity.country == selectedField.home:
-                cityCommand = CityCommand.objects.filter(city=selectedCity)
-                if len(cityCommand) == 1:
-                    cityCommand = cityCommand.first()
-                    output += ',"citycommand":{'
-                    output += '"pk":"'+str(cityCommand.newUnitType.pk)+'"'
-                    if cityCommand.result is not None:
-                        output += ',"result":"'+commandValidator.getResult(cityCommand)+'"'
-                    newTypes = UnitType.objects.filter(fieldTypes=selectedField.type)
-                    output += ',"prio":'+str(cityCommand.priority)
-                    output += ',"fcmds":['
-                    separator = ''
-                    for type in newTypes:
-                        output += separator+'['+str(type.pk)+',"'+type.name+'"]'
-                        separator = ','
-                    output += ']}'    
+                cmd = Command.objects.filter(unit__turn=selectedTurn, unit=selectedUnit)
+                if len(cmd) == 1:
+                    cmd = cmd.first()
+                    # append command
+                    output += ',"command":{'
+                    output += '"pk":'+str(cmd.commandType.pk)
+                    output += ',"name":"'+cmd.commandType.name+'"'
+                    output += ',"template":['+cmd.commandType.template+']'
+                    if cmd.result is not None:
+                        result = commandValidator.getResult(cmd)
+                        output += ',"res":"'+cmd.result[:cmd.result.find('.')]+'"'
+                        output += ',"result":"'+result+'"'
+                    output += ',"prio":'+str(cmd.removePriority)
+                    # append arguments
+                    if cmd.args != '':
+                        output += ',"args":['
+                        flds = cmd.args.split(',')
+                        separator = ''
+                        for fld in flds:
+                            if fld != '0' and fld != '':
+                                f = Field.objects.get(pk=fld)
+                                output += separator+'{'
+                                output += '"pk":'+str(f.pk)
+                                output += ',"name":"'+f.name+'"'
+                                output += ',"ll":['+str(f.lat)+','+str(f.lng)+']'
+                                output += '}'
+                            else:
+                                output += separator+'{0,"",[0,0]}'
+                            separator = ','
+                        output += ']'
+                    #append escape
+                    if cmd.escape is not None:
+                        escapes = cmd.escape.split(',')
+                        if escapes[0] is not None and escapes[0] != '':
+                            f = Field.objects.get(pk=escapes[0])
+                            if f is not None:
+                                output += ',"escape":{'
+                                output += '"pk":'+str(f.pk)
+                                output += ',"name":"'+f.name+'"'
+                                output += '}'
+                    output += "}"
+                
+                cmds = CommandType.objects.filter(unitType=selectedUnit.unitType)
+                output += ',"cmds":['
+                separator = ''
+                for row in cmds:
+                    output += separator+'['+str(row.id)+',"'+row.name+'"]'
+                    separator = ','
+                output += ']'
+            if selectedTurn.open:
+                selectedCity = City.objects.filter(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
+            else:
+                selectedCity = City.objects.filter(field__pk=fieldId, turn=selectedTurn)
+            if len(selectedCity) == 1:
+                selectedCity = selectedCity.first()
+                if selectedField.isCity and selectedCity.country == selectedField.home:
+                    cityCommand = CityCommand.objects.filter(city=selectedCity)
+                    if len(cityCommand) == 1:
+                        cityCommand = cityCommand.first()
+                        output += ',"citycommand":{'
+                        output += '"pk":"'+str(cityCommand.newUnitType.pk)+'"'
+                        if cityCommand.result is not None:
+                            output += ',"result":"'+commandValidator.getResult(cityCommand)+'"'
+                        newTypes = UnitType.objects.filter(fieldTypes=selectedField.type)
+                        output += ',"prio":'+str(cityCommand.priority)
+                        output += ',"fcmds":['
+                        separator = ''
+                        for type in newTypes:
+                            output += separator+'['+str(type.pk)+',"'+type.name+'"]'
+                            separator = ','
+                        output += ']}'    
     output += '}'
     #print(output)
     return HttpResponse(output)
@@ -159,7 +164,11 @@ def unit_command_rest(request):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
     if selectedTurn.deadline is None or selectedTurn.deadline > timezone.now():
-        selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+        try:
+            selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+        except Country.DoesNotExist:
+            return unitResponse(request, fieldId, "No country assigned to user")
+        
         try:
             selectedUnit = Unit.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
             selectedCommand = Command.objects.get(unit=selectedUnit)
@@ -213,7 +222,10 @@ def city_command_rest(request):
     selectedGame = Game.objects.get(pk=request.session['selected_game'], user__id=request.user.id)
     selectedTurn = Turn.objects.get(pk=request.session['selected_turn'], game=selectedGame, open=True)
     if selectedTurn.deadline is None or selectedTurn.deadline > timezone.now():
-        selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+        try:
+            selectedCountry = Country.objects.get(game=selectedGame, owner__id=request.user.id)
+        except Country.DoesNotExist:
+            return unitResponse(request, fieldId, "No country assigned to user")
         try:
             selectedCity = City.objects.get(field__pk=fieldId, country=selectedCountry, turn=selectedTurn)
             selectedCommand = CityCommand.objects.get(city=selectedCity)
