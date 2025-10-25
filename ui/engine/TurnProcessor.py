@@ -44,7 +44,10 @@ class TurnProcessor:
             newField.winPoints = f.winPoints
             newField.unitPoints = f.unitPoints
             if f.home is not None:
-                newField.home = Country.objects.get(game=newGame, name=f.home.name)
+                try:
+                    newField.home = Country.objects.get(game=newGame, name=f.home.name)
+                except Country.DoesNotExist:
+                    newField.home = None
             newField.isCity = f.isCity
             newField.save()
             if newField.isCity and newField.home is not None:
