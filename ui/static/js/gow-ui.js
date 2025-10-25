@@ -49,8 +49,8 @@ function renderCommandElement(lat1,lng1,lat2,lng2, clr, cmd, pk) {
 	    iconAnchor: [8, 8],
 	    className: 'o-fpk-'+pk
 	});
-	lat = lat1+(lat2-lat1)/1.7;
-	lng = lng1+(lng2-lng1)/1.7;
+	lat = lat1+(lat2-lat1)/2;
+	lng = lng1+(lng2-lng1)/2;
 	L.marker([lat,lng], {icon: markerIcon}).bindTooltip(cmd).on('click', function(e){
 		onClickField(e,pk);
 	}).addTo(map);
