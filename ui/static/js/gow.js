@@ -233,6 +233,7 @@ function setupGame() {
 		    }
 		}
 		
+		resizeIcons();
 		renderCountryDialog();
 	});
 }
