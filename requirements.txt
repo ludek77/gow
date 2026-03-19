@@ -1,4 +1,4 @@
-django>=2.1
+django>=5.1,<5.2
 django-debug-toolbar
 gunicorn
 psycopg2-binary
