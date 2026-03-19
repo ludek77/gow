@@ -66,9 +66,8 @@ body {
 .login-button {
 	cursor: pointer;
 	border: none;
-	width:  16px;
-	height: 16px;
-	background: url('../icon/result/ok.png') no-repeat;
+	padding: 0;
+	vertical-align: middle;
 }
 
 .logout-button {
@@ -76,7 +75,8 @@ body {
 	border: none;
 	width:  16px;
 	height: 16px;
-	background: url('../icon/logout.png') no-repeat;
+	background: none;
+	background-size: contain;
 }
 
 #select-game {

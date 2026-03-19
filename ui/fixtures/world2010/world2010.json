@@ -31,7 +31,7 @@
 	{"model":"ui.country","pk":20,"fields":{"name":"Amerika","game":2,"color":"#f88c88","fgcolor":"black","lat":"40.00","lng":"-100.00","owner":20}},
 	{"model":"ui.country","pk":21,"fields":{"name":"Aztekove","game":2,"color":"#a800a8","fgcolor":"white","lat":"19.00","lng":"-99.00","owner":21}},
 	{"model":"ui.country","pk":22,"fields":{"name":"Australie","game":2,"color":"#d8cca0","fgcolor":"black","lat":"-25.00","lng":"135.00","owner":22}},
-	{"model":"ui.country","pk":23,"fields":{"name":"Rusko","game":2,"color":"#a80000","fgcolor":"white","lat":"60.00","lng":"100.00","owner":2}},
+	{"model":"ui.country","pk":23,"fields":{"name":"Rusko","game":2,"color":"#a80000","fgcolor":"white","lat":"60.00","lng":"100.00","owner":23}},
 	{"model":"ui.country","pk":24,"fields":{"name":"Siouxove","game":2,"color":"#886800","fgcolor":"white","lat":"44.00","lng":"-100.00","owner":24}},
 	{"model":"ui.country","pk":25,"fields":{"name":"Zimbabwe","game":2,"color":"#f8d0f8","fgcolor":"black","lat":"-19.00","lng":"30.00","owner":25}},
 

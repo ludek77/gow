@@ -3,7 +3,7 @@ from ui.engine.CommandValidator import CommandValidator
 from ui.engine.TurnProcessor import TurnProcessor
 from django.utils import timezone
 import cmd
-from pytz import _CountryTimezoneDict
+import pytz
 
 class Engine:
     
