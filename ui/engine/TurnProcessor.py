@@ -13,6 +13,7 @@ class TurnProcessor:
         newGame.winPoints = game.winPoints
         newGame.defaultCommandType = game.defaultCommandType
         newGame.status = 1
+        newGame.turnMinutes = game.turnMinutes
         newGame.save()
         for u in game.user.all():
             newGame.user.add(u)

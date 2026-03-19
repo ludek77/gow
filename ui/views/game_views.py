@@ -7,7 +7,10 @@ import logging
 
 @login_required
 def game_list_rest(request):
-    list = Game.objects.filter(user__id=request.user.id)
+    if request.user.is_superuser:
+        list = Game.objects.filter(user__id=request.user.id)
+    else:
+        list = Game.objects.filter(user__id=request.user.id, status__gt=0)
     output = '[' + ','.join(['{"name":"'+row.name+'","id":"'+str(row.id)+'"}' for row in list]) + ']'
     return HttpResponse(output)
 
@@ -17,7 +20,7 @@ def game_select_rest(request):
     g = Game.objects.filter(pk=game, user__id=request.user.id)
     request.session['selected_game'] = None
     request.session['selected_turn'] = None
-    if len(g) == 1: 
+    if len(g) == 1:
         request.session['selected_game'] = str(g[0].id)
         turns = Turn.objects.filter(game=g[0]).order_by('-deadline')
         if len(turns) > 0:

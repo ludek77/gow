@@ -1,5 +1,5 @@
 [
-	{"model":"ui.game","pk":2,"fields":{"name":"World2010","tileServer":"http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png","winPoints":20,"defaultCommandType":1,"turnMinutes":1440,"status":1,"user":[1,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]}},
+	{"model":"ui.game","pk":2,"fields":{"name":"World2010","tileServer":"http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png","winPoints":20,"defaultCommandType":1,"turnMinutes":1440,"status":0,"user":[1,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25]}},
 
 	{"model":"auth.user","pk":10,"fields":{"username":"indonesie","first_name":"","last_name":"","email":"","is_staff":false,"is_active":true,"is_superuser":false,"date_joined":"2024-10-24T12:00:00+00:00","last_login":null,"password":"pbkdf2_sha256$1000000$world2010hash$encrypted","groups":[],"user_permissions":[]}},
 	{"model":"auth.user","pk":11,"fields":{"username":"evropa","first_name":"","last_name":"","email":"","is_staff":false,"is_active":true,"is_superuser":false,"date_joined":"2024-10-24T12:00:00+00:00","last_login":"2025-10-24T20:14:33.421627+00:00","password":"pbkdf2_sha256$1000000$Ht9RNU3K5D09cIBYyLLbfM$7cfaBVgelUC7S5+yuaBT6BRcWmCnQY1bg/gV0qD3O9Y=","groups":[],"user_permissions":[]}},
