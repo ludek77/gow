@@ -23,8 +23,8 @@
 	{% csrf_token %}
 	<input type="text" class="username" name="username"/>
 	<input type="password" class="password" name="password"/>
-	<button id="login-user" class="icon-button" type="button"/>
-		<img src="{% static 'icon/login.svg' %}" alt="Login" width="24" height="24"/>
+	<button id="login-user" class="icon-button" type="button">
+		<img src="{% static 'icon/login.svg' %}" alt="Login"/>
 	</button>
 	<span id="login-error"></span>
 </form>

@@ -48,13 +48,15 @@
 
 		<div id="workspace">
 			<div id="menu">
+				{% if request.user.is_authenticated %}
 				<button id="commands-btn" class="icon-button" title="Open commands">
-					<img src="{% static 'icon/command/move.png' %}" alt="Open commands" width="24" height="24"/>
+					<img src="{% static 'icon/commands.svg' %}" alt="Open commands" width="24" height="24"/>
 				</button>
 
 				<button id="logout-btn" class="icon-button" title="Logout">
-					<img src="{% static 'icon/logout.svg' %}" alt="Logout" width="24" height="24"/>
+					<img src="{% static 'icon/logout.svg' %}" alt="Logout"/>
 				</button>
+				{% endif %}
 
 				{% include "menu.html" %}
 			</div>
